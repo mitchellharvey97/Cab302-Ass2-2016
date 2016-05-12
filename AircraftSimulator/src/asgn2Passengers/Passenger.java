@@ -72,17 +72,29 @@ public abstract class Passenger {
 	 * OR (departureTime < bookingTime) 
 	 */
 	public Passenger(int bookingTime, int departureTime) throws PassengerException  {
-		//Stuff here 
+		// Check input for errors
+		if (bookingTime < 0 ) {
+			throw new PassengerException("Booking time cannot be less than zero.");
+		} else if (departureTime <= 0) {
+			throw new PassengerException("Departure time must be greater than zero.");
+		} else if (departureTime < bookingTime) {
+			throw new PassengerException("Departure time must be greater than booking time.");
+		}
+		
+		// Original code
 		this.passID = "" + Passenger.index; 
-		Passenger.index++; 
-		//Stuff here 
+		Passenger.index++;
+
+		// Modify the passenger
+		this.bookingTime = bookingTime;
+		this.departureTime = departureTime;
 	}
 	
 	/**
 	 * Simple no-argument constructor to support {@link #upgrade()}
 	 */
 	protected Passenger() {
-
+		
 	}
 	
 	/**
@@ -103,7 +115,28 @@ public abstract class Passenger {
 	 *         isFlown(this) OR (cancellationTime < 0) OR (departureTime < cancellationTime)
 	 */
 	public void cancelSeat(int cancellationTime) throws PassengerException {
-
+		// Check passenger state (only accept isConfirmed(this))
+		if (this.isNew()) {
+			throw new PassengerException("Passenger is new. Cannot cancel.");
+		} else if (this.isQueued()) {
+			throw new PassengerException("Passenger has been queued. Cannot cancel.");
+		} else if (this.isRefused()) {
+			throw new PassengerException("Passenger has been refused. Cannot cancel.");
+		} else if (this.isFlown()) {
+			throw new PassengerException("Passenger has been flown. Cannot cancel.");
+		}
+		
+		// Check input for errors
+		if (cancellationTime < 0) {
+			throw new PassengerException("Cancellation time cannot be less than zero.");
+		} else if (departureTime < cancellationTime) {
+			throw new PassengerException("Departure time cannot be less than cancellation time.");
+		}
+		
+		// Modify the passenger
+		this.confirmed = false;
+		this.newState = true;
+		this.bookingTime = cancellationTime;
 	}
 
 	/**
@@ -123,7 +156,31 @@ public abstract class Passenger {
 	 * 		   OR (confirmationTime < 0) OR (departureTime < confirmationTime)
 	 */
 	public void confirmSeat(int confirmationTime, int departureTime) throws PassengerException {
-	
+		// Check passenger state (only accept isNew(this) or isQueued(this))
+		if (this.isConfirmed()) {
+			throw new PassengerException("Passenger has already been confirmed.");
+		} else if (this.isRefused()) {
+			throw new PassengerException("Passenger has been refused. Cannot confirm.");
+		} else if (this.isFlown()) {
+			throw new PassengerException("Passenger has been flown. Cannot confirm.");
+		}
+		
+		// Check input for errors
+		if (confirmationTime < 0) {
+			throw new PassengerException("Confirmation time cannot be less than zero.");
+		} else if (departureTime < confirmationTime) {
+			throw new PassengerException("Departure time cannot be less than confirmation time.");
+		}
+		
+		// Modify the passenger
+		this.newState = false;
+		this.inQueue = false;
+		this.confirmed = true;
+		this.confirmationTime = confirmationTime;
+		this.departureTime = departureTime;
+		if (this.isQueued()) {
+			exitQueueTime = confirmationTime;
+		}
 	}
 
 	/**
@@ -139,7 +196,26 @@ public abstract class Passenger {
 	 *         isFlown(this) OR (departureTime <= 0)
 	 */
 	public void flyPassenger(int departureTime) throws PassengerException {
+		// Check passenger state (only accept isConfirmed(this))
+		if (this.isNew()) {
+			throw new PassengerException("Passenger is new. Cannot fly.");
+		} else if (this.isQueued()) {
+			throw new PassengerException("Passenger has been queued. Cannot fly.");
+		} else if (this.isRefused()) {
+			throw new PassengerException("Pasenger has been refused. Cannot fly.");
+		} else if (this.isFlown()) {
+			throw new PassengerException("Passenger has already been flown.");
+		}
 		
+		// Check input for errors
+		if (departureTime <= 0) {
+			throw new PassengerException("Departure time must be greater than zero.");
+		}
+		
+		// Modify the passenger
+		this.confirmed = false;
+		this.flown = true;
+		this.departureTime = departureTime;
 	}
 
 	/**
@@ -148,7 +224,7 @@ public abstract class Passenger {
 	 * @return the bookingTime
 	 */
 	public int getBookingTime() {
-		
+		return bookingTime;
 	}
 
 	/**
@@ -158,7 +234,7 @@ public abstract class Passenger {
 	 * @return the confirmationTime
 	 */
 	public int getConfirmationTime() {
-		
+		return confirmationTime;
 	}
 
 	/**
@@ -167,7 +243,7 @@ public abstract class Passenger {
 	 * @return the departureTime
 	 */
 	public int getDepartureTime() {
-		
+		return departureTime;
 	}
 	
 	/**
@@ -176,7 +252,7 @@ public abstract class Passenger {
 	 * @return the enterQueueTime
 	 */
 	public int getEnterQueueTime() {
-		
+		return enterQueueTime;
 	}
 
 	/**
@@ -185,7 +261,7 @@ public abstract class Passenger {
 	 * @return the exitQueueTime
 	 */
 	public int getExitQueueTime() {
-		
+		return exitQueueTime;
 	}
 
 	/**
@@ -194,7 +270,7 @@ public abstract class Passenger {
 	 * @return the passID
 	 */
 	public String getPassID() {
-		
+		return passID;
 	}
 
 	/**
@@ -203,7 +279,7 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if Confirmed state; false otherwise 
 	 */
 	public boolean isConfirmed() {
-		
+		return confirmed;
 	}
 		
 	/**
@@ -212,7 +288,7 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if Flown state; false otherwise 
 	 */
 	public boolean isFlown() {
-		
+		return flown;
 	}
 	
 	/**
@@ -221,7 +297,7 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if New state; false otherwise 
 	 */
 	public boolean isNew() {
-		
+		return newState;
 	}
 
 	/**
@@ -230,7 +306,7 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if Queued state; false otherwise 
 	 */
 	public boolean isQueued() {
-		
+		return inQueue;
 	}
 	
 	/**
@@ -239,7 +315,7 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if Refused state; false otherwise 
 	 */
 	public boolean isRefused() {
-		
+		return refused;
 	}
 	
 	/**
@@ -267,7 +343,29 @@ public abstract class Passenger {
 	 *         isFlown(this) OR (queueTime < 0) OR (departureTime < queueTime)
 	 */
 	public void queuePassenger(int queueTime, int departureTime) throws PassengerException {
+		// Check passenger state (only accept isNew(this))
+		if (this.isQueued()) {
+			throw new PassengerException("Passenger has already been queued.");
+		} else if (this.isConfirmed()) {
+			throw new PassengerException("Passenger has been confirmed. Cannot queue.");
+		} else if (this.isRefused()) {
+			throw new PassengerException("Passenger has been refused. Cannot queue.");
+		} else if (this.isFlown()) {
+			throw new PassengerException("Passenger has been flown. Cannot queue.");
+		}
 		
+		// Check input for errors
+		if (queueTime < 0) {
+			throw new PassengerException("Queue time cannot be less than zero.");
+		} else if (departureTime < queueTime) {
+			throw new PassengerException("Departure time cannot be less than queue time.");
+		}
+		
+		// Modify the passenger
+		this.newState = false;
+		this.inQueue = true;
+		this.enterQueueTime = queueTime;
+		this.departureTime = departureTime;		
 	}
 	
 	/**
@@ -285,7 +383,29 @@ public abstract class Passenger {
 	 * 			OR (refusalTime < 0) OR (refusalTime < bookingTime)
 	 */
 	public void refusePassenger(int refusalTime) throws PassengerException {
+		// Check passenger state (only accept isNew(this) or isQueued(this))
+		if (this.isConfirmed()) {
+			throw new PassengerException("Passenger has been confirmed. Cannot refuse.");
+		} else if (this.isRefused()) {
+			throw new PassengerException("Passenger has already been refused.");
+		} else if (this.isFlown()) {
+			throw new PassengerException("Passenger has been flown. Cannot refuse.");
+		}
 		
+		// Check input for errors
+		if (refusalTime < 0) {
+			throw new PassengerException("Refusal time cannot be less than zero.");
+		} else if (refusalTime < bookingTime) {
+			throw new PassengerException("Refusal time cannot be less than booking time");
+		}
+		
+		// Modify the passenger
+		this.newState = false;
+		this.inQueue = false;
+		this.refused = true;
+		if (this.isQueued()) {
+			exitQueueTime = refusalTime;
+		}
 	}
 	
 	/* (non-Javadoc) (Supplied) 
@@ -327,7 +447,7 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if was Confirmed state; false otherwise
 	 */
 	public boolean wasConfirmed() {
-		
+		return wasConfirmed();
 	}
 
 	/**
@@ -336,7 +456,7 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if was Queued state; false otherwise
 	 */
 	public boolean wasQueued() {
-		
+		return wasQueued();
 	}
 	
 	/**
@@ -345,7 +465,19 @@ public abstract class Passenger {
 	 * @param <code>Passenger</code> state to transfer
 	 */
 	protected void copyPassengerState(Passenger p) {
+		// Copy passenger state
+		p.newState = newState;
+		p.confirmed = confirmed;
+		p.inQueue = inQueue;
+		p.flown = flown;
+		p.refused = refused;
 		
+		// Copy passenger properties
+		//p.bookingTime = bookingTime;
+		//p.enterQueueTime = enterQueueTime;
+		//p.exitQueueTime = exitQueueTime;
+		//p.confirmationTime = confirmationTime;
+		//p.departureTime = departureTime;
 	}
 	
 	//Various private helper methods to check arguments and throw exceptions
