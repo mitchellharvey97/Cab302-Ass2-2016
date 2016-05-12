@@ -65,7 +65,14 @@ public abstract class Aircraft {
 	 * @throws AircraftException if isNull(flightCode) OR (departureTime <=0) OR ({first,business,premium,economy} <0)
 	 */
 	public Aircraft(String flightCode,int departureTime, int first, int business, int premium, int economy) throws AircraftException {
-		//Lots here 
+		//@todo Add Error Exception throwing here
+		this.flightCode = flightCode;
+		this.departureTime = departureTime;
+		this.numFirst = first;
+		this.numBusiness = business;
+		this.numPremium = premium;
+		this.numEconomy = economy;
+				
 		this.status = "";
 	}
 	
@@ -285,8 +292,11 @@ public abstract class Aircraft {
 	 * then Premium, upgrading to fill spaces already available and those created 
 	 * by upgrades to First), and then finally, we do the same for Economy, upgrading 
 	 * where possible to Premium.  
+	 * 
+	 * @throws PassengerException if <code>Passenger</code> is in incorrect state 
+	 * See {@link asgn2Passengers.Passenger#upgrade()}
 	 */
-	public void upgradeBookings() { 
+	public void upgradeBookings() throws PassengerException { 
 		
 	}
 
