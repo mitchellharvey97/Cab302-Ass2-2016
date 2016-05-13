@@ -447,7 +447,10 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if was Confirmed state; false otherwise
 	 */
 	public boolean wasConfirmed() {
-		return wasConfirmed();
+		// confirmationTime time can be set to 0
+		// Maybe find another way to find if it has been set
+		// Cannot check for null of type int
+		return (confirmationTime != 0);
 	}
 
 	/**
@@ -456,7 +459,10 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if was Queued state; false otherwise
 	 */
 	public boolean wasQueued() {
-		return wasQueued();
+		// enterQueueTime time can be set to 0
+		// Maybe find another way to find if it has been set
+		// Cannot check for null of type int
+		return (enterQueueTime != 0);
 	}
 	
 	/**
