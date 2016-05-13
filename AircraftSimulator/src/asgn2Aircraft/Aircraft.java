@@ -104,7 +104,7 @@ public abstract class Aircraft {
 	public void cancelBooking(Passenger p, int cancellationTime) throws PassengerException, AircraftException {
 		this.status += Log.setPassengerMsg(p, "C", "N");
 		p.cancelSeat(cancellationTime);
-		}
+	}
 
 	/**
 	 * Method to add a Passenger to the aircraft seating. Precondition is a test
@@ -163,9 +163,7 @@ public abstract class Aircraft {
 		if (this.numBusiness == this.businessCapacity && this.numEconomy == this.economyCapacity
 				&& this.numFirst == this.firstCapacity && this.numPremium == this.premiumCapacity) {
 			return true;
-		}
-
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -194,8 +192,7 @@ public abstract class Aircraft {
 	 * @return <code>Bookings</code> object containing the status.
 	 */
 	public Bookings getBookings() {
-//STILL NEED TO ADD
-		
+		//STILL NEED TO ADD
 	}
 
 	/**
@@ -220,7 +217,7 @@ public abstract class Aircraft {
 	 * @return <code>int</code> number of Economy Class passengers
 	 */
 	public int getNumEonomy() { // TYPO HEREE BUT IM GOING TO LEAVE IT UNTIL JIM
-								// SAYS TO UPDATE IR - MITCH
+								// SAYS TO UPDATE IT - MITCH
 		int num_confirm_eco = 0;
 
 		for (Passenger pas : this.seats) {
@@ -388,12 +385,10 @@ public abstract class Aircraft {
 	 * upgrading to fill spaces already available and those created by upgrades
 	 * to First), and then finally, we do the same for Economy, upgrading where
 	 * possible to Premium.
-	 * 
-	 * @throws PassengerException
-	 *             if <code>Passenger</code> is in incorrect state See
-	 *             {@link asgn2Passengers.Passenger#upgrade()}
 	 */
-	public void upgradeBookings() throws PassengerException {
+	public void upgradeBookings() {
+		// Removed exception from this method as per email from Jim. - Andrew
+		
 		// KNOWN ERROR HERE ONLY UPGRADES THE ECONOMY CURRENTLY - WILL COME BACK
 		// LATER
 		while (this.numPremium < this.premiumCapacity && this.numEconomy > 0) {

@@ -94,7 +94,7 @@ public abstract class Passenger {
 	 * Simple no-argument constructor to support {@link #upgrade()}
 	 */
 	protected Passenger() {
-		
+		// Not sure if we need anything here
 	}
 	
 	/**
@@ -479,6 +479,7 @@ public abstract class Passenger {
 		p.refused = refused;
 		
 		// Copy passenger properties
+		//p.passID = passID;
 		//p.bookingTime = bookingTime;
 		//p.enterQueueTime = enterQueueTime;
 		//p.exitQueueTime = exitQueueTime;
