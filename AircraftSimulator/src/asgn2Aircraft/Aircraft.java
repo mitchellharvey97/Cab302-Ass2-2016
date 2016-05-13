@@ -83,7 +83,6 @@ public abstract class Aircraft {
 		this.numBusiness = business;
 		this.numPremium = premium;
 		this.numEconomy = economy;
-
 		this.status = "";
 	}
 
@@ -105,9 +104,7 @@ public abstract class Aircraft {
 	public void cancelBooking(Passenger p, int cancellationTime) throws PassengerException, AircraftException {
 		this.status += Log.setPassengerMsg(p, "C", "N");
 		p.cancelSeat(cancellationTime);
-
-		// Stuff here
-	}
+		}
 
 	/**
 	 * Method to add a Passenger to the aircraft seating. Precondition is a test
@@ -125,9 +122,8 @@ public abstract class Aircraft {
 	 *             if no seats available in <code>Passenger</code> fare class.
 	 */
 	public void confirmBooking(Passenger p, int confirmationTime) throws AircraftException, PassengerException {
-		// Stuff here
+		p.confirmSeat(confirmationTime, this.departureTime);
 		this.status += Log.setPassengerMsg(p, "N/Q", "C");
-		// Stuff here
 	}
 
 	/**
@@ -198,7 +194,8 @@ public abstract class Aircraft {
 	 * @return <code>Bookings</code> object containing the status.
 	 */
 	public Bookings getBookings() {
-
+//STILL NEED TO ADD
+		
 	}
 
 	/**
@@ -222,7 +219,8 @@ public abstract class Aircraft {
 	 * 
 	 * @return <code>int</code> number of Economy Class passengers
 	 */
-	public int getNumEonomy() {
+	public int getNumEonomy() { // TYPO HEREE BUT IM GOING TO LEAVE IT UNTIL JIM
+								// SAYS TO UPDATE IR - MITCH
 		int num_confirm_eco = 0;
 
 		for (Passenger pas : this.seats) {
@@ -288,8 +286,7 @@ public abstract class Aircraft {
 	 * @return <code>List<Passenger></code> object containing the passengers.
 	 */
 	public List<Passenger> getPassengers() {
-		// @Todo FINISH THIS LATER
-		
+		return this.seats;
 	}
 
 	/**
@@ -319,13 +316,11 @@ public abstract class Aircraft {
 		boolean pass_found = false;
 
 		for (Passenger pas : this.seats) {
-			if (pas == p){
+			if (pas == p) {
 				return true;
 			}
 		}
-		
 		return pass_found;
-
 	}
 
 	/**
@@ -348,10 +343,30 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if seats in Class(p); false otherwise
 	 */
 	public boolean seatsAvailable(Passenger p) {
+		if (p instanceof Business) {
+			if (this.getNumBusiness() < this.businessCapacity) {
+				return true;
+			}
+		}
+		if (p instanceof Economy) {
+			if (this.getNumEonomy() < this.economyCapacity) {
+				return true;
+			}
+		}
 
-		
-		
-		
+		if (p instanceof First) {
+			if (this.getNumFirst() < this.firstCapacity) {
+				return true;
+			}
+		}
+
+		if (p instanceof Premium) {
+			if (this.getNumPremium() < this.premiumCapacity) {
+				return true;
+			}
+		}
+		// Fall Back error case
+		return false;
 	}
 
 	/*
@@ -379,6 +394,19 @@ public abstract class Aircraft {
 	 *             {@link asgn2Passengers.Passenger#upgrade()}
 	 */
 	public void upgradeBookings() throws PassengerException {
+		// KNOWN ERROR HERE ONLY UPGRADES THE ECONOMY CURRENTLY - WILL COME BACK
+		// LATER
+		while (this.numPremium < this.premiumCapacity && this.numEconomy > 0) {
+			for (Passenger pas : this.seats) {
+				if (pas instanceof Economy) {
+					pas = pas.upgrade();
+					this.numEconomy--;
+				}
+				if (this.numPremium >= this.premiumCapacity) {
+					break;
+				}
+			}
+		}
 
 	}
 
