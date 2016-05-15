@@ -1,24 +1,24 @@
 /**
  * 
  */
-package asgn2Tests.asgn2AircraftTests;
+package asgn2Tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 /**
  * @author Andrew
  *
  */
-public class AircraftTests {
+public class BookingsTests {
 
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	@Before
+	public void setUpBefore() throws Exception {
 	}
 
 	@Test

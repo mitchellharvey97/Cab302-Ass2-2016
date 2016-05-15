@@ -1,12 +1,12 @@
 /**
  * 
  */
-package asgn2Tests.asgn2PassengerTests;
+package asgn2Tests;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 import asgn2Passengers.Business;
@@ -24,8 +24,8 @@ public class PremiumTests {
 	 */
 	public static Premium prem_pass;
 
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	@Before
+	public void setUpBefore() throws Exception {
 		prem_pass = new Premium(10, 102);
 	}
 

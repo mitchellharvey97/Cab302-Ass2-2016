@@ -5,13 +5,11 @@ package asgn2Tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
-import asgn2Passengers.Business;
-import asgn2Passengers.Economy;
 import asgn2Passengers.First;
-import asgn2Passengers.Premium;
+import asgn2Passengers.PassengerException;
 
 /**
  * @author Mitchell
@@ -19,25 +17,45 @@ import asgn2Passengers.Premium;
  */
 public class PassengerTests {
 
-	public static Economy y;
-	public static Premium p;
-	public static Business j;
-	public static First f;
-	
 	/**
 	 * @throws java.lang.Exception
 	 */
+	public static First first_pass;
+
 	@Before
 	public void setUpBefore() throws Exception {
-		y = new Economy(0, 0);
-		p = new Premium(0, 0);
-		j = new Business(0, 0);
-		f = new First(0, 0);
+		first_pass = new First(10, 20);
 	}
-	
+
+	// General Passenger Class Tests
 	@Test
-	public void test() {
-		fail("Not yet implemented");
+	public void check_pass_index_incriments() throws PassengerException {
+		assertEquals("F:0", first_pass.getPassID());
+		// Create second passenger
+		First second_pass = new First(10, 21);
+		assertEquals("F:1", second_pass.getPassID());
+	}
+
+	@Test(expected = PassengerException.class)
+	public void invalid_booking_time() throws PassengerException {
+		First bad_pass = new First(-3, 6);
+	}
+
+	@Test(expected = PassengerException.class)
+	public void invalid_depart_time() throws PassengerException {
+		First bad_pass = new First(5, -6);
+	}
+
+	@Test(expected = PassengerException.class)
+	public void depart_time_before_booking() throws PassengerException {
+		First bad_pass = new First(10, 4);
+	}
+
+	@Test
+	public void confirm_seat() throws PassengerException {
+		assertFalse(first_pass.isConfirmed());
+		first_pass.confirmSeat(10, 12);
+		assertTrue(first_pass.isConfirmed());
 	}
 
 }

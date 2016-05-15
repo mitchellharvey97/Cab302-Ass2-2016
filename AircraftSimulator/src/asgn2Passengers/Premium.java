@@ -28,7 +28,8 @@ public class Premium extends Passenger {
 	 * Simple constructor to support {@link asgn2Passengers.Passenger#upgrade()} in other subclasses
 	 */
 	protected Premium() {
-		this.passID = "P:" + this.passID;
+		super();
+		this.passID = "P:";
 	}
 
 	@Override

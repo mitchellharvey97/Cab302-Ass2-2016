@@ -479,12 +479,12 @@ public abstract class Passenger {
 		p.refused = refused;
 		
 		// Copy passenger properties
-		//p.passID = passID;
-		//p.bookingTime = bookingTime;
-		//p.enterQueueTime = enterQueueTime;
-		//p.exitQueueTime = exitQueueTime;
-		//p.confirmationTime = confirmationTime;
-		//p.departureTime = departureTime;
+		p.passID += passID;
+		p.bookingTime = bookingTime;
+		p.enterQueueTime = enterQueueTime;
+		p.exitQueueTime = exitQueueTime;
+		p.confirmationTime = confirmationTime;
+		p.departureTime = departureTime;
 	}
 	
 	//Various private helper methods to check arguments and throw exceptions
