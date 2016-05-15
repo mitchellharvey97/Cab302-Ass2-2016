@@ -8,7 +8,7 @@ package asgn2Aircraft;
 
 
 /**
- * Specialisation of the {@link asgn2Aircraft.Aircraft} class for the Boeing B747-400. 
+ * Specialization of the {@link asgn2Aircraft.Aircraft} class for the Boeing B747-400. 
  * Default passenger capacities are based on the QANTAS four class configuration 
  * 
  * @author hogan
@@ -32,6 +32,7 @@ public class B747 extends Aircraft {
 	 */
 	public B747(String flightCode,int departureTime) throws AircraftException {
 		//Call here 
+		super(flightCode, departureTime,FIRST,BUSINESS,PREMIUM,ECONOMY);
 		this.type = "B747";
 	}
 
@@ -42,6 +43,7 @@ public class B747 extends Aircraft {
 	 */
 	public B747(String flightCode,int departureTime,int first, int business, int premium, int economy) throws AircraftException {
 		//Call here 
+		super(flightCode, departureTime, first, business, premium, economy);
 		this.type = "B747";
 	}
 

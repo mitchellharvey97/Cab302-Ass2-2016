@@ -160,8 +160,10 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if aircraft full; false otherwise
 	 */
 	public boolean flightFull() {
-		if (this.numBusiness == this.businessCapacity && this.numEconomy == this.economyCapacity
-				&& this.numFirst == this.firstCapacity && this.numPremium == this.premiumCapacity) {
+		// Changed to greater than or equal to incase booking errors over book a
+		// flight it will still come up as full
+		if (this.numBusiness >= this.businessCapacity && this.numEconomy >= this.economyCapacity
+				&& this.numFirst >= this.firstCapacity && this.numPremium >= this.premiumCapacity) {
 			return true;
 		} else {
 			return false;
@@ -192,7 +194,9 @@ public abstract class Aircraft {
 	 * @return <code>Bookings</code> object containing the status.
 	 */
 	public Bookings getBookings() {
-		//STILL NEED TO ADD
+		Bookings aircraft_status = new Bookings(this.numFirst, this.numBusiness, this.numPremium, this.numEconomy,
+				this.seats.size(), this.capacity);
+		return aircraft_status;
 	}
 
 	/**
@@ -310,14 +314,12 @@ public abstract class Aircraft {
 	 */
 	public boolean hasPassenger(Passenger p) {
 
-		boolean pass_found = false;
-
 		for (Passenger pas : this.seats) {
-			if (pas == p) {
+			if (pas.getPassID() == p.getPassID()) {
 				return true;
 			}
 		}
-		return pass_found;
+		return false;
 	}
 
 	/**
@@ -388,7 +390,7 @@ public abstract class Aircraft {
 	 */
 	public void upgradeBookings() {
 		// Removed exception from this method as per email from Jim. - Andrew
-		
+
 		// KNOWN ERROR HERE ONLY UPGRADES THE ECONOMY CURRENTLY - WILL COME BACK
 		// LATER
 		while (this.numPremium < this.premiumCapacity && this.numEconomy > 0) {
