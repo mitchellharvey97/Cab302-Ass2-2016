@@ -260,8 +260,7 @@ public abstract class Aircraft {
 	 * 
 	 * @return <code>int</code> number of Economy Class passengers
 	 */
-	public int getNumEonomy() {
-		// TYPO HERE BUT IM GOING TO LEAVE IT UNTIL JIM SAYS TO UPDATE IT - MITCH
+	public int getNumEconomy() {
 		return numEconomy;
 		
 		//int num_confirm_eco = 0;
@@ -389,13 +388,13 @@ public abstract class Aircraft {
 	 */
 	public boolean seatsAvailable(Passenger p) {
 		if (p instanceof First) {
-			return (this.getNumFirst() < this.firstCapacity);
+			return (this.numFirst < this.firstCapacity);
 		} else if (p instanceof Business) {
-			return (this.getNumBusiness() < this.businessCapacity);
+			return (this.numBusiness < this.businessCapacity);
 		} else if (p instanceof Premium) {
-			return (this.getNumPremium() < this.premiumCapacity);
+			return (this.numPremium < this.premiumCapacity);
 		} else if (p instanceof Economy) {
-			return (this.getNumEonomy() < this.economyCapacity);
+			return (this.numEconomy < this.economyCapacity);
 		} else { // Fall Back error case
 			return false;
 		}
