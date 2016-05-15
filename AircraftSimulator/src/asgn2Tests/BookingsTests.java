@@ -19,6 +19,7 @@ public class BookingsTests {
 	 */
 	@Before
 	public void setUpBefore() throws Exception {
+		
 	}
 
 	@Test

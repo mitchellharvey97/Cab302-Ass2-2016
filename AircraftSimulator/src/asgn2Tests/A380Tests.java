@@ -16,6 +16,7 @@ import asgn2Aircraft.Bookings;
 import asgn2Passengers.Economy;
 import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
+import asgn2Passengers.Premium;
 
 /**
  * @author Andrew
@@ -23,15 +24,15 @@ import asgn2Passengers.PassengerException;
  */
 public class A380Tests {
 
-	public static A380 a;
-	public static Economy p;
+	public A380 a;
+	public Economy p;
 	
 	/**
 	 * @throws java.lang.Exception
 	 */
 	@Before
 	public void setUpBefore() throws Exception {
-		a = new A380("QF11", 1);
+		a = new A380("QF11", 1, 0, 0, 1, 1);
 		p = new Economy(0, 1);
 	}
 
@@ -106,11 +107,6 @@ public class A380Tests {
 	}
 	
 	@Test (expected = PassengerException.class)
-	public void testCancelBookingPassengerNotConfirmed() throws PassengerException, AircraftException {
-		a.cancelBooking(p, 1);
-	}
-	
-	@Test (expected = PassengerException.class)
 	public void testCancelBookingLowerBoundCancellationTime() throws PassengerException, AircraftException {
 		// Test that cancellationTime < 0 throws an exception
 		a.confirmBooking(p, 1);
@@ -124,11 +120,10 @@ public class A380Tests {
 		a.cancelBooking(p, 2);
 	}
 	
-//	@Test (expected = AircraftException.class)
-//	public void testCancelBookingInvalidPassenger() throws PassengerException, AircraftException {
-//		// Passenger not recorded in aircraft seating
-//		a.cancelBooking(p, 1);
-//	}
+	@Test (expected = AircraftException.class)
+	public void testCancelBookingPassengerNotConfirmed() throws PassengerException, AircraftException {
+		a.cancelBooking(p, 1);
+	}
 	
 	/* Aircraft.confirmBooking() Tests */
 	@Test
@@ -137,13 +132,15 @@ public class A380Tests {
 	}
 
 	@Test (expected = PassengerException.class)
-	public void testConfirmBookingConfirmedPassenger() {
-		
+	public void testConfirmBookingConfirmedPassenger() throws AircraftException, PassengerException {
+		p.confirmSeat(1, 1);
+		a.confirmBooking(p, 1);
 	}
 	
 	@Test (expected = PassengerException.class)
-	public void testConfirmBookingRefusedPassenger() {
-		
+	public void testConfirmBookingRefusedPassenger() throws PassengerException, AircraftException {
+		p.refusePassenger(1);
+		a.confirmBooking(p, 1);
 	}
 	
 	@Test (expected = PassengerException.class)
@@ -174,35 +171,49 @@ public class A380Tests {
 	
 	/* Aircraft.flightEmpty() Tests */
 	@Test
-	public void testFlightEmpty() {
-		
+	public void testFlightEmpty() throws AircraftException, PassengerException {
+		assertTrue(a.flightEmpty());
+		a.confirmBooking(p, 1);
+		assertFalse(a.flightEmpty());
 	}
 	
 	/* Aircraft.flightFull() Tests */
 	@Test
-	public void testFlightFull() {
+	public void testFlightFull() throws AircraftException, PassengerException {
+		Premium p2 = new Premium(1, 1);
 		
+		assertFalse(a.flightFull());
+		a.confirmBooking(p, 1);
+		a.confirmBooking(p2, 1);
+		assertTrue(a.flightFull());
 	}
 	
 	/* Aircraft.flyPassengers() Tests */
 	@Test
-	public void testFlyPassengersValid() {
-		
+	public void testFlyPassengersValid() throws PassengerException, AircraftException {
+		a.confirmBooking(p, 1);
+		a.flyPassengers(1);
 	}
 	
 	@Test (expected = PassengerException.class)
-	public void testFlyPassengersNewPassenger() {
-		
+	public void testFlyPassengersNewPassenger() throws PassengerException, AircraftException {
+		a.confirmBooking(p, 1);
+		p.cancelSeat(1);
+		a.flyPassengers(1);
 	}
 	
 	@Test (expected = PassengerException.class)
-	public void testFlyPassengersQueuedPassenger() {
-		
+	public void testFlyPassengersQueuedPassenger() throws AircraftException, PassengerException {
+		a.confirmBooking(p, 1);
+		p.queuePassenger(1, 1);
+		a.flyPassengers(1);
 	}
 	
 	@Test (expected = PassengerException.class)
-	public void testFlyPassengersRefusedPassenger() {
-		
+	public void testFlyPassengersRefusedPassenger() throws PassengerException, AircraftException {
+		a.confirmBooking(p, 1);
+		p.refusePassenger(1);
+		a.flyPassengers(1);
 	}
 	
 	@Test (expected = PassengerException.class)
@@ -229,6 +240,7 @@ public class A380Tests {
 	public void testGetBookings() {
 		Bookings book = a.getBookings();
 		
+		fail("Not yet implemented.");
 	}
 		
 	/* Aircraft.getPassengers() Tests */
@@ -236,6 +248,7 @@ public class A380Tests {
 	public void testGetPassengers() {
 		List<Passenger> passengers = a.getPassengers();
 		
+		fail("Not yet implemeted.");
 	}
 	
 	/* Aircraft.hasPassenger() Tests */
@@ -249,13 +262,13 @@ public class A380Tests {
 	/* Aircraft.seatsAvailable() Tests */
 	@Test
 	public void testSeatsAvailable() {
-		
+		fail("Not yet implemented.");
 	}
 	
 	/* Aircraft.upgradeBookings() Tests */
 	@Test
 	public void testUpgradeBookings() {
-		
+		fail("Not yet implemented.");
 	}
 
 }

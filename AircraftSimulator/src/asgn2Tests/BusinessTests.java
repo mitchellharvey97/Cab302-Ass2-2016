@@ -5,7 +5,7 @@ package asgn2Tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import asgn2Passengers.Business;
@@ -23,8 +23,8 @@ public class BusinessTests {
 	 */
 	public static Business bus_pass;
 
-	@Before
-	public void setUpBefore() throws Exception {
+	@BeforeClass
+	public void setUpBeforeClass() throws Exception {
 		bus_pass = new Business(10, 102);
 	}
 

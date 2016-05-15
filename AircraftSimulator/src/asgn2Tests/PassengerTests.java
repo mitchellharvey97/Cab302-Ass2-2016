@@ -5,7 +5,7 @@ package asgn2Tests;
 
 import static org.junit.Assert.*;
 
-import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import asgn2Passengers.First;
@@ -22,8 +22,8 @@ public class PassengerTests {
 	 */
 	public static First first_pass;
 
-	@Before
-	public void setUpBefore() throws Exception {
+	@BeforeClass
+	public void setUpBeforeClass() throws Exception {
 		first_pass = new First(10, 20);
 	}
 

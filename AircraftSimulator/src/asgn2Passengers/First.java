@@ -28,7 +28,7 @@ public class First extends Passenger {
 	 * Simple constructor to support {@link asgn2Passengers.Passenger#upgrade()} in other subclasses
 	 */
 	protected First() {
-		this.passID = "F:" + this.passID;
+		this.passID = "F:";
 	}
 
 	@Override
