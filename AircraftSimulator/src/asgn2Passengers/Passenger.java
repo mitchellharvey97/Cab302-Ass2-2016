@@ -130,7 +130,7 @@ public abstract class Passenger {
 		if (cancellationTime < 0) {
 			throw new PassengerException("Cancellation time cannot be less than zero.");
 		} else if (departureTime < cancellationTime) {
-			throw new PassengerException("Departure time cannot be less than cancellation time.");
+			throw new PassengerException("Cancellation time cannot be greater than departure time.");
 		}
 		
 		// Modify the passenger
@@ -169,7 +169,7 @@ public abstract class Passenger {
 		if (confirmationTime < 0) {
 			throw new PassengerException("Confirmation time cannot be less than zero.");
 		} else if (departureTime < confirmationTime) {
-			throw new PassengerException("Departure time cannot be less than confirmation time.");
+			throw new PassengerException("Confirmation time cannot be greater than departure time.");
 		}
 		
 		// Modify the passenger
@@ -358,7 +358,7 @@ public abstract class Passenger {
 		if (queueTime < 0) {
 			throw new PassengerException("Queue time cannot be less than zero.");
 		} else if (departureTime < queueTime) {
-			throw new PassengerException("Departure time cannot be less than queue time.");
+			throw new PassengerException("Queue time cannot be greater than departure time.");
 		}
 		
 		// Modify the passenger
@@ -396,7 +396,7 @@ public abstract class Passenger {
 		if (refusalTime < 0) {
 			throw new PassengerException("Refusal time cannot be less than zero.");
 		} else if (refusalTime < bookingTime) {
-			throw new PassengerException("Refusal time cannot be less than booking time");
+			throw new PassengerException("Refusal time cannot be less than booking time.");
 		}
 		
 		// Modify the passenger

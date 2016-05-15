@@ -27,8 +27,8 @@ public class PassengerTests {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	@BeforeClass
-	public static void setUpBeforeClass() throws Exception {
+	@Before
+	public void setUpBefore() throws Exception {
 		y = new Economy(0, 0);
 		p = new Premium(0, 0);
 		j = new Business(0, 0);
