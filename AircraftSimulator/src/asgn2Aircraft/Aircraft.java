@@ -98,6 +98,7 @@ public abstract class Aircraft {
 		this.businessCapacity = business;
 		this.premiumCapacity = premium;
 		this.economyCapacity = economy;
+		this.capacity = first + business + premium + economy;
 		
 		// Initialise variables
 		this.status = "";
@@ -129,6 +130,17 @@ public abstract class Aircraft {
 		p.cancelSeat(cancellationTime);
 		this.seats.remove(p);
 		this.status += Log.setPassengerMsg(p, "C", "N");
+		
+		// Update passenger count
+		if (p instanceof First) {
+			numFirst--;
+		} else if (p instanceof Business) {
+			numBusiness--;
+		} else if (p instanceof Premium) {
+			numPremium--;
+		} else if (p instanceof Economy) {
+			numEconomy--;
+		}
 	}
 
 	/**
@@ -170,6 +182,17 @@ public abstract class Aircraft {
 		p.confirmSeat(confirmationTime, this.departureTime);
 		this.seats.add(p);
 		this.status += Log.setPassengerMsg(p, "N/Q", "C");
+		
+		// Update passenger count
+		if (p instanceof First) {
+			numFirst++;
+		} else if (p instanceof Business) {
+			numBusiness++;
+		} else if (p instanceof Premium) {
+			numPremium++;
+		} else if (p instanceof Economy) {
+			numEconomy++;
+		}
 	}
 
 	/**
@@ -192,7 +215,7 @@ public abstract class Aircraft {
 	 * @return <code>boolean</code> true if aircraft empty; false otherwise
 	 */
 	public boolean flightEmpty() {
-		return (this.numFirst + this.numBusiness + this.numPremium + this.numEconomy > 0);
+		return (this.numFirst + this.numBusiness + this.numPremium + this.numEconomy == 0);
 	}
 
 	/**
@@ -233,9 +256,8 @@ public abstract class Aircraft {
 	 * @return <code>Bookings</code> object containing the status.
 	 */
 	public Bookings getBookings() {
-		Bookings aircraft_status = new Bookings(this.numFirst, this.numBusiness, this.numPremium, this.numEconomy,
-				this.seats.size(), this.capacity);
-		return aircraft_status;
+		return new Bookings(this.numFirst, this.numBusiness, this.numPremium, this.numEconomy,
+				this.seats.size(), this.capacity - this.getNumPassengers());
 	}
 
 	/**
@@ -421,47 +443,30 @@ public abstract class Aircraft {
 	 * possible to Premium.
 	 */
 	public void upgradeBookings() {
-		// Removed exception from this method as per email from Jim. - Andrew
-		
-		// Upgrading Business to First
-		while (this.numFirst < this.firstCapacity && this.numBusiness > 0) {
-			for (Passenger pas : this.seats) {
-				if (pas instanceof Business) {
-					pas = pas.upgrade();
-					this.numBusiness--;
-				}
-				if (this.numFirst >= this.firstCapacity) {
-					break;
-				}
-			}
-		}
-		
-		// Upgrading Premium to Business
-		while (this.numBusiness < this.businessCapacity && this.numPremium > 0) {
-			for (Passenger pas : this.seats) {
-				if (pas instanceof Premium) {
-					pas = pas.upgrade();
-					this.numPremium--;
-				}
-				if (this.numBusiness >= this.businessCapacity) {
-					break;
-				}
-			}
-		}
+		for (int i = 0; i < this.seats.size(); i++) {
+			Passenger p = this.seats.get(i);
 
-		// Upgrading Economy to Premium
-		while (this.numPremium < this.premiumCapacity && this.numEconomy > 0) {
-			for (Passenger pas : this.seats) {
-				if (pas instanceof Economy) {
-					pas = pas.upgrade();
-					this.numEconomy--;
-				}
-				if (this.numPremium >= this.premiumCapacity) {
-					break;
-				}
+			// Upgrade Business to First
+			if (p instanceof Business && numFirst < firstCapacity) {
+				this.seats.set(i, p.upgrade());
+				this.numBusiness--;
+				this.numFirst++;
+			}
+			
+			// Upgrade Premium to Business
+			if (p instanceof Premium && numBusiness < businessCapacity) {
+				this.seats.set(i, p.upgrade());
+				this.numPremium--;
+				this.numBusiness++;
+			}
+			
+			// Upgrade Economy to Premium
+			if (p instanceof Economy && numPremium < premiumCapacity) {
+				this.seats.set(i, p.upgrade());
+				this.numEconomy--;
+				this.numPremium++;
 			}
 		}
-
 	}
 
 	/**
@@ -490,5 +495,26 @@ public abstract class Aircraft {
 //	private String noSeatsAvailableMsg(Passenger p) {
 //		String msg = "";
 //		return msg + p.noSeatsMsg();
+//	}
+	
+//	private void updateNumPassengers() {
+//		//Reset all counts
+//		this.numFirst = 0;
+//		this.numBusiness = 0;
+//		this.numPremium = 0;
+//		this.numEconomy = 0;
+//		
+//		// Count all passenger types
+//		for (Passenger p : this.seats) {
+//			if (p instanceof First) {
+//				this.numFirst++;
+//			} else if (p instanceof Business) {
+//				this.numBusiness++;
+//			} else if (p instanceof Premium) {
+//				this.numPremium++;
+//			} else if (p instanceof Economy) {
+//				this.numEconomy++;
+//			}	
+//		}
 //	}
 }

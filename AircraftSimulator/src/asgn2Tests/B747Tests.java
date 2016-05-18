@@ -245,10 +245,19 @@ public class B747Tests {
 		
 	/* Aircraft.getPassengers() Tests */
 	@Test
-	public void testGetPassengers() {
+	public void testGetPassengers() throws AircraftException, PassengerException {
 		List<Passenger> passengers = b.getPassengers();
+		assertTrue(passengers.isEmpty());
 		
-		fail("Not yet implemeted.");
+		// Add a passenger to the aircraft
+		b.confirmBooking(p, 1);
+		
+		// Test passenger has been added
+		passengers = b.getPassengers();
+		assertEquals(1, passengers.size());
+		
+		// Test passenger is stored correctly
+		assertEquals(p.getPassID(), passengers.get(0).getPassID());
 	}
 	
 	/* Aircraft.hasPassenger() Tests */
