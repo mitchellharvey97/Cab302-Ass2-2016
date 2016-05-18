@@ -28,7 +28,9 @@ public class Business extends Passenger {
 	 * Simple constructor to support {@link asgn2Passengers.Passenger#upgrade()} in other subclasses
 	 */
 	protected Business() {
-		this.passID = "J:";
+		// Set the prefix for the new (upgraded) passenger
+		// The original passID will be appended in copyPassengerState()
+		this.passID = "J(U)";
 	}
 	
 	@Override

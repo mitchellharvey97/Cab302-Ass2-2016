@@ -6,7 +6,8 @@ package asgn2Tests;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import asgn2Passengers.Economy;
@@ -22,11 +23,16 @@ public class EconomyTests {
 	/**
 	 * @throws java.lang.Exception
 	 */
+	public static int startingIndex;
 	public static Economy eco_pass;
 
-	@Before
-	public void setUpBefore() throws Exception {
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 		eco_pass = new Economy(10, 102);
+		
+		// Get the passenger ID number, exclude the class identifier
+		String[] splitID = eco_pass.getPassID().split(":");
+		startingIndex = Integer.parseInt(splitID[1]);
 	}
 
 	@Test
@@ -43,8 +49,7 @@ public class EconomyTests {
 	public void upgrade_pas() {
 		Passenger upgraded = eco_pass.upgrade();
 		assertTrue(upgraded instanceof Premium);
-		// NEED TO READ SPECS AS TO WHAT TO DO WITH THE PASSENGER ID HERE
-		assertEquals("P:0", upgraded.getPassID());
+		assertEquals("P(U)Y:0", upgraded.getPassID());
 	}
 
 }

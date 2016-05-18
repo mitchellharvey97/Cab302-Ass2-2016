@@ -5,6 +5,7 @@ package asgn2Tests;
 
 import static org.junit.Assert.*;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -21,16 +22,21 @@ public class BusinessTests {
 	/**
 	 * @throws java.lang.Exception
 	 */
+	public static int startingIndex;
 	public static Business bus_pass;
 
 	@BeforeClass
-	public void setUpBeforeClass() throws Exception {
+	public static void setUpBeforeClass() throws Exception {
 		bus_pass = new Business(10, 102);
+		
+		// Get the passenger ID number, exclude the class identifier
+		String[] splitID = bus_pass.getPassID().split(":");
+		startingIndex = Integer.parseInt(splitID[1]);
 	}
 
 	@Test
 	public void checkpass_id() {
-		assertEquals("J:0", bus_pass.getPassID());
+		assertEquals("J:" + startingIndex, bus_pass.getPassID());
 	}
 
 	@Test
@@ -42,8 +48,7 @@ public class BusinessTests {
 	public void upgrade_pas() {
 		Passenger upgraded = bus_pass.upgrade();
 		assertTrue(upgraded instanceof First);
-		// NEED TO READ SPECS AS TO WHAT TO DO WITH THE PASSENGER ID HERE
-		assertEquals("F:0", upgraded.getPassID());
+		assertEquals("F(U)J:" + startingIndex, upgraded.getPassID());
 	}
 
 }
