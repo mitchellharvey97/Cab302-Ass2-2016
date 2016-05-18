@@ -3,16 +3,14 @@
  */
 package asgn2Tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import javax.xml.stream.events.StartDocument;
-
-import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import asgn2Passengers.First;
-import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
 
 /**
@@ -31,7 +29,7 @@ public class PassengerTests {
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		first_pass = new First(10, 20);
-		
+
 		// Get the passenger ID number, exclude the class identifier
 		String[] splitID = first_pass.getPassID().split(":");
 		startingIndex = Integer.parseInt(splitID[1]);
@@ -46,20 +44,50 @@ public class PassengerTests {
 		assertEquals("F:" + (startingIndex + 1), second_pass.getPassID());
 	}
 
+	// Booking less than 0
 	@Test(expected = PassengerException.class)
 	public void invalid_booking_time() throws PassengerException {
 		bad_pass = new First(-3, 6);
 	}
 
+	// Departure less than 0
 	@Test(expected = PassengerException.class)
 	public void invalid_depart_time() throws PassengerException {
 		bad_pass = new First(5, -6);
 	}
 
+	// Departure equal to 0
+	@Test(expected = PassengerException.class)
+	public void invalid_depart_time_0() throws PassengerException {
+		bad_pass = new First(5, 0);
+	}
+
+	// Departure less than booking
 	@Test(expected = PassengerException.class)
 	public void depart_time_before_booking() throws PassengerException {
 		bad_pass = new First(10, 4);
 	}
+
+	//Successful Cancel Seat
+	@Test
+	public void cancel_seat() throws PassengerException {
+		// Need to confirm to cancel
+		first_pass.confirmSeat(10, 20);
+		// check staring values are correct
+		assertTrue(first_pass.isConfirmed());
+		assertFalse(first_pass.isNew());
+		first_pass.cancelSeat(1);
+		assertFalse(first_pass.isConfirmed());
+	}
+	
+	
+	public void cancel_seat_new_pas(){
+		
+		
+	}
+	
+	
+	
 
 	@Test
 	public void confirm_seat() throws PassengerException {
