@@ -24,7 +24,7 @@ public class PassengerTests {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	public int startingIndex;
+	public static int startingIndex;
 	public First first_pass;
 	public First bad_pass;
 
@@ -57,7 +57,6 @@ public class PassengerTests {
 	}
 
 	
-	//Constructor Testing 
 	
 	// Booking less than 0
 	@Test(expected = PassengerException.class)
@@ -90,7 +89,7 @@ public class PassengerTests {
 		bad_pass = new First(10, 4);
 	}
 	
-	// Booking sane as depart (Allowed)
+	// Booking 0 (Allowed)
 		@Test
 		public void depart_time_same_booking() throws PassengerException {
 			First good_pass = new First(6, 6);
@@ -110,12 +109,7 @@ public class PassengerTests {
 		assertFalse(first_pass.isConfirmed());
 	}
 
-	//TODO finish Cancel seet throws
-	@Test(expected = PassengerException.class)
-	public void cancel_seat_not_confirmed() throws PassengerException {
-		assertFalse(first_pass.isConfirmed());
-		
-		first_pass.cancelSeat(3);
+	public void cancel_seat_new_pas() {
 
 	}
 

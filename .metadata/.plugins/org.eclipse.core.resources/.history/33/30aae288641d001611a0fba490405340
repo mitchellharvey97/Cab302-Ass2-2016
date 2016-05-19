@@ -24,7 +24,7 @@ public class PassengerTests {
 	/**
 	 * @throws java.lang.Exception
 	 */
-	public int startingIndex;
+	public static int startingIndex;
 	public First first_pass;
 	public First bad_pass;
 
@@ -45,42 +45,43 @@ public class PassengerTests {
 	@Test
 	public void check_pass_index_incriments() throws PassengerException {
 		assertEquals("F:" + startingIndex, first_pass.getPassID());
+
 		// Create second passenger
 		First second_pass = new First(10, 21);
-		// FInd the loop start value (Tests are run out of order)
+
+		// assertEquals("F:" + (startingIndex + 1), second_pass.getPassID());
+		// FInd the loop start value
 		int loop_pass_start = extract_pass_id(second_pass) + 1;
-		//Create 10 first class passengers to make sure it increments correctly
+		System.out.println("Pass ID : " + loop_pass_start);
+
 		for (int x = loop_pass_start; x < loop_pass_start + 10; x++) {
-			First mass_pass = new First(10, 20);
+					First mass_pass = new First(10, 20);
+			//String expected_pass_id = "F:" + (x);
+//			System.out.println( mass_pass.getPassID()+ " should be " + expected_pass_id);
+
+			 assertEquals(x, extract_pass_id(mass_pass));
+
 			assertEquals(("F:" + x), mass_pass.getPassID());
+
 		}
+
 	}
 
-	
-	//Constructor Testing 
-	
 	// Booking less than 0
 	@Test(expected = PassengerException.class)
-	public void booking_time_less_than_0() throws PassengerException {
+	public void invalid_booking_time() throws PassengerException {
 		bad_pass = new First(-3, 6);
 	}
 
-	// Booking 0 (Allowed)
-	@Test
-	public void booking_time_0() throws PassengerException {
-		First good_pass = new First(0, 6);
-		assertEquals(0, good_pass.getBookingTime());
-	}
-	
 	// Departure less than 0
 	@Test(expected = PassengerException.class)
-	public void depart_time_less_than_0() throws PassengerException {
+	public void invalid_depart_time() throws PassengerException {
 		bad_pass = new First(5, -6);
 	}
 
 	// Departure equal to 0
 	@Test(expected = PassengerException.class)
-	public void depart_time_0() throws PassengerException {
+	public void invalid_depart_time_0() throws PassengerException {
 		bad_pass = new First(5, 0);
 	}
 
@@ -89,14 +90,6 @@ public class PassengerTests {
 	public void depart_time_before_booking() throws PassengerException {
 		bad_pass = new First(10, 4);
 	}
-	
-	// Booking sane as depart (Allowed)
-		@Test
-		public void depart_time_same_booking() throws PassengerException {
-			First good_pass = new First(6, 6);
-			assertEquals(6, good_pass.getBookingTime());
-			assertEquals(6, good_pass.getDepartureTime());
-}
 
 	// Successful Cancel Seat
 	@Test
@@ -110,12 +103,7 @@ public class PassengerTests {
 		assertFalse(first_pass.isConfirmed());
 	}
 
-	//TODO finish Cancel seet throws
-	@Test(expected = PassengerException.class)
-	public void cancel_seat_not_confirmed() throws PassengerException {
-		assertFalse(first_pass.isConfirmed());
-		
-		first_pass.cancelSeat(3);
+	public void cancel_seat_new_pas() {
 
 	}
 
