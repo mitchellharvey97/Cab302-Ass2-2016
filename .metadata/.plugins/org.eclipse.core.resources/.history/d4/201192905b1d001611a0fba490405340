@@ -52,7 +52,7 @@ public class PassengerTests {
 		int loop_pass_start = extract_pass_id(second_pass);
 		
 		for (int x = loop_pass_start; x < loop_pass_start + 10; x++){
-			//TODO add tests here
+			
 			
 		}
 		

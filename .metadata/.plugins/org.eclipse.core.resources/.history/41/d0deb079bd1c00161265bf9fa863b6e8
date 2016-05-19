@@ -7,12 +7,10 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import asgn2Passengers.First;
-import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
 
 /**
@@ -25,20 +23,16 @@ public class PassengerTests {
 	 * @throws java.lang.Exception
 	 */
 	public static int startingIndex;
-	public First first_pass;
-	public First bad_pass;
+	public static First first_pass;
+	public static First bad_pass;
 
-	@Before
-	public void setUpBeforeClass() throws Exception {
+	@BeforeClass
+	public static void setUpBeforeClass() throws Exception {
 		first_pass = new First(10, 20);
-		startingIndex = extract_pass_id(first_pass);
-	}
 
-	private int extract_pass_id(Passenger pas) {
 		// Get the passenger ID number, exclude the class identifier
-		String[] splitID = pas.getPassID().split(":");
-		int pass_id = Integer.parseInt(splitID[1]);
-		return pass_id;
+		String[] splitID = first_pass.getPassID().split(":");
+		startingIndex = Integer.parseInt(splitID[1]);
 	}
 
 	// General Passenger Class Tests
@@ -48,14 +42,6 @@ public class PassengerTests {
 		// Create second passenger
 		First second_pass = new First(10, 21);
 		assertEquals("F:" + (startingIndex + 1), second_pass.getPassID());
-		
-		int loop_pass_start = extract_pass_id(second_pass);
-		
-		for (int x = loop_pass_start; x < loop_pass_start + 10; x++){
-			//TODO add tests here
-			
-		}
-		
 	}
 
 	// Booking less than 0
@@ -82,7 +68,6 @@ public class PassengerTests {
 		bad_pass = new First(10, 4);
 	}
 
-	// Successful Cancel Seat
 	@Test
 	public void cancel_seat() throws PassengerException {
 		// Need to confirm to cancel
@@ -92,10 +77,6 @@ public class PassengerTests {
 		assertFalse(first_pass.isNew());
 		first_pass.cancelSeat(1);
 		assertFalse(first_pass.isConfirmed());
-	}
-
-	public void cancel_seat_new_pas() {
-
 	}
 
 	@Test

@@ -32,13 +32,16 @@ public class PassengerTests {
 	public void setUpBeforeClass() throws Exception {
 		first_pass = new First(10, 20);
 		startingIndex = extract_pass_id(first_pass);
+
 	}
 
 	private int extract_pass_id(Passenger pas) {
 		// Get the passenger ID number, exclude the class identifier
 		String[] splitID = pas.getPassID().split(":");
 		int pass_id = Integer.parseInt(splitID[1]);
+
 		return pass_id;
+
 	}
 
 	// General Passenger Class Tests
@@ -48,14 +51,6 @@ public class PassengerTests {
 		// Create second passenger
 		First second_pass = new First(10, 21);
 		assertEquals("F:" + (startingIndex + 1), second_pass.getPassID());
-		
-		int loop_pass_start = extract_pass_id(second_pass);
-		
-		for (int x = loop_pass_start; x < loop_pass_start + 10; x++){
-			//TODO add tests here
-			
-		}
-		
 	}
 
 	// Booking less than 0
