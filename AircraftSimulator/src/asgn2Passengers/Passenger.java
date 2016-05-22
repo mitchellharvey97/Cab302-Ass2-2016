@@ -58,7 +58,10 @@ public abstract class Passenger {
 	protected int enterQueueTime;
 	protected int exitQueueTime;
 	protected int confirmationTime;
-	protected int departureTime; 
+	protected int departureTime;
+
+	protected boolean wasConfirmed;
+	protected boolean wasQueued;
 	
 	
 	/**
@@ -81,13 +84,13 @@ public abstract class Passenger {
 			throw new PassengerException("Departure time must be greater than booking time.");
 		}
 		
-		// Original code
+		// Modify the passenger
 		this.passID = "" + Passenger.index; 
 		Passenger.index++;
-
-		// Modify the passenger
 		this.bookingTime = bookingTime;
 		this.departureTime = departureTime;
+		this.wasConfirmed = false;
+		this.wasQueued = false;
 	}
 	
 	/**
@@ -173,14 +176,15 @@ public abstract class Passenger {
 		}
 		
 		// Modify the passenger
+		if (this.isQueued()) {
+			this.exitQueueTime = confirmationTime;
+		}
 		this.newState = false;
 		this.inQueue = false;
 		this.confirmed = true;
+		this.wasConfirmed = true;
 		this.confirmationTime = confirmationTime;
 		this.departureTime = departureTime;
-		if (this.isQueued()) {
-			exitQueueTime = confirmationTime;
-		}
 	}
 
 	/**
@@ -364,6 +368,7 @@ public abstract class Passenger {
 		// Modify the passenger
 		this.newState = false;
 		this.inQueue = true;
+		this.wasQueued = true;
 		this.enterQueueTime = queueTime;
 		this.departureTime = departureTime;		
 	}
@@ -400,12 +405,12 @@ public abstract class Passenger {
 		}
 		
 		// Modify the passenger
-		this.newState = false;
-		this.inQueue = false;
-		this.refused = true;
 		if (this.isQueued()) {
 			exitQueueTime = refusalTime;
 		}
+		this.newState = false;
+		this.inQueue = false;
+		this.refused = true;
 	}
 	
 	/* (non-Javadoc) (Supplied) 
@@ -447,10 +452,7 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if was Confirmed state; false otherwise
 	 */
 	public boolean wasConfirmed() {
-		// confirmationTime time can be set to 0
-		// Maybe find another way to find if it has been set
-		// Cannot check for null of type int
-		return (confirmationTime != 0);
+		return this.wasConfirmed;
 	}
 
 	/**
@@ -459,10 +461,7 @@ public abstract class Passenger {
 	 * @return <code>boolean</code> true if was Queued state; false otherwise
 	 */
 	public boolean wasQueued() {
-		// enterQueueTime time can be set to 0
-		// Maybe find another way to find if it has been set
-		// Cannot check for null of type int
-		return (enterQueueTime != 0);
+		return this.wasQueued;
 	}
 	
 	/**
@@ -477,6 +476,8 @@ public abstract class Passenger {
 		this.inQueue = p.inQueue;
 		this.flown = p.flown;
 		this.refused = p.refused;
+		this.wasConfirmed = p.wasConfirmed;
+		this.wasQueued = p.wasQueued;
 		
 		// Copy passenger properties
 		this.passID += p.passID;

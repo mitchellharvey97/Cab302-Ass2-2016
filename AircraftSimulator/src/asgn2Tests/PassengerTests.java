@@ -110,7 +110,7 @@ public class PassengerTests {
 		assertFalse(first_pass.isConfirmed());
 	}
 
-	//TODO finish Cancel seet throws
+	//TODO finish Cancel seat throws
 	@Test(expected = PassengerException.class)
 	public void cancel_seat_not_confirmed() throws PassengerException {
 		assertFalse(first_pass.isConfirmed());
