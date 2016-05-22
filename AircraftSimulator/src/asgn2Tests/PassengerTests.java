@@ -353,11 +353,10 @@ public class PassengerTests {
 
     /* Passenger.wasConfirmed() Tests */
     @Test
-    public void testWasConfirmed() throws PassengerException {
-        // Test refused passenger
+    public void testWasConfirmedPassengerRefused() throws PassengerException {
         // N -> C -> N -> Q -> R
         assertFalse(p.wasConfirmed());
-        p.confirmSeat(1, 1);
+        p.confirmSeat(0, 1);
         assertTrue(p.wasConfirmed());
         p.cancelSeat(1);
         assertTrue(p.wasConfirmed());
@@ -365,37 +364,51 @@ public class PassengerTests {
         assertTrue(p.wasConfirmed());
         p.refusePassenger(1);
         assertTrue(p.wasConfirmed());
-
-        // Test flown passenger
+    }
+    
+    @Test
+    public void testWasConfirmedPassengerFlown() throws PassengerException {
         // N -> C -> F
-        First p2 = new First(1, 1);
-        assertFalse(p2.wasConfirmed());
-        p2.confirmSeat(1, 1);
-        assertTrue(p2.wasConfirmed());
-        p2.flyPassenger(1);
-        assertTrue(p2.wasConfirmed());
+        assertFalse(p.wasConfirmed());
+        p.confirmSeat(1, 1);
+        assertTrue(p.wasConfirmed());
+        p.flyPassenger(1);
+        assertTrue(p.wasConfirmed());
+    }
+    
+    @Test
+    public void testWasConfirmedPassengerUpgraded() throws PassengerException {
+        p.confirmSeat(1, 1);
+        First u = (First) p.upgrade();
+        assertTrue(u.wasConfirmed());
+    }
+    
+    @Test
+    public void testWasQueuedPassengerUpgraded() throws PassengerException {
+        p.queuePassenger(1, 1);
+        First u = (First) p.upgrade();
+        assertTrue(u.wasQueued());
     }
 
     /* Passenger.wasQueued() Tests */
     @Test
-    public void testWasQueued() throws PassengerException {
-        // Test refused passenger
+    public void testWasQueuedPassengerRefused() throws PassengerException {
         // N -> Q -> R
         assertFalse(p.wasQueued());
         p.queuePassenger(1, 1);
         assertTrue(p.wasQueued());
         p.refusePassenger(1);
         assertTrue(p.wasQueued());
-
-        // Test flown passenger
+    }
+    @Test
+    public void testWasQueuedPassengerFlown() throws PassengerException {
         // N -> Q -> C -> F
-        First p2 = new First(1, 1);
-        assertFalse(p2.wasQueued());
-        p2.queuePassenger(1, 1);
-        assertTrue(p2.wasQueued());
-        p2.confirmSeat(1, 1);
-        assertTrue(p2.wasQueued());
-        p2.flyPassenger(1);
-        assertTrue(p2.wasQueued());
+        assertFalse(p.wasQueued());
+        p.queuePassenger(1, 1);
+        assertTrue(p.wasQueued());
+        p.confirmSeat(1, 1);
+        assertTrue(p.wasQueued());
+        p.flyPassenger(1);
+        assertTrue(p.wasQueued());
     }
 }

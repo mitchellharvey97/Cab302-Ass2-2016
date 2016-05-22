@@ -88,6 +88,22 @@ public class BusinessTests {
         Passenger u = p.upgrade();
         assertTrue(u instanceof First);
         assertEquals("F(U)J:" + id, u.getPassID());
+
+        // Check passenger state
+        assertEquals(p.isNew(), u.isNew());
+        assertEquals(p.isConfirmed(), u.isConfirmed());
+        assertEquals(p.isQueued(), u.isQueued());
+        assertEquals(p.isFlown(), u.isFlown());
+        assertEquals(p.isRefused(), u.isRefused());
+        assertEquals(p.wasConfirmed(), u.wasConfirmed());
+        assertEquals(p.wasQueued(), u.wasQueued());
+
+        // Check passenger properties
+        assertEquals(p.getBookingTime(), u.getBookingTime());
+        assertEquals(p.getEnterQueueTime(), u.getEnterQueueTime());
+        assertEquals(p.getExitQueueTime(), u.getExitQueueTime());
+        assertEquals(p.getConfirmationTime(), u.getConfirmationTime());
+        assertEquals(p.getDepartureTime(), u.getDepartureTime());
     }
 
 }
