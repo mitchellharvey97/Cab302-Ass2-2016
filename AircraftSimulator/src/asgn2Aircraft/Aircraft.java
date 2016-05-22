@@ -263,7 +263,7 @@ public abstract class Aircraft {
      */
     public Bookings getBookings() {
         return new Bookings(this.numFirst, this.numBusiness, this.numPremium, this.numEconomy,
-                this.seats.size(), this.capacity - getNumPassengers());
+                getNumPassengers(), this.capacity - getNumPassengers());
     }
 
     /**
@@ -299,7 +299,7 @@ public abstract class Aircraft {
      * @return <code>int</code> number of Confirmed passengers
      */
     public int getNumPassengers() {
-        return numFirst + numBusiness + numPremium + numEconomy;
+        return this.seats.size();
     }
 
     /**

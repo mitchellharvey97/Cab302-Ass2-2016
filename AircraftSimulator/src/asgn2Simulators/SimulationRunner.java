@@ -31,6 +31,7 @@ public class SimulationRunner {
         Log l = null; 
 
         try {
+            // USE THIS SWITCH STATEMENT TO RUN GUI
             switch (args.length) {
                 case NUM_ARGS: {
                     s = createSimulatorUsingArgs(args); 
@@ -122,17 +123,17 @@ public class SimulationRunner {
         this.sim.createSchedule();
         this.log.initialEntry(this.sim);
 
-        //Main simulation loop 
+        //Main simulation loop
         for (int time=0; time<=Constants.DURATION; time++) {
-            this.sim.resetStatus(time); 
-            this.sim.rebookCancelledPassengers(time); 
+            this.sim.resetStatus(time);
+            this.sim.rebookCancelledPassengers(time);
             this.sim.generateAndHandleBookings(time);
             this.sim.processNewCancellations(time);
             if (time >= Constants.FIRST_FLIGHT) {
                 this.sim.processUpgrades(time);
                 this.sim.processQueue(time);
                 this.sim.flyPassengers(time);
-                this.sim.updateTotalCounts(time); 
+                this.sim.updateTotalCounts(time);
                 this.log.logFlightEntries(time, sim);
             } else {
                 this.sim.processQueue(time);
