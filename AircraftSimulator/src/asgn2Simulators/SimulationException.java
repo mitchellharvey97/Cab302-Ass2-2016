@@ -13,13 +13,13 @@ package asgn2Simulators;
  */
 @SuppressWarnings("serial") // We're not interested in binary i/o here
 public class SimulationException extends Exception {
-	
-	/**
-	 * Creates a new instance of SimulationException.
-	 * 
-	 * @param message String holding an informative message about the problem encountered
-	 */
-	public SimulationException(String message) {
-		super("Simulation Exception: " + message);
-	}
+
+    /**
+     * Creates a new instance of SimulationException.
+     * 
+     * @param message String holding an informative message about the problem encountered
+     */
+    public SimulationException(String message) {
+        super("Simulation Exception: " + message);
+    }
 }

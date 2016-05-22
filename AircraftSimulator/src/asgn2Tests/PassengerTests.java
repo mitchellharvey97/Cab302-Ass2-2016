@@ -374,7 +374,6 @@ public class PassengerTests {
         assertTrue(p2.wasConfirmed());
         p2.flyPassenger(1);
         assertTrue(p2.wasConfirmed());
-
     }
 
     /* Passenger.wasQueued() Tests */
