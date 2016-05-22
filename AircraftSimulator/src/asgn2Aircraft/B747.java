@@ -6,43 +6,43 @@
  */
 package asgn2Aircraft;
 
-
 /**
  * Specialization of the {@link asgn2Aircraft.Aircraft} class for the Boeing B747-400. 
  * Default passenger capacities are based on the QANTAS four class configuration 
  * 
- * @author hogan
+ * @author Mitchell Harvey (N9453270)
+ * @version 1.0
  *
  */
 public class B747 extends Aircraft {
-	
-	static final int FIRST = 14;
-	static final int BUSINESS = 52;
-	static final int PREMIUM = 32;
-	static final int ECONOMY = 255;
 
-	/**
-	 * Constructor for B747 uses default fare class capacities 
-	 * 
-	 * 
-	 * @param flightCode <code>String</code> containing flight ID 
-	 * @param departureTime <code>int</code> scheduled departure time
-	 * @throws AircraftException if invalid parameters. 
-	 * See {@link asgn2Aircraft.Aircraft#Aircraft(String, int, int, int, int, int)}
-	 */
-	public B747(String flightCode,int departureTime) throws AircraftException {
-		super(flightCode, departureTime, FIRST, BUSINESS, PREMIUM, ECONOMY);
-		this.type = "B747";
-	}
+    static final int FIRST = 14;
+    static final int BUSINESS = 52;
+    static final int PREMIUM = 32;
+    static final int ECONOMY = 255;
 
-	/**
-	 * Constructor for B747 sets all fare class capacities 
-	 * 
-	 * @see asgn2Aircraft.Aircraft#Aircraft(String, int, int, int, int, int) 
-	 */
-	public B747(String flightCode,int departureTime,int first, int business, int premium, int economy) throws AircraftException {
-		super(flightCode, departureTime, first, business, premium, economy);
-		this.type = "B747";
-	}
+    /**
+     * Constructor for B747 uses default fare class capacities 
+     * 
+     * 
+     * @param flightCode <code>String</code> containing flight ID 
+     * @param departureTime <code>int</code> scheduled departure time
+     * @throws AircraftException if invalid parameters. 
+     * See {@link asgn2Aircraft.Aircraft#Aircraft(String, int, int, int, int, int)}
+     */
+    public B747(String flightCode,int departureTime) throws AircraftException {
+        super(flightCode, departureTime, FIRST, BUSINESS, PREMIUM, ECONOMY);
+        this.type = "B747";
+    }
+
+    /**
+     * Constructor for B747 sets all fare class capacities 
+     * 
+     * @see asgn2Aircraft.Aircraft#Aircraft(String, int, int, int, int, int) 
+     */
+    public B747(String flightCode,int departureTime,int first, int business, int premium, int economy) throws AircraftException {
+        super(flightCode, departureTime, first, business, premium, economy);
+        this.type = "B747";
+    }
 
 }
