@@ -28,7 +28,6 @@ import asgn2Passengers.Premium;
  *
  */
 public class A380Tests {
-
     public A380 a;
     public Economy p;
 
@@ -108,6 +107,11 @@ public class A380Tests {
     public void testSimpleConstructorFlightCode() throws AircraftException {
         a = new A380("QF11", 1);
         assertTrue(a.toString().indexOf("QF11") >= 0);
+    }
+    //TODO add some way of testing the capacity is set correctly by default (Probably via a loop)
+    @Test
+    public void testSimpleConstructorGetBusiness() throws AircraftException {
+       assertTrue(false);
     }
 
     @Test
