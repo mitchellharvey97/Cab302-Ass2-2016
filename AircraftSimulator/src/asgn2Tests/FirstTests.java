@@ -16,8 +16,8 @@ import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
 
 /**
- * The FirstTests class provides various JUnit tests designed to guarantee correct
- * functionality of the First passenger object.
+ * The FirstTests class provides various JUnit tests designed to guarantee
+ * correct functionality of the First passenger object.
  * 
  * @author Mitchell Harvey (N9453270)
  * @version 1.0
@@ -44,26 +44,36 @@ public class FirstTests {
     /* Valid Constructors */
     @Test
     public void testValidConstructor() throws PassengerException {
-        new First(1, 1);
+        new First(1, 2);
+    }
+
+    @Test
+    public void testValidConstructorBookingTimeEqualDepartureTime() throws PassengerException {
+        new First(2, 2);
+    }
+
+    @Test
+    public void testValidConstructorBookingTime0() throws PassengerException {
+        new First(0, 1);
     }
 
     /* Invalid Constructors */
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorBookingTimeLessThanZero() throws PassengerException {
         new First(-1, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorZeroDepartureTime() throws PassengerException {
         new First(1, 0);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanZero() throws PassengerException {
         new First(1, -1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanBookingTime() throws PassengerException {
         new First(2, 1);
     }

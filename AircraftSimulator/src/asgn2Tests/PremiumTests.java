@@ -6,15 +6,16 @@
  */
 package asgn2Tests;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import asgn2Passengers.Premium;
 import asgn2Passengers.Business;
 import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
+import asgn2Passengers.Premium;
 
 /**
  * The PremiumTests class provides various JUnit tests designed to guarantee correct
@@ -45,7 +46,17 @@ public class PremiumTests {
     /* Valid Constructors */
     @Test
     public void testValidConstructor() throws PassengerException {
-        new Premium(1, 1);
+        new Premium(1, 2);
+    }
+
+    @Test
+    public void testValidConstructorBookingTimeEqualDepartureTime() throws PassengerException {
+        new Premium(2, 2);
+    }
+
+    @Test
+    public void testValidConstructorBookingTime0() throws PassengerException {
+        new Premium(0, 1);
     }
 
     /* Invalid Constructors */

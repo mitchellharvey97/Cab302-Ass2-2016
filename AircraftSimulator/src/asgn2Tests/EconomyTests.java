@@ -17,8 +17,8 @@ import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
 
 /**
- * The EconomyTests class provides various JUnit tests designed to guarantee correct
- * functionality of the Economy passenger object.
+ * The EconomyTests class provides various JUnit tests designed to guarantee
+ * correct functionality of the Economy passenger object.
  * 
  * @author Mitchell Harvey (N9453270)
  * @version 1.0
@@ -45,26 +45,36 @@ public class EconomyTests {
     /* Valid Constructors */
     @Test
     public void testValidConstructor() throws PassengerException {
-        new Economy(1, 1);
+        new Economy(1, 2);
+    }
+
+    @Test
+    public void testValidConstructorBookingTimeEqualDepartureTime() throws PassengerException {
+        new Economy(2, 2);
+    }
+
+    @Test
+    public void testValidConstructorBookingTime0() throws PassengerException {
+        new Economy(0, 1);
     }
 
     /* Invalid Constructors */
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorBookingTimeLessThanZero() throws PassengerException {
         new Economy(-1, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorZeroDepartureTime() throws PassengerException {
         new Economy(1, 0);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanZero() throws PassengerException {
         new Economy(1, -1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanBookingTime() throws PassengerException {
         new Economy(2, 1);
     }
@@ -83,8 +93,10 @@ public class EconomyTests {
         assertEquals("No seats available in Economy", p.noSeatsMsg());
     }
 
+    // TODO Do we need to test if P and U are independent of each other?
     @Test
     public void testPassengerUpgrade() {
+        assertTrue(p instanceof Economy);
         Passenger u = p.upgrade();
         assertTrue(u instanceof Premium);
         assertEquals("P(U)Y:" + id, u.getPassID());
@@ -104,6 +116,10 @@ public class EconomyTests {
         assertEquals(p.getExitQueueTime(), u.getExitQueueTime());
         assertEquals(p.getConfirmationTime(), u.getConfirmationTime());
         assertEquals(p.getDepartureTime(), u.getDepartureTime());
+
+        // Double Upgrade
+        Passenger u2 = u.upgrade();
+        assertEquals("J(U)P(U)Y:0", u2.getPassID());
     }
 
 }

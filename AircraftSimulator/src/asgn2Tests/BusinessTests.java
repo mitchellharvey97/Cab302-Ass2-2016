@@ -17,8 +17,8 @@ import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
 
 /**
- * The BusinessTests class provides various JUnit tests designed to guarantee correct
- * functionality of the Business passenger object.
+ * The BusinessTests class provides various JUnit tests designed to guarantee
+ * correct functionality of the Business passenger object.
  * 
  * @author Mitchell Harvey (N9453270)
  * @version 1.0
@@ -45,26 +45,36 @@ public class BusinessTests {
     /* Valid Constructors */
     @Test
     public void testValidConstructor() throws PassengerException {
-        new Business(1, 1);
+        new Business(1, 2);
+    }
+
+    @Test
+    public void testValidConstructorBookingTimeEqualDepartureTime() throws PassengerException {
+        new Business(2, 2);
+    }
+
+    @Test
+    public void testValidConstructorBookingTime0() throws PassengerException {
+        new Business(0, 1);
     }
 
     /* Invalid Constructors */
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorBookingTimeLessThanZero() throws PassengerException {
         new Business(-1, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorZeroDepartureTime() throws PassengerException {
         new Business(1, 0);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanZero() throws PassengerException {
         new Business(1, -1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanBookingTime() throws PassengerException {
         new Business(2, 1);
     }
@@ -85,6 +95,7 @@ public class BusinessTests {
 
     @Test
     public void testPassengerUpgrade() {
+        assertTrue(p instanceof Business);
         Passenger u = p.upgrade();
         assertTrue(u instanceof First);
         assertEquals("F(U)J:" + id, u.getPassID());
