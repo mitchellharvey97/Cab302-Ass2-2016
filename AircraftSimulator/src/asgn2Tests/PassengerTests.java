@@ -60,22 +60,22 @@ public class PassengerTests {
     }
 
     /* INVALID CONSTRUCTORS */
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorBookingTimeLessThanZero() throws PassengerException {
         new First(-1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanZero() throws PassengerException {
         new First(1, -1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorZeroDepartureTime() throws PassengerException {
         new First(0, 0);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanBookingTime() throws PassengerException {
         new First(2, 1);
     }
@@ -97,27 +97,27 @@ public class PassengerTests {
         assertEquals(1, p.getBookingTime());
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testCancelSeatPassengerNew() throws PassengerException {
         assertTrue(p.isNew());
         p.cancelSeat(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testCancelSeatPassengerQueued() throws PassengerException {
         p.queuePassenger(1, 1);
         assertTrue(p.isQueued());
         p.cancelSeat(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testCancelSeatPassengerRefused() throws PassengerException {
         p.refusePassenger(1);
         assertTrue(p.isRefused());
         p.cancelSeat(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testCancelSeatPassengerFlown() throws PassengerException {
         p.confirmSeat(1, 1);
         p.flyPassenger(1);
@@ -125,7 +125,7 @@ public class PassengerTests {
         p.cancelSeat(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testCancelSeatCancellationTimeLessThanZero() throws PassengerException {
         p.confirmSeat(1, 1);
         p.cancelSeat(-1);
@@ -137,8 +137,8 @@ public class PassengerTests {
         p.cancelSeat(0);
     }
 
-    @Test(expected = PassengerException.class)
-    public void testCancelSeatCancellationTimeGreaterThanDeparture() throws PassengerException {
+    @Test (expected = PassengerException.class)
+    public void testCancelSeatDepartureTimeLessThanCancellationTime() throws PassengerException {
         p.confirmSeat(1, 1);
         int cancelTime = 2;
         assertTrue(p.getDepartureTime() < cancelTime);
@@ -190,21 +190,21 @@ public class PassengerTests {
         assertEquals(1, p.getExitQueueTime());
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testConfirmSeatPassengerConfirmed() throws PassengerException {
         p.confirmSeat(1, 1);
         assertTrue(p.isConfirmed());
         p.confirmSeat(1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testConfirmSeatPassengerRefused() throws PassengerException {
         p.refusePassenger(1);
         assertTrue(p.isRefused());
         p.confirmSeat(1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testConfirmSeatPassengerFlown() throws PassengerException {
         p.confirmSeat(1, 1);
         p.flyPassenger(1);
@@ -212,7 +212,7 @@ public class PassengerTests {
         p.confirmSeat(1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testConfirmSeatConfirmationTimeLessThanZero() throws PassengerException {
         p.confirmSeat(-1, 1);
     }
@@ -223,8 +223,8 @@ public class PassengerTests {
         assertEquals(0, p.getConfirmationTime());
     }
 
-    @Test(expected = PassengerException.class)
-    public void testConfirmSeatConfirmationTimeGreaterThanDepartureTime() throws PassengerException {
+    @Test (expected = PassengerException.class)
+    public void testConfirmSeatDepartureTimeLessThanConfirmationTime() throws PassengerException {
         p.confirmSeat(2, 1);
     }
 
@@ -261,27 +261,27 @@ public class PassengerTests {
         assertEquals(2, p.getDepartureTime());
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testFlyPassengerPassengerNew() throws PassengerException {
         assertTrue(p.isNew());
         p.flyPassenger(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testFlyPassengerPassengerQueued() throws PassengerException {
         p.queuePassenger(1, 1);
         assertTrue(p.isQueued());
         p.flyPassenger(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testFlyPassengerPassengerRefused() throws PassengerException {
         p.refusePassenger(1);
         assertTrue(p.isRefused());
         p.flyPassenger(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testFlyPassengerPassengerFlown() throws PassengerException {
         p.confirmSeat(1, 1);
         p.flyPassenger(1);
@@ -289,13 +289,13 @@ public class PassengerTests {
         p.flyPassenger(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testFlyPassengerZeroDepartureTime() throws PassengerException {
         p.confirmSeat(1, 1);
         p.flyPassenger(0);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testFlyPassengerDepartureTimeLessThanZero() throws PassengerException {
         p.confirmSeat(1, 1);
         p.flyPassenger(-1);
@@ -397,28 +397,28 @@ public class PassengerTests {
         assertEquals(1, p.getDepartureTime());
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testQueuePassengerPassengerQueued() throws PassengerException {
         p.queuePassenger(1, 1);
         assertTrue(p.isQueued());
         p.queuePassenger(1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testQueuePassengerPassengerConfirmed() throws PassengerException {
         p.confirmSeat(1, 1);
         assertTrue(p.isConfirmed());
         p.queuePassenger(1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testQueuePassengerPassengerRefused() throws PassengerException {
         p.refusePassenger(1);
         assertTrue(p.isRefused());
         p.queuePassenger(1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testQueuePassengerPassengerFlown() throws PassengerException {
         p.confirmSeat(1, 1);
         p.flyPassenger(1);
@@ -426,7 +426,7 @@ public class PassengerTests {
         p.queuePassenger(1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testQueuePassengerQueueTimeLessThanZero() throws PassengerException {
         p.queuePassenger(-1, 1);
     }
@@ -436,8 +436,8 @@ public class PassengerTests {
         p.queuePassenger(0, 1);
     }
 
-    @Test(expected = PassengerException.class)
-    public void testQueuePassengerQueueTimeGreaterThanDepartureTime() throws PassengerException {
+    @Test (expected = PassengerException.class)
+    public void testQueuePassengerDepartureTimeLessThanQueueTime() throws PassengerException {
         p.queuePassenger(2, 1);
     }
 
@@ -465,21 +465,21 @@ public class PassengerTests {
         assertEquals(2, p.getExitQueueTime());
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testRefusePassengerPassengerConfirmed() throws PassengerException {
         p.confirmSeat(1, 1);
         assertTrue(p.isConfirmed());
         p.refusePassenger(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testRefusePassengerPassengerRefused() throws PassengerException {
         p.refusePassenger(1);
         assertTrue(p.isRefused());
         p.refusePassenger(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testRefusePassengerPassengerFlown() throws PassengerException {
         p.confirmSeat(1, 1);
         p.flyPassenger(1);
@@ -487,7 +487,7 @@ public class PassengerTests {
         p.refusePassenger(1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testRefusePassengerRefusalTimeLessThanZero() throws PassengerException {
         p.refusePassenger(-1);
     }
@@ -500,7 +500,7 @@ public class PassengerTests {
         assertTrue(p2.isRefused());
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testRefusePassengerRefusalTimeLessThanBookingTime() throws PassengerException {
         assertTrue(p.getBookingTime() > 0);
         p.refusePassenger(0);
@@ -576,4 +576,4 @@ public class PassengerTests {
         p.flyPassenger(1);
         assertTrue(p.wasQueued());
     }
- }
+}
