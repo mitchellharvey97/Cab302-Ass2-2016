@@ -134,10 +134,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlStart = new JPanel();
 
         // JFreeChart
-        // pnlChartController = new ChartPanel();
-        // pnlChart = pnlChartController.getChartPanel();
-        // pnlDisplay.setLayout(new BorderLayout());
-        // pnlDisplay.add(pnlChart);
+         pnlChartController = new ChartPanel();
+         pnlChart = pnlChartController.getChartPanel();
+         pnlDisplay.setLayout(new BorderLayout());
+         pnlDisplay.add(pnlChart);
 
         // Start Image
         lblStartTop = createLabel("Thank you for flying Air Hogie!", new Font("Arial", Font.BOLD, 15));
@@ -333,6 +333,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        System.out.println("All Done for now");
     }
 
     private Integer strToInt(String input) {
@@ -364,10 +365,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private boolean prepareSim() throws IOException, SimulationException {
         Integer seed,queueSize;
-
         Double dailyMean, cancel, first, business, premium ,economy ,sdBooking;
-
-
+//Check everything for errors, return false if there is a problem, otherwise fall through and return true
         if ((seed = strToInt(txtSeed.getText())) == null) {
             createErrorMessage("Seed value");
             return false;
@@ -376,51 +375,39 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             createErrorMessage("Daily Mean");
             return false;
         }
-
         if ((queueSize = strToInt(txtQueue.getText())) == null) {
             createErrorMessage("Max Queue Size");
             return false;
         }
-
         if ((cancel = strToDouble(txtCancel.getText(),1.0)) == null) {
-
             createErrorMessage("Cancel Value");
             return false;
         }
-
         if ((first = strToDouble(txtFirst.getText(),1.0)) == null) {
             createErrorMessage("First Percent");
             return false;
         }
         if ((business = strToDouble(txtBusiness.getText(),1.0)) == null) {
-
             createErrorMessage("Business Percent");
             return false;
         }
-
-
         if ((premium = strToDouble(txtPremium.getText(),1.0)) == null) {
             createErrorMessage("Premium Percent");
             return false;
         }        
         if ((economy = strToDouble(txtEconomy.getText(),1.0)) == null) {
-
             createErrorMessage("Economy Percent");
             return false;
         }
-
         if ((first + business + premium + economy) != 1) {
             createErrorMessage("Passenger split");
             return false;
         }
-
-
+//overwriting the values
         sdBooking = 0.33 * dailyMean;
         sdBooking  = 429.0;
-  l = new Log();
-
+        l = new Log();
         sim = new Simulator(seed, queueSize, dailyMean, sdBooking, first, business, premium, economy, cancel);
-
         return true;
     }
 
@@ -431,12 +418,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         System.out.println("Running the main sim");
         this.sim.createSchedule();
         this.l.initialEntry(this.sim);
-
         // Main simulation loop
 
-        int cumulativeBusness = 0,cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0, cumulativeFlown = 0  ;
-
-
+        int cumulativeBusness = 0,cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0;//, cumulativeFlown = 0  ;
 
         TimeSeries tmsBooking = new TimeSeries("Bookings");
         TimeSeries tmsFirst= new TimeSeries("First");
@@ -478,7 +462,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             Date timePoint = cal.getTime();
 
 
-            tmsFirst.add(new Day(timePoint), dailyFirst);
+           tmsBooking.add(new Day(timePoint), time);
+           
+          tmsFirst.add(new Day(timePoint), dailyFirst);
             tmsBusiness.add(new Day(timePoint), dailyBusiness);
             tmsPremium.add(new Day(timePoint), dailyPremium);
             tmsEconomy.add(new Day(timePoint), dailyEconomy);
@@ -494,6 +480,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         data_points.addSeries(tmsPremium);
         data_points.addSeries(tmsEconomy);
         data_points.addSeries(tmsBooking);
+        
         JFreeChart chart = pnlChartController.createChart(data_points);
         pnlChart.setChart(chart);
         pnlChart.repaint();
