@@ -64,8 +64,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JTextField txtPremium;
     private JTextField txtEconomy;
     
-    private JLabel lblSimulation;
-    private JLabel lblFareClasses;
+    private JLabel lblSimTitle;
+    private JLabel lblFareTitle;
     private JLabel lblSeed;
     private JLabel lblMean;
     private JLabel lblQueue;
@@ -125,8 +125,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlDisplay.add(txtDisplay, BorderLayout.CENTER);
         
         // Labels
-        lblSimulation = createLabel("Simulation", new Font("Arial", Font.BOLD, 24));
-        lblFareClasses = createLabel("Fare Classes", new Font("Arial", Font.BOLD, 24));
+        lblSimTitle = createLabel("Simulation", new Font("Arial", Font.BOLD, 24));
+        lblFareTitle = createLabel("Fare Classes", new Font("Arial", Font.BOLD, 24));
         lblSeed = createLabel("Seed");
         lblMean = createLabel("Mean");
         lblQueue = createLabel("Queue Size");
@@ -137,14 +137,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblEconomy = createLabel("Pr(Economy)");
         
         // Text Fields
-        txtSeed = createTextField();
-        txtMean = createTextField();
-        txtQueue = createTextField();
-        txtCancel = createTextField();
-        txtFirst = createTextField();
-        txtBusiness = createTextField();
-        txtPremium = createTextField();
-        txtEconomy = createTextField();
+        txtSeed = createTextField("100");
+        txtMean = createTextField("1300.0");
+        txtQueue = createTextField("500");
+        txtCancel = createTextField("0.1");
+        txtFirst = createTextField("0.03");
+        txtBusiness = createTextField("0.14");
+        txtPremium = createTextField("0.13");
+        txtEconomy = createTextField("0.7");
 
         // Buttons
         btnRun = createButton("Run Simulation");
@@ -174,8 +174,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return jb;
     }
 
-    private JTextField createTextField() {
-        JTextField jtf = new JTextField();
+    private JTextField createTextField(String str) {
+        JTextField jtf = new JTextField(str);
         jtf.setFont(new Font("Arial", Font.PLAIN, 12));
         jtf.setBorder(BorderFactory.createEtchedBorder());
         return jtf;
@@ -200,7 +200,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel createLabel(String str) {
         JLabel jl = new JLabel(str);
         jl.setFont(new Font("Arial", Font.PLAIN, 12));
-        jl.setHorizontalAlignment(SwingConstants.CENTER);
+        jl.setHorizontalAlignment(SwingConstants.RIGHT);
         return jl;
     }
     
@@ -211,35 +211,35 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Add components to grid
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
-        //c.insets = new Insets(1, 2, 1, 2);
+        c.insets = new Insets(0, 0, 0, 5);
         c.weightx = 1;
         c.weighty = 1;
 
-        c.anchor = GridBagConstraints.WEST;
-        addToPanel(pnlBottom, lblSimulation, c, 0, 0, 2, 1);
-        addToPanel(pnlBottom, lblSeed, c, 0, 1, 1, 1);
-        addToPanel(pnlBottom, lblMean, c, 0, 2, 1, 1);
-        addToPanel(pnlBottom, lblQueue, c, 0, 3, 1, 1);
-        addToPanel(pnlBottom, lblCancel, c, 0, 4, 1, 1);
-        addToPanel(pnlBottom, txtSeed, c, 1, 1, 1, 1);
-        addToPanel(pnlBottom, txtMean, c, 1, 2, 1, 1);
-        addToPanel(pnlBottom, txtQueue, c, 1, 3, 1, 1);
-        addToPanel(pnlBottom, txtCancel, c, 1, 4, 1, 1);
+        c.anchor = GridBagConstraints.WEST; //x, y, w, h
+        addToPanel(pnlBottom, lblSimTitle, c, 0, 0, 3, 1);
+        addToPanel(pnlBottom, lblSeed,     c, 0, 1, 1, 1);
+        addToPanel(pnlBottom, lblMean,     c, 0, 2, 1, 1);
+        addToPanel(pnlBottom, lblQueue,    c, 0, 3, 1, 1);
+        addToPanel(pnlBottom, lblCancel,   c, 0, 4, 1, 1);
+        addToPanel(pnlBottom, txtSeed,     c, 1, 1, 2, 1);
+        addToPanel(pnlBottom, txtMean,     c, 1, 2, 2, 1);
+        addToPanel(pnlBottom, txtQueue,    c, 1, 3, 2, 1);
+        addToPanel(pnlBottom, txtCancel,   c, 1, 4, 2, 1);
 
-        addToPanel(pnlBottom, lblFareClasses, c, 2, 0, 2, 1);
-        addToPanel(pnlBottom, lblFirst, c, 2, 1, 1, 1);
-        addToPanel(pnlBottom, lblBusiness, c, 2, 2, 1, 1);
-        addToPanel(pnlBottom, lblPremium, c, 2, 3, 1, 1);
-        addToPanel(pnlBottom, lblEconomy, c, 2, 4, 1, 1);
-        addToPanel(pnlBottom, txtFirst, c, 3, 1, 1, 1);
-        addToPanel(pnlBottom, txtBusiness, c, 3, 2, 1, 1);
-        addToPanel(pnlBottom, txtPremium, c, 3, 3, 1, 1);
-        addToPanel(pnlBottom, txtEconomy, c, 3, 4, 1, 1);
+        addToPanel(pnlBottom, lblFareTitle, c, 3, 0, 3, 1);
+        addToPanel(pnlBottom, lblFirst,     c, 3, 1, 1, 1);
+        addToPanel(pnlBottom, lblBusiness,  c, 3, 2, 1, 1);
+        addToPanel(pnlBottom, lblPremium,   c, 3, 3, 1, 1);
+        addToPanel(pnlBottom, lblEconomy,   c, 3, 4, 1, 1);
+        addToPanel(pnlBottom, txtFirst,     c, 4, 1, 2, 1);
+        addToPanel(pnlBottom, txtBusiness,  c, 4, 2, 2, 1);
+        addToPanel(pnlBottom, txtPremium,   c, 4, 3, 2, 1);
+        addToPanel(pnlBottom, txtEconomy,   c, 4, 4, 2, 1);
         
         c.anchor = GridBagConstraints.EAST;
         c.fill = GridBagConstraints.BOTH;
-        addToPanel(pnlBottom, btnRun, c, 4, 1, 2, 2);
-        addToPanel(pnlBottom, btnSwitch, c, 4, 3, 2, 2);
+        addToPanel(pnlBottom, btnRun,    c, 6, 1, 2, 2);
+        addToPanel(pnlBottom, btnSwitch, c, 6, 3, 2, 2);
     }
     
     /**
