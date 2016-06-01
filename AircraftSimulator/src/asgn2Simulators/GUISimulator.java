@@ -7,6 +7,7 @@
 package asgn2Simulators;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -26,7 +27,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel; 
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -49,6 +50,8 @@ import asgn2Passengers.PassengerException;
 public class GUISimulator extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 600;
     public static final int HEIGHT = 400;
+
+    private boolean startPage = true;
 
     private JPanel pnlDisplay;
     private JPanel pnlTop;
@@ -76,7 +79,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private JLabel lblStartTop;
     private JLabel lblStartBottom;
-    
+
     private JLabel lblSimTitle;
     private JLabel lblFareTitle;
     private JLabel lblSeed;
@@ -134,16 +137,20 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlStart = new JPanel();
 
         // JFreeChart
-         pnlChartController = new ChartPanel();
-         pnlChart = pnlChartController.getChartPanel();
-         pnlDisplay.setLayout(new BorderLayout());
-         pnlDisplay.add(pnlChart);
+        pnlChartController = new ChartPanel();
+        pnlChart = pnlChartController.getChartPanel();
+        pnlDisplay.setLayout(new BorderLayout());
+        pnlDisplay.add(pnlChart);
 
         // Start Image
         lblStartTop = createLabel("Thank you for flying Air Hogie!", new Font("Arial", Font.BOLD, 15));
-        lblStartBottom = createLabel("We hope you enjoy our wide selection of in-flight memes.", new Font("Arial", Font.BOLD, 15));
+        lblStartBottom = createLabel("We hope you enjoy our wide selection of in-flight memes.",
+                new Font("Arial", Font.BOLD, 15));
         lblStartImg = new JLabel(new ImageIcon(getClass().getResource("img/jim.png")));
-        pnlDisplay.add(pnlStart);
+        // if (this.startPage){
+     //   pnlDisplay.add(pnlStart);
+        // }
+        // }
 
         // Labels
         lblSimTitle = createLabel("Simulation Settings", new Font("Arial", Font.BOLD, 15));
@@ -171,7 +178,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         btnRun = createButton("Run Simulation");
         btnSwitch = createButton("Switch Charts");
         btnRestore = createButton("Restore Defaults");
-        
+
         layoutStartPanel();
         layoutButtonPanel();
 
@@ -211,7 +218,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         jl.setHorizontalAlignment(SwingConstants.RIGHT);
         return jl;
     }
-    
+
     private void layoutStartPanel() {
         pnlStart.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
@@ -273,12 +280,18 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
      * A convenience method to add a component to given grid bag layout
      * locations. Code due to Cay Horstmann
      *
-     * @param c the component to add
-     * @param constraints the grid bag constraints to use
-     * @param x the x grid position
-     * @param y the y grid position
-     * @param w the grid width
-     * @param h the grid height
+     * @param c
+     *            the component to add
+     * @param constraints
+     *            the grid bag constraints to use
+     * @param x
+     *            the x grid position
+     * @param y
+     *            the y grid position
+     * @param w
+     *            the grid width
+     * @param h
+     *            the grid height
      */
     private void addToPanel(JPanel jp, Component c, GridBagConstraints constraints, int x, int y, int w, int h) {
         constraints.gridx = x;
@@ -295,6 +308,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         // Determine which button was pressed
         if (src == btnRun) {
+
+            startPage = false;
             complete_sim();
         } else if (src == btnSwitch) {
             JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring Class: Warning",
@@ -364,9 +379,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     private boolean prepareSim() throws IOException, SimulationException {
-        Integer seed,queueSize;
-        Double dailyMean, cancel, first, business, premium ,economy ,sdBooking;
-//Check everything for errors, return false if there is a problem, otherwise fall through and return true
+        Integer seed, queueSize;
+        Double dailyMean, cancel, first, business, premium, economy, sdBooking;
+        // Check everything for errors, return false if there is a problem,
+        // otherwise fall through and return true
         if ((seed = strToInt(txtSeed.getText())) == null) {
             createErrorMessage("Seed value");
             return false;
@@ -379,23 +395,23 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             createErrorMessage("Max Queue Size");
             return false;
         }
-        if ((cancel = strToDouble(txtCancel.getText(),1.0)) == null) {
+        if ((cancel = strToDouble(txtCancel.getText(), 1.0)) == null) {
             createErrorMessage("Cancel Value");
             return false;
         }
-        if ((first = strToDouble(txtFirst.getText(),1.0)) == null) {
+        if ((first = strToDouble(txtFirst.getText(), 1.0)) == null) {
             createErrorMessage("First Percent");
             return false;
         }
-        if ((business = strToDouble(txtBusiness.getText(),1.0)) == null) {
+        if ((business = strToDouble(txtBusiness.getText(), 1.0)) == null) {
             createErrorMessage("Business Percent");
             return false;
         }
-        if ((premium = strToDouble(txtPremium.getText(),1.0)) == null) {
+        if ((premium = strToDouble(txtPremium.getText(), 1.0)) == null) {
             createErrorMessage("Premium Percent");
             return false;
-        }        
-        if ((economy = strToDouble(txtEconomy.getText(),1.0)) == null) {
+        }
+        if ((economy = strToDouble(txtEconomy.getText(), 1.0)) == null) {
             createErrorMessage("Economy Percent");
             return false;
         }
@@ -403,9 +419,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             createErrorMessage("Passenger split");
             return false;
         }
-//overwriting the values
+        // overwriting the values
         sdBooking = 0.33 * dailyMean;
-        sdBooking  = 429.0;
+        sdBooking = 429.0;
         l = new Log();
         sim = new Simulator(seed, queueSize, dailyMean, sdBooking, first, business, premium, economy, cancel);
         return true;
@@ -414,20 +430,24 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
         // TODO Remove pnlStart from pnlDisplay
         // Add chart to pnlDisplay
-        
+
         System.out.println("Running the main sim");
         this.sim.createSchedule();
         this.l.initialEntry(this.sim);
         // Main simulation loop
 
-        int cumulativeBusness = 0,cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0;//, cumulativeFlown = 0  ;
+        int cumulativeBusness = 0, cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0;// ,
+                                                                                                     // cumulativeFlown
+                                                                                                     // =
+                                                                                                     // 0
+                                                                                                     // ;
 
         TimeSeries tmsBooking = new TimeSeries("Bookings");
-        TimeSeries tmsFirst= new TimeSeries("First");
+        TimeSeries tmsFirst = new TimeSeries("First");
         TimeSeries tmsBusiness = new TimeSeries("Business");
         TimeSeries tmsPremium = new TimeSeries("Premium");
         TimeSeries tmsEconomy = new TimeSeries("Economy");
-        
+
         Calendar cal = GregorianCalendar.getInstance();
 
         for (int time = 0; time <= Constants.DURATION; time++) {
@@ -454,17 +474,15 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             cumulativeFirst = sim.getTotalFirst();
 
             int dailyPremium = sim.getTotalPremium() - cumulativePremium;
-            
-            cumulativePremium= sim.getTotalPremium();
 
+            cumulativePremium = sim.getTotalPremium();
 
             cal.set(2016, 0, time, 6, 0);
             Date timePoint = cal.getTime();
 
+            tmsBooking.add(new Day(timePoint), time);
 
-           tmsBooking.add(new Day(timePoint), time);
-           
-          tmsFirst.add(new Day(timePoint), dailyFirst);
+            tmsFirst.add(new Day(timePoint), dailyFirst);
             tmsBusiness.add(new Day(timePoint), dailyBusiness);
             tmsPremium.add(new Day(timePoint), dailyPremium);
             tmsEconomy.add(new Day(timePoint), dailyEconomy);
@@ -480,11 +498,26 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         data_points.addSeries(tmsPremium);
         data_points.addSeries(tmsEconomy);
         data_points.addSeries(tmsBooking);
+
         
+        
+    
+        
+   //     pnlDisplay.remove(pnlStart); 
+   //     pnlChartController = new ChartPanel();
+   //     pnlChart = pnlChartController.getChartPanel();  
+   //     pnlDisplay.setLayout(new BorderLayout());
+   //     pnlDisplay.setBackground(Color.GREEN);
+   //     pnlDisplay.add(pnlChart);     
+   
         JFreeChart chart = pnlChartController.createChart(data_points);
         pnlChart.setChart(chart);
         pnlChart.repaint();
-
+ 
+        
+        
+        
+        
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.l.logQREntries(Constants.DURATION, sim);
         this.l.finalise(this.sim);
