@@ -485,6 +485,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
             tmsBooking.add(new Day(timePoint), time);
 
+            System.out.println(sim.getTotalBusiness());
+            
             tmsFirst.add(new Day(timePoint), dailyFirst);
             tmsBusiness.add(new Day(timePoint), dailyBusiness);
             tmsPremium.add(new Day(timePoint), dailyPremium);
@@ -503,8 +505,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         data_points.addSeries(tmsBooking);  
     
            System.out.println("Updating Chart");
-        pnlChart.setChart(pnlChartController.createChart(data_points));
-        pnlChart.repaint();
+           pnlChartController.SetData(data_points);
+           
+     //   pnlChart.setChart(pnlChartController.createChart(data_points));
+     //   pnlChart.repaint();
         
         displayGraph();
     
