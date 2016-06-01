@@ -15,6 +15,7 @@ import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -25,6 +26,9 @@ import javax.swing.JTextArea;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import asgn2Aircraft.AircraftException;
+import asgn2Passengers.PassengerException;
 
 /**
  * @author hogan
@@ -68,13 +72,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     /**
      * @param args
-     * @throws UnsupportedLookAndFeelException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws ClassNotFoundException 
+     * @throws UnsupportedLookAndFeelException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws ClassNotFoundException
      */
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        //JFrame.setDefaultLookAndFeelDecorated(false);
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
+            IllegalAccessException, UnsupportedLookAndFeelException {
+        // JFrame.setDefaultLookAndFeelDecorated(false);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new GUISimulator("BorderLayout"));
     }
@@ -83,12 +88,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-        
-        pnlDisplay = createPanel();//Color.WHITE);
-        pnlTwo = createPanel();//Color.BLACK);
-        pnlBtn = createPanel();//Color.BLUE);
-        pnlFour = createPanel();//Color.RED);
-        pnlFive = createPanel();//Color.YELLOW);
+
+        pnlDisplay = createPanel();// Color.WHITE);
+        pnlTwo = createPanel();// Color.BLACK);
+        pnlBtn = createPanel();// Color.BLUE);
+        pnlFour = createPanel();// Color.RED);
+        pnlFive = createPanel();// Color.YELLOW);
 
         btnLoad = createButton("Load");
         btnUnload = createButton("Unload");
@@ -108,13 +113,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.getContentPane().add(pnlFour, BorderLayout.EAST);
         this.getContentPane().add(pnlFive, BorderLayout.WEST);
         repaint();
-        
+
         this.setVisible(true);
     }
 
-    private JPanel createPanel() { //Color c) {
+    private JPanel createPanel() { // Color c) {
         JPanel jp = new JPanel();
-        //jp.setBackground(c);
+        // jp.setBackground(c);
         return jp;
     }
 
@@ -194,8 +199,151 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring Class: Warning",
                     JOptionPane.WARNING_MESSAGE);
         } else if (src == btnFind) {
-            JOptionPane.showMessageDialog(this, "An Error Message", "Wiring Class: Error", JOptionPane.ERROR_MESSAGE);
+            // JOptionPane.showMessageDialog(this, "An Error Message", "Wiring
+            // Class: Error", JOptionPane.ERROR_MESSAGE);
+            complete_sim();
         }
+    }
+
+    private void createErrorMessage(String errorBody) {
+        JOptionPane.showMessageDialog(this, "Please Input a valid number for the" + errorBody, "Input Value Error", JOptionPane.WARNING_MESSAGE);
+
+    }
+
+    // Simulation Running Code
+    private Log l;
+    private Simulator sim;
+
+    private void complete_sim() {
+        try {
+            if (prepare_sim()) {
+                run_sim();
+            } else {
+                System.out.println("There where errors in setting up");
+            }
+        } catch (IOException | SimulationException | AircraftException | PassengerException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+    }
+
+    private Integer str_to_int(String input) {
+        try {
+            return Integer.parseInt(input);
+        } catch (NumberFormatException e) {
+            System.out.println("FAIL");
+            return null;
+        }
+    }
+
+    private Double str_to_dbl(String input) {
+        try {
+            return Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            System.out.println("FAIL");
+            return null;
+        }
+    }
+    
+    
+    
+    private boolean prepare_sim() throws IOException, SimulationException {
+        Integer seed = 100;
+        Integer daily_mean = 1300;
+        Integer queue_size = 0;
+        Double cancel = 0.1;
+        Double first = 0.14;
+        Double business = 0.13;
+        Double premium = 0.7;
+        Double economy = 0.7;
+        Double sd_booking = 2.0;
+
+        String text_input = "10a";
+//Going to add some more testing in each here
+        if ((seed = str_to_int(text_input)) == null) {
+            createErrorMessage("Seed value");
+            return false;
+        }
+        if ((daily_mean = str_to_int(text_input)) == null) {
+            createErrorMessage("Daily Mean");
+            return false;
+        }
+
+        if ((queue_size = str_to_int(text_input)) == null) {
+            createErrorMessage("Max Queue Size");
+            return false;
+        }
+
+        if ((cancel = str_to_dbl(text_input)) == null) {
+            createErrorMessage("Cancel Value");
+            return false;
+        }
+
+        if ((first = str_to_dbl(text_input)) == null) {
+            createErrorMessage("First Percent");
+            return false;
+        }
+        if ((business = str_to_dbl(text_input)) == null) {
+            createErrorMessage("Business Percent");
+            return false;
+        }  
+        
+        if ((business = str_to_dbl(text_input)) == null) {
+            createErrorMessage("Business Percent");
+            return false;
+        }        
+        
+        if ((premium = str_to_dbl(text_input)) == null) {
+            createErrorMessage("Premium Percent");
+            return false;
+        }        
+        if ((economy = str_to_dbl(text_input)) == null) {
+            createErrorMessage("Economy Percent");
+            return false;
+        }        
+       
+        
+        
+        
+        
+        
+        l = new Log();
+
+        sim = new Simulator(seed, queue_size, daily_mean, sd_booking, first, business, premium, economy, cancel);
+
+        return true;
+    }
+
+    private void run_sim() throws AircraftException, PassengerException, SimulationException, IOException {
+        System.out.println("Running the main sim");
+        this.sim.createSchedule();
+        this.l.initialEntry(this.sim);
+
+        // Main simulation loop
+        for (int time = 0; time <= Constants.DURATION; time++) {
+            this.sim.resetStatus(time);
+            this.sim.rebookCancelledPassengers(time);
+            this.sim.generateAndHandleBookings(time);
+            this.sim.processNewCancellations(time);
+            if (time >= Constants.FIRST_FLIGHT) {
+                this.sim.processUpgrades(time);
+                this.sim.processQueue(time);
+                this.sim.flyPassengers(time);
+                this.sim.updateTotalCounts(time);
+                this.l.logFlightEntries(time, sim);
+            } else {
+                this.sim.processQueue(time);
+            }
+            // System.out.println("TEST??");
+            // Log progress
+
+            this.l.logQREntries(time, sim);
+            this.l.logEntry(time, this.sim);
+        }
+        this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
+        this.l.logQREntries(Constants.DURATION, sim);
+        this.l.finalise(this.sim);
+
     }
 
 }
