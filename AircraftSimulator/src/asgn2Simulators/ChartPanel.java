@@ -61,6 +61,7 @@ public class ChartPanel extends Component {
      * @returns chart to be added to panel
      */
     public JFreeChart createChart(final XYDataset dataset) {
+        System.out.println("Creating the chart");
         final JFreeChart result = ChartFactory.createTimeSeriesChart(TITLE, "Days", "Passengers", dataset, true, true,
                 false);
         final XYPlot plot = result.getXYPlot();
