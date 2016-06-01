@@ -7,9 +7,7 @@
 package asgn2Simulators;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -18,10 +16,6 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -36,16 +30,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.plot.XYPlot;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
-import org.jfree.data.xy.XYDataset;
-
 import asgn2Aircraft.AircraftException;
 import asgn2Passengers.PassengerException;
 
@@ -58,6 +42,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 600;
     public static final int HEIGHT = 400;
 
+    
     private JPanel pnlDisplay;
     private JPanel pnlTop;
     private JPanel pnlBottom;
@@ -67,6 +52,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JButton btnRun;
     private JButton btnSwitch;
 
+    private ChartPanel pnlChart;
+    
     private JTextArea txtDisplay;
 
     private JTextField txtSeed;
@@ -134,14 +121,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlBottom = createPanel(); //Color.BLUE);
         
         // JFreeChart
-        final TimeSeriesCollection dataset = createTimeSeriesData();
-        JFreeChart chart = createChart(dataset);
-        pnlDisplay.add(new ChartPanel(chart), BorderLayout.CENTER);
+        pnlChart = new ChartPanel();        
+        pnlDisplay.add(pnlChart.getChartPanel(), BorderLayout.CENTER);
         
         // Text Area
-        txtDisplay = createTextArea();
-        pnlDisplay.setLayout(new BorderLayout());
-        pnlDisplay.add(txtDisplay, BorderLayout.CENTER);
+//        txtDisplay = createTextArea();
+//        pnlDisplay.setLayout(new BorderLayout());
+//        pnlDisplay.add(txtDisplay, BorderLayout.CENTER);
         
         // Labels
         lblSimTitle = createLabel("Simulation", new Font("Arial", Font.BOLD, 24));
@@ -179,80 +165,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         repaint();
 
         this.setVisible(true);
-    }
-
-    /**
-     * Private method creates the dataset. Lots of hack code in the 
-     * middle, but you should use the labelled code below  
-     * @return collection of time series for the plot 
-     */
-    private TimeSeriesCollection createTimeSeriesData() {
-        TimeSeriesCollection tsc = new TimeSeriesCollection(); 
-        TimeSeries bookTotal = new TimeSeries("Total Bookings");
-        TimeSeries econTotal = new TimeSeries("Economy"); 
-        TimeSeries busTotal = new TimeSeries("Business");
-        
-        //Base time, data set up - the calendar is needed for the time points
-        Calendar cal = GregorianCalendar.getInstance();
-        Random rng = new Random(250); 
-        
-        int economy = 0;
-        int business = 0; 
-        
-        //Hack loop to make it interesting. Grows for half of it, then declines
-        for (int i=0; i<=18*7; i++) {
-            //These lines are important 
-            cal.set(2016,0,i,6,0);
-            Date timePoint = cal.getTime();
-            
-            //HACK BEGINS
-            if (i<9*7) {
-                if (randomSuccess(0.2,rng)) {
-                    economy++; 
-                }
-                if (randomSuccess(0.1,rng)) {
-                    business++;
-                }
-            } else if (i < 18*7) {
-                if (randomSuccess(0.15,rng)) {
-                    economy++; 
-                } else if (randomSuccess(0.4,rng)) {
-                    economy = Math.max(economy-1,0);
-                }
-                if (randomSuccess(0.05,rng)) {
-                    business++; 
-                } else if (randomSuccess(0.2,rng)) {
-                    business = Math.max(business-1,0);
-                }
-            } else {
-                economy=0; 
-                business =0;
-            }
-            //HACK ENDS
-            
-            //This is important - steal it shamelessly 
-            busTotal.add(new Day(timePoint),business);
-            econTotal.add(new Day(timePoint),economy);
-            bookTotal.add(new Day(timePoint),economy+business);
-        }
-        
-        //Collection
-        tsc.addSeries(bookTotal);
-        tsc.addSeries(econTotal);
-        tsc.addSeries(busTotal);
-        return tsc;
-    }
-    
-    /**
-     * Utility method to implement a <a href="http://en.wikipedia.org/wiki/Bernoulli_trial">Bernoulli Trial</a>, 
-     * a coin toss with two outcomes: success (probability successProb) and failure (probability 1-successProb)
-     * @param successProb double holding the success probability 
-     * @param rng Random object 
-     * @return true if trial was successful, false otherwise
-     */
-    private boolean randomSuccess(double successProb,Random rng) {
-        boolean result = rng.nextDouble() <= successProb;
-        return result;
     }
 
     private JPanel createPanel() { // Color c) {
@@ -295,22 +207,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         jl.setFont(new Font("Arial", Font.PLAIN, 12));
         jl.setHorizontalAlignment(SwingConstants.RIGHT);
         return jl;
-    }
-
-    /**
-     * Helper method to deliver the Chart - currently uses default colours and auto range 
-     * @param dataset TimeSeriesCollection for plotting 
-     * @returns chart to be added to panel 
-     */
-    private JFreeChart createChart(final XYDataset dataset) {
-        final JFreeChart result = ChartFactory.createTimeSeriesChart(
-            "Dynamic Series", "Days", "Passengers", dataset, true, true, false);
-        final XYPlot plot = result.getXYPlot();
-        ValueAxis domain = plot.getDomainAxis();
-        domain.setAutoRange(true);
-        ValueAxis range = plot.getRangeAxis();
-        range.setAutoRange(true);
-        return result;
     }
 
     private void layoutButtonPanel() {
@@ -388,7 +284,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private void createErrorMessage(String errorBody) {
         JOptionPane.showMessageDialog(this, "Please Input a valid number for the " + errorBody, "Input Value Error", JOptionPane.WARNING_MESSAGE);
-
     }
 
     // Simulation Running Code
@@ -435,16 +330,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             return null;
         }
     }
-    
-    
-    
+
     private boolean prepareSim() throws IOException, SimulationException {
         Integer seed,queue_size;
         
         Double dailyMean, cancel, first, business, premium ,economy ,sd_booking;
          
         if ((seed = str_to_int(txtSeed.getText())) == null) {
-            
             createErrorMessage("Seed value");
             return false;
         }
@@ -489,7 +381,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         sd_booking = 0.33 * dailyMean;
         sd_booking  = 429.0;
         
-        
         l = new Log();
 
         sim = new Simulator(seed, queue_size, dailyMean, sd_booking, first, business, premium, economy, cancel);
@@ -504,9 +395,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         // Main simulation loop
         int cumulativeBusness = 0,cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0 ;
-        
-        
-        
+
         for (int time = 0; time <= Constants.DURATION; time++) {
             this.sim.resetStatus(time);
             this.sim.rebookCancelledPassengers(time);
@@ -540,11 +429,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             this.l.logQREntries(time, sim);
             this.l.logEntry(time, this.sim);
         }
+        
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.l.logQREntries(Constants.DURATION, sim);
         this.l.finalise(this.sim);
-
     }
-    
-
 }
