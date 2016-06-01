@@ -301,17 +301,31 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     private Integer str_to_int(String input) {
+        Integer value;
         try {
-            return Integer.parseInt(input);
+            if ((value = Integer.parseInt(input))> 0){
+                return value;                
+            }
+            else{
+                return null;
+             }
         } catch (NumberFormatException e) {
             System.out.println("FAIL");
             return null;
         }
     }
 
-    private Double str_to_dbl(String input) {
-        try {
-            return Double.parseDouble(input);
+    private Double str_to_dbl(String input, Double max) {
+        Double value;
+        try {            
+            if ((value = Double.parseDouble(input)) > 0){
+                if (max == null || value <= max){
+                return value;
+                }
+            }
+            
+                return null;
+            
         } catch (NumberFormatException e) {
             System.out.println("FAIL");
             return null;
@@ -321,59 +335,56 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     
     
     private boolean prepare_sim() throws IOException, SimulationException {
-        Integer seed = 100;
-        Integer daily_mean = 1300;
-        Integer queue_size = 0;
-        Double cancel = 0.1;
-        Double first = 0.14;
-        Double business = 0.13;
-        Double premium = 0.7;
-        Double economy = 0.7;
-        Double sd_booking = 2.0;
+        Integer seed,queue_size;
+        
+        Double daily_mean, cancel, first, business, premium ,economy ,sd_booking;
 
-        String text_input = "10a";
-//Going to add some more testing in each here
-        if ((seed = str_to_int(text_input)) == null) {
+         
+        if ((seed = str_to_int(txtSeed.getText())) == null) {
+            
             createErrorMessage("Seed value");
             return false;
         }
-        if ((daily_mean = str_to_int(text_input)) == null) {
+        if ((daily_mean = str_to_dbl(txtMean.getText(), null)) == null) {
             createErrorMessage("Daily Mean");
             return false;
         }
 
-        if ((queue_size = str_to_int(text_input)) == null) {
+        if ((queue_size = str_to_int(txtQueue.getText())) == null) {
             createErrorMessage("Max Queue Size");
             return false;
         }
 
-        if ((cancel = str_to_dbl(text_input)) == null) {
+        if ((cancel = str_to_dbl(txtCancel.getText(),1.0)) == null) {
             createErrorMessage("Cancel Value");
             return false;
         }
 
-        if ((first = str_to_dbl(text_input)) == null) {
+        if ((first = str_to_dbl(txtFirst.getText(),1.0)) == null) {
             createErrorMessage("First Percent");
             return false;
         }
-        if ((business = str_to_dbl(text_input)) == null) {
+        if ((business = str_to_dbl(txtBusiness.getText(),1.0)) == null) {
             createErrorMessage("Business Percent");
             return false;
         }  
         
-        if ((business = str_to_dbl(text_input)) == null) {
-            createErrorMessage("Business Percent");
-            return false;
-        }        
-        
-        if ((premium = str_to_dbl(text_input)) == null) {
+        if ((premium = str_to_dbl(txtPremium.getText(),1.0)) == null) {
             createErrorMessage("Premium Percent");
             return false;
         }        
-        if ((economy = str_to_dbl(text_input)) == null) {
+        if ((economy = str_to_dbl(txtEconomy.getText(),1.0)) == null) {
             createErrorMessage("Economy Percent");
             return false;
         }
+        
+        if ((first + business + premium + economy) != 1){
+            createErrorMessage("Passenger split");
+            return false;
+        }
+        
+        sd_booking = 0.33 * daily_mean;
+        
         
         l = new Log();
 
@@ -402,7 +413,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             } else {
                 this.sim.processQueue(time);
             }
-            // System.out.println("TEST??");
             // Log progress
 
             this.l.logQREntries(time, sim);
