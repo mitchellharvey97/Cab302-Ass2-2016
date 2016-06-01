@@ -57,9 +57,13 @@ public class ChartPanel extends Component {
         }       
         tsc.addSeries(dataset);
         return tsc;
-    }    
+    }
 
     public void SetData(TimeSeriesCollection data) {
+        data_points = data;
+    }
+
+    public void SetBarData(CategoryDataset data) {
         data_points = data;
     }
 

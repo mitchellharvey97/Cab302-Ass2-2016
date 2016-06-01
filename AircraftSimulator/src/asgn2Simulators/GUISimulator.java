@@ -37,6 +37,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jfree.chart.JFreeChart;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -240,7 +241,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlChart = pnlChartController.getChartPanel();
         pnlDisplay.setLayout(new BorderLayout());
         pnlDisplay.add(pnlChart);
-        pnlDisplay.repaint();
         this.setVisible(true);
     }
 
@@ -475,10 +475,16 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         data_points.addSeries(tmsBusiness);
         data_points.addSeries(tmsPremium);
         data_points.addSeries(tmsEconomy);
-        data_points.addSeries(tmsBooking);  
+        data_points.addSeries(tmsBooking);
     
         System.out.println("Updating Chart");
         pnlChartController.SetData(data_points);
+        displayGraph();
+        
+        // Bar graph
+        CategoryDataset data_bar = pnlChartController.createBarDataset();
+        JFreeChart chart = pnlChartController.createBarChart(data_bar);
+        pnlChart.setChart(chart);
         displayGraph();
 
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
