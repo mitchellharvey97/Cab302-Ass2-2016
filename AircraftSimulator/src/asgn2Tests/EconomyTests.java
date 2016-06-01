@@ -93,7 +93,6 @@ public class EconomyTests {
         assertEquals("No seats available in Economy", p.noSeatsMsg());
     }
 
-    // TODO Do we need to test if P and U are independent of each other?
     @Test
     public void testPassengerUpgrade() {
         assertTrue(p instanceof Economy);

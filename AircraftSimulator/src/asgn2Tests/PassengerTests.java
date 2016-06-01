@@ -513,7 +513,6 @@ public class PassengerTests {
     }
 
     /* Passenger.toString() Tests */
-    // TODO Do we need to test tostring?
 
     /* Passenger.wasConfirmed() Tests */
     @Test

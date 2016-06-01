@@ -116,8 +116,6 @@ public class B747Tests {
         b = new B747("QF15", 1);
         assertTrue(b.toString().indexOf("QF15") >= 0);
     }
-    
-  //TODO add some way of testing the capacity is set correctly by default (Probably via a loop)
 
     @Test
     public void testFullConstructorFlightCode() {

@@ -7,6 +7,7 @@
 package asgn2Aircraft;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import asgn2Passengers.Business;
@@ -163,7 +164,7 @@ public abstract class Aircraft {
     public void confirmBooking(Passenger p, int confirmationTime) throws AircraftException, PassengerException {
         // Could also use p.noSeatsMsg() in exceptions
         // Check seat availability
-        if (p instanceof First) { 
+        if (p instanceof First) {
             if (numFirst >= firstCapacity) {
                 throw new AircraftException("No seats available in First class. Cannot confirm booking.");
             }
@@ -189,7 +190,7 @@ public abstract class Aircraft {
         } else {
             this.status += Log.setPassengerMsg(p, "Q", "C");
         }
-        
+
         // Update passenger count
         if (p instanceof First) {
             numFirst++;
@@ -231,10 +232,8 @@ public abstract class Aircraft {
      * @return <code>boolean</code> true if aircraft full; false otherwise
      */
     public boolean flightFull() {
-        return (this.numFirst >= this.firstCapacity &&
-                this.numBusiness >= this.businessCapacity &&
-                this.numPremium >= this.premiumCapacity &&
-                this.numEconomy >= this.economyCapacity);
+        return (this.numFirst >= this.firstCapacity && this.numBusiness >= this.businessCapacity
+                && this.numPremium >= this.premiumCapacity && this.numEconomy >= this.economyCapacity);
     }
 
     /**
@@ -262,8 +261,8 @@ public abstract class Aircraft {
      * @return <code>Bookings</code> object containing the status.
      */
     public Bookings getBookings() {
-        return new Bookings(this.numFirst, this.numBusiness, this.numPremium, this.numEconomy,
-                getNumPassengers(), this.capacity - getNumPassengers());
+        return new Bookings(this.numFirst, this.numBusiness, this.numPremium, this.numEconomy, getNumPassengers(),
+                this.capacity - getNumPassengers());
     }
 
     /**
@@ -318,7 +317,16 @@ public abstract class Aircraft {
      * @return <code>List<Passenger></code> object containing the passengers.
      */
     public List<Passenger> getPassengers() {
-        return this.seats;
+        List<Passenger> returned = new ArrayList<Passenger>();
+
+        Iterator<Passenger> pass_itter = this.seats.iterator();
+        while (pass_itter.hasNext()) {
+            returned.add(pass_itter.next());
+            // System.out.println(pass_itter.next());
+        }
+//TODO I had to fix a bug here so we should add a test to catch the issue i found???
+        return returned;
+
     }
 
     /**
@@ -403,7 +411,8 @@ public abstract class Aircraft {
      */
     public void upgradeBookings() {
         // Need to iterate three times to ensure vacated seats
-        // E.g. All business passengers must be processed before premium passengers
+        // E.g. All business passengers must be processed before premium
+        // passengers
 
         // Upgrade Business to First
         for (int i = 0; i < this.seats.size() && numFirst < firstCapacity; i++) {
