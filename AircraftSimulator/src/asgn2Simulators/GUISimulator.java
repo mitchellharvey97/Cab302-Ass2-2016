@@ -353,6 +353,16 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 JOptionPane.WARNING_MESSAGE);
     }
 
+    private Double valueInRange(JSpinner js, double min, double max){
+        
+        Double returned = (Double) js.getValue();
+        
+
+
+        return returned;
+       
+    }
+    
     // Create the data set and much much more
     // Simulation Running Code
     private Log l;
@@ -397,18 +407,16 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             return false;
         }
 
-        // overwriting the values
+        //overwriting the values
         sdBooking = 0.33 * mean;
-        sdBooking = 429.0;
+        sdBooking  = 429.0;
 
         l = new Log();
-
         sim = new Simulator(seed, queue, mean, sdBooking, first, business, premium, economy, cancel);
         return true;
     }
 
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
-        // TODO Remove pnlStart from pnlDisplay
         // Add chart to pnlDisplay
 
         System.out.println("Running the main sim");
