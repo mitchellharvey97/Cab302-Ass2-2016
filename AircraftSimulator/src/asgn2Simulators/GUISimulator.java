@@ -53,8 +53,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JButton btnSwitch;
 
     private ChartPanel pnlChart;
-    
-    private JTextArea txtDisplay;
 
     private JTextField txtSeed;
     private JTextField txtMean;
@@ -114,20 +112,16 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         setLayout(new BorderLayout());
         
         // Panels
-        pnlTop = createPanel(); //Color.BLACK);
-        pnlLeft = createPanel(); //Color.YELLOW);
-        pnlRight = createPanel(); //Color.RED);
-        pnlDisplay = createPanel(); //Color.WHITE);
-        pnlBottom = createPanel(); //Color.BLUE);
-        
+        pnlTop = new JPanel();
+        pnlLeft = new JPanel();
+        pnlRight = new JPanel();
+        pnlDisplay = new JPanel();
+        pnlBottom = new JPanel();
+
         // JFreeChart
-        pnlChart = new ChartPanel();        
-        pnlDisplay.add(pnlChart.getChartPanel(), BorderLayout.CENTER);
-        
-        // Text Area
-//        txtDisplay = createTextArea();
-//        pnlDisplay.setLayout(new BorderLayout());
-//        pnlDisplay.add(txtDisplay, BorderLayout.CENTER);
+        pnlChart = new ChartPanel();
+        pnlDisplay.setLayout(new BorderLayout());
+        pnlDisplay.add(pnlChart.getChartPanel());
         
         // Labels
         lblSimTitle = createLabel("Simulation", new Font("Arial", Font.BOLD, 24));
@@ -167,12 +161,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.setVisible(true);
     }
 
-    private JPanel createPanel() { // Color c) {
-        JPanel jp = new JPanel();
-        // jp.setBackground(c);
-        return jp;
-    }
-
     private JButton createButton(String str) {
         JButton jb = new JButton(str);
         jb.addActionListener(this);
@@ -184,15 +172,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         jtf.setFont(new Font("Arial", Font.PLAIN, 12));
         jtf.setBorder(BorderFactory.createEtchedBorder());
         return jtf;
-    }
-
-    private JTextArea createTextArea() {
-        JTextArea jta = new JTextArea();
-        jta.setEditable(false);
-        jta.setLineWrap(true);
-        jta.setFont(new Font("Arial", Font.BOLD, 24));
-        jta.setBorder(BorderFactory.createEtchedBorder());
-        return jta;
     }
 
     private JLabel createLabel(String str, Font fnt) {
@@ -216,25 +195,31 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0, 0, 0, 5);
-        c.weightx = 1;
-        c.weighty = 1;
 
         c.anchor = GridBagConstraints.WEST; //x, y, w, h
+        c.weightx = 1;
+        c.weighty = 1;
         addToPanel(pnlBottom, lblSimTitle, c, 0, 0, 3, 1);
         addToPanel(pnlBottom, lblSeed,     c, 0, 1, 1, 1);
         addToPanel(pnlBottom, lblMean,     c, 0, 2, 1, 1);
         addToPanel(pnlBottom, lblQueue,    c, 0, 3, 1, 1);
         addToPanel(pnlBottom, lblCancel,   c, 0, 4, 1, 1);
+        c.weightx = 100;
+        c.weighty = 100;
         addToPanel(pnlBottom, txtSeed,     c, 1, 1, 2, 1);
         addToPanel(pnlBottom, txtMean,     c, 1, 2, 2, 1);
         addToPanel(pnlBottom, txtQueue,    c, 1, 3, 2, 1);
         addToPanel(pnlBottom, txtCancel,   c, 1, 4, 2, 1);
 
+        c.weightx = 1;
+        c.weighty = 1;
         addToPanel(pnlBottom, lblFareTitle, c, 3, 0, 3, 1);
         addToPanel(pnlBottom, lblFirst,     c, 3, 1, 1, 1);
         addToPanel(pnlBottom, lblBusiness,  c, 3, 2, 1, 1);
         addToPanel(pnlBottom, lblPremium,   c, 3, 3, 1, 1);
         addToPanel(pnlBottom, lblEconomy,   c, 3, 4, 1, 1);
+        c.weightx = 100;
+        c.weighty = 100;
         addToPanel(pnlBottom, txtFirst,     c, 4, 1, 2, 1);
         addToPanel(pnlBottom, txtBusiness,  c, 4, 2, 2, 1);
         addToPanel(pnlBottom, txtPremium,   c, 4, 3, 2, 1);
@@ -274,8 +259,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Determine which button was pressed
         if (src == btnRun) {
             complete_sim();
-            JButton btn = ((JButton) src);
-            txtDisplay.setText(btn.getText().trim());
+            //JButton btn = ((JButton) src);
+            //btn.getText().trim();
         } else if (src == btnSwitch) {
             JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring Class: Warning",
                     JOptionPane.WARNING_MESSAGE);
