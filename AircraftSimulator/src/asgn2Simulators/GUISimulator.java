@@ -182,13 +182,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlChartController = new ChartPanel();
         displayStart();
         // displayGraph();
-        
+
         this.getContentPane().add(pnlTop, BorderLayout.NORTH);
         this.getContentPane().add(pnlLeft, BorderLayout.WEST);
         this.getContentPane().add(pnlRight, BorderLayout.EAST);
         this.getContentPane().add(pnlDisplay, BorderLayout.CENTER);
         this.getContentPane().add(pnlBottom, BorderLayout.SOUTH);
-        //repaint();
+        // repaint();
 
         this.setVisible(true);
     }
@@ -309,12 +309,18 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
      * A convenience method to add a component to given grid bag layout
      * locations. Code due to Cay Horstmann
      *
-     * @param c the component to add
-     * @param constraints the grid bag constraints to use
-     * @param x the x grid position
-     * @param y the y grid position
-     * @param w the grid width
-     * @param h the grid height
+     * @param c
+     *            the component to add
+     * @param constraints
+     *            the grid bag constraints to use
+     * @param x
+     *            the x grid position
+     * @param y
+     *            the y grid position
+     * @param w
+     *            the grid width
+     * @param h
+     *            the grid height
      */
     private void addToPanel(JPanel jp, Component c, GridBagConstraints constraints, int x, int y, int w, int h) {
         constraints.gridx = x;
@@ -340,11 +346,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             valSeed.setValue(Constants.DEFAULT_SEED);
             valMean.setValue(Constants.DEFAULT_DAILY_BOOKING_MEAN);
             valQueue.setValue(Constants.DEFAULT_MAX_QUEUE_SIZE);
-            valCancel.setValue(Constants.DEFAULT_CANCELLATION_PROB / 100);
-            valFirst.setValue(Constants.DEFAULT_FIRST_PROB / 100);
-            valBusiness.setValue(Constants.DEFAULT_BUSINESS_PROB / 100);
-            valPremium.setValue(Constants.DEFAULT_PREMIUM_PROB / 100);
-            valEconomy.setValue(Constants.DEFAULT_ECONOMY_PROB / 100);
+            valCancel.setValue(Constants.DEFAULT_CANCELLATION_PROB * 100);
+            valFirst.setValue(Constants.DEFAULT_FIRST_PROB * 100);
+            valBusiness.setValue(Constants.DEFAULT_BUSINESS_PROB * 100);
+            valPremium.setValue(Constants.DEFAULT_PREMIUM_PROB * 100);
+            valEconomy.setValue(Constants.DEFAULT_ECONOMY_PROB * 100);
         }
     }
 
@@ -353,16 +359,22 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 JOptionPane.WARNING_MESSAGE);
     }
 
-    private Double valueInRange(JSpinner js, double min, double max){
-        
-        Double returned = (Double) js.getValue();
-        
+    private Double valueInRange(JSpinner js, Integer min, Integer max, boolean percent) {
+        // A crazy way of extracting a double from a spinner
+        Object returned_value = js.getValue();
+        Double returned = Double.parseDouble(returned_value.toString());
 
-
+        // Check if there are valid parameters then if the value is in bounds
+        if (returned == null || (min != null && returned < min) || (max != null && returned > max)) {
+            return null;
+        }
+        // if it is a percent value then act upon it
+        if (percent) {
+            returned /= 100;
+        }
         return returned;
-       
     }
-    
+
     // Create the data set and much much more
     // Simulation Running Code
     private Log l;
@@ -391,25 +403,63 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Check everything for errors, return false if there is a problem,
         // otherwise fall through and return true
 
-        Double sdBooking;
+        Double sdBooking, mean, cancel, first, business, premium, economy;
 
-        int seed = ((Double) valSeed.getValue()).intValue();
-        double mean = (Double) valMean.getValue();
-        int queue = ((Double) valSeed.getValue()).intValue();
-        double cancel = (Double) valCancel.getValue();
-        double first = (Double) valFirst.getValue() / 100;
-        double business = (Double) valBusiness.getValue() / 100;
-        double premium = (Double) valPremium.getValue() / 100;
-        double economy = (Double) valEconomy.getValue() / 100;
+        Integer seed, queue;// = ((Double) valSeed.getValue()).intValue();
+        Double tmp;
 
+        // Extra Confusing for Integer Values
+              
+        if (((tmp = (valueInRange(valSeed, 0, null, false))) == null) || (seed = tmp.intValue()) == null) {
+            createErrorMessage("Seed Value");
+            return false;
+        }
+        
+        if (((tmp = (valueInRange(valQueue, 0, null, false))) == null) || (queue = tmp.intValue()) == null) {
+            createErrorMessage("Queue Value");
+            return false;
+        }
+
+        // A much easier way without casting to Integers
+        if ((mean = valueInRange(valMean, 0, null, true)) == null) {
+            createErrorMessage("Mean Value");
+            return false;
+        }
+        
+        if ((cancel = valueInRange(valCancel, 0, 100, true)) == null) {
+            createErrorMessage("Cancel Value");
+            return false;
+        }
+        
+
+        if ((first = valueInRange(valFirst, 0, 100, true)) == null) {
+            createErrorMessage("First Value");
+            return false;
+        }
+       
+        if ((business = valueInRange(valBusiness, 0, 100, true)) == null) {
+            createErrorMessage("Business Value");
+            return false;
+        }
+        
+        if ((premium = valueInRange(valPremium, 0, 100, true)) == null) {
+            createErrorMessage("Premium Value");
+            return false;
+        }
+        
+        if ((economy = valueInRange(valEconomy, 0, 100, true)) == null) {
+            createErrorMessage("Economy Value");
+            return false;
+        }
+        
         if ((first + business + premium + economy) != 1) {
             createErrorMessage("Passenger split");
             return false;
         }
 
-        //overwriting the values
+        // overwriting the values
         sdBooking = 0.33 * mean;
-        sdBooking  = 429.0;
+        sdBooking = 429.0;
 
         l = new Log();
         sim = new Simulator(seed, queue, mean, sdBooking, first, business, premium, economy, cancel);
@@ -467,7 +517,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             tmsBooking.add(new Day(timePoint), time);
 
             System.out.println(sim.getTotalBusiness());
-            
+
             tmsFirst.add(new Day(timePoint), dailyFirst);
             tmsBusiness.add(new Day(timePoint), dailyBusiness);
             tmsPremium.add(new Day(timePoint), dailyPremium);
@@ -483,8 +533,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         data_points.addSeries(tmsBusiness);
         data_points.addSeries(tmsPremium);
         data_points.addSeries(tmsEconomy);
-        data_points.addSeries(tmsBooking);  
-    
+        data_points.addSeries(tmsBooking);
+
         System.out.println("Updating Chart");
         pnlChartController.SetData(data_points);
         displayGraph();
