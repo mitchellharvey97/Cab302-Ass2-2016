@@ -111,7 +111,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
-<<<<<<< HEAD
         
         // Panels
         pnlTop = createPanel(); //Color.BLACK);
@@ -119,21 +118,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlRight = createPanel(); //Color.RED);
         pnlDisplay = createPanel(); //Color.WHITE);
         pnlBottom = createPanel(); //Color.BLUE);
-=======
-
-        pnlDisplay = createPanel();// Color.WHITE);
-        pnlTwo = createPanel();// Color.BLACK);
-        pnlBtn = createPanel();// Color.BLUE);
-        pnlFour = createPanel();// Color.RED);
-        pnlFive = createPanel();// Color.YELLOW);
-
-        btnLoad = createButton("Load");
-        btnUnload = createButton("Unload");
-        btnFind = createButton("Find");
-        btnSwitch = createButton("Switch");
-
-        areDisplay = createTextArea();
->>>>>>> refs/remotes/origin/master
 
         // Text Area
         txtDisplay = createTextArea();
