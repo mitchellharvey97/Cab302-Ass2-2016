@@ -59,22 +59,22 @@ public class BusinessTests {
     }
 
     /* Invalid Constructors */
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorBookingTimeLessThanZero() throws PassengerException {
         new Business(-1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorZeroDepartureTime() throws PassengerException {
         new Business(1, 0);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanZero() throws PassengerException {
         new Business(1, -1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanBookingTime() throws PassengerException {
         new Business(2, 1);
     }

@@ -59,22 +59,22 @@ public class EconomyTests {
     }
 
     /* Invalid Constructors */
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorBookingTimeLessThanZero() throws PassengerException {
         new Economy(-1, 1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorZeroDepartureTime() throws PassengerException {
         new Economy(1, 0);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanZero() throws PassengerException {
         new Economy(1, -1);
     }
 
-    @Test(expected = PassengerException.class)
+    @Test (expected = PassengerException.class)
     public void testInvalidConstructorDepartureTimeLessThanBookingTime() throws PassengerException {
         new Economy(2, 1);
     }
