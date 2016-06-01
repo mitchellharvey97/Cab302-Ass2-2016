@@ -9,19 +9,24 @@ package asgn2Simulators;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.HeadlessException;
+import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -36,17 +41,35 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     public static final int HEIGHT = 400;
 
     private JPanel pnlDisplay;
-    private JPanel pnlTwo;
-    private JPanel pnlBtn;
-    private JPanel pnlFour;
-    private JPanel pnlFive;
+    private JPanel pnlTop;
+    private JPanel pnlBottom;
+    private JPanel pnlRight;
+    private JPanel pnlLeft;
 
-    private JButton btnLoad;
-    private JButton btnUnload;
-    private JButton btnFind;
+    private JButton btnRun;
     private JButton btnSwitch;
 
-    private JTextArea areDisplay;
+    private JTextArea txtDisplay;
+
+    private JTextField txtSeed;
+    private JTextField txtMean;
+    private JTextField txtQueue;
+    private JTextField txtCancel;
+    private JTextField txtFirst;
+    private JTextField txtBusiness;
+    private JTextField txtPremium;
+    private JTextField txtEconomy;
+    
+    private JLabel lblSimulation;
+    private JLabel lblFareClasses;
+    private JLabel lblSeed;
+    private JLabel lblMean;
+    private JLabel lblQueue;
+    private JLabel lblCancel;
+    private JLabel lblFirst;
+    private JLabel lblBusiness;
+    private JLabel lblPremium;
+    private JLabel lblEconomy;
 
     /**
      * @param arg0
@@ -84,29 +107,51 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         
-        pnlDisplay = createPanel();//Color.WHITE);
-        pnlTwo = createPanel();//Color.BLACK);
-        pnlBtn = createPanel();//Color.BLUE);
-        pnlFour = createPanel();//Color.RED);
-        pnlFive = createPanel();//Color.YELLOW);
+        // Panels
+        pnlTop = createPanel(); //Color.BLACK);
+        pnlLeft = createPanel(); //Color.YELLOW);
+        pnlRight = createPanel(); //Color.RED);
+        pnlDisplay = createPanel(); //Color.WHITE);
+        pnlBottom = createPanel(); //Color.BLUE);
 
-        btnLoad = createButton("Load");
-        btnUnload = createButton("Unload");
-        btnFind = createButton("Find");
-        btnSwitch = createButton("Switch");
-
-        areDisplay = createTextArea();
-
+        // Text Area
+        txtDisplay = createTextArea();
         pnlDisplay.setLayout(new BorderLayout());
-        pnlDisplay.add(areDisplay, BorderLayout.CENTER);
+        pnlDisplay.add(txtDisplay, BorderLayout.CENTER);
+        
+        // Labels
+        lblSimulation = createLabel("Simulation", new Font("Arial", Font.BOLD, 24));
+        lblFareClasses = createLabel("Fare Classes", new Font("Arial", Font.BOLD, 24));
+        lblSeed = createLabel("Seed");
+        lblMean = createLabel("Mean");
+        lblQueue = createLabel("Queue Size");
+        lblCancel = createLabel("Pr(Cancel)");
+        lblFirst = createLabel("Pr(First)");
+        lblBusiness = createLabel("Pr(Business)");
+        lblPremium = createLabel("Pr(Premium)");
+        lblEconomy = createLabel("Pr(Economy)");
+        
+        // Text Fields
+        txtSeed = createTextField();
+        txtMean = createTextField();
+        txtQueue = createTextField();
+        txtCancel = createTextField();
+        txtFirst = createTextField();
+        txtBusiness = createTextField();
+        txtPremium = createTextField();
+        txtEconomy = createTextField();
+
+        // Buttons
+        btnRun = createButton("Run Simulation");
+        btnSwitch = createButton("Switch Charts");
 
         layoutButtonPanel();
 
+        this.getContentPane().add(pnlTop, BorderLayout.NORTH);
+        this.getContentPane().add(pnlLeft, BorderLayout.WEST);
+        this.getContentPane().add(pnlRight, BorderLayout.EAST);
         this.getContentPane().add(pnlDisplay, BorderLayout.CENTER);
-        this.getContentPane().add(pnlTwo, BorderLayout.NORTH);
-        this.getContentPane().add(pnlBtn, BorderLayout.SOUTH);
-        this.getContentPane().add(pnlFour, BorderLayout.EAST);
-        this.getContentPane().add(pnlFive, BorderLayout.WEST);
+        this.getContentPane().add(pnlBottom, BorderLayout.SOUTH);
         repaint();
         
         this.setVisible(true);
@@ -124,6 +169,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return jb;
     }
 
+    private JTextField createTextField() {
+        JTextField jtf = new JTextField();
+        jtf.setFont(new Font("Arial", Font.PLAIN, 12));
+        jtf.setBorder(BorderFactory.createEtchedBorder());
+        return jtf;
+    }
+
     private JTextArea createTextArea() {
         JTextArea jta = new JTextArea();
         jta.setEditable(false);
@@ -133,42 +185,69 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return jta;
     }
 
-    private void layoutButtonPanel() {
-        GridBagLayout layout = new GridBagLayout();
-        pnlBtn.setLayout(layout);
-
-        // add components to grid
-        GridBagConstraints constraints = new GridBagConstraints();
-
-        // Defaults
-        constraints.fill = GridBagConstraints.NONE;
-        constraints.anchor = GridBagConstraints.CENTER;
-        constraints.weightx = 100;
-        constraints.weighty = 100;
-
-        addToPanel(pnlBtn, btnLoad, constraints, 0, 0, 2, 1);
-        addToPanel(pnlBtn, btnUnload, constraints, 3, 0, 2, 1);
-        addToPanel(pnlBtn, btnFind, constraints, 0, 2, 2, 1);
-        addToPanel(pnlBtn, btnSwitch, constraints, 3, 2, 2, 1);
+    private JLabel createLabel(String str, Font fnt) {
+        JLabel jl = new JLabel(str);
+        jl.setFont(fnt);
+        jl.setHorizontalAlignment(SwingConstants.CENTER);
+        return jl;
     }
 
+    private JLabel createLabel(String str) {
+        JLabel jl = new JLabel(str);
+        jl.setFont(new Font("Arial", Font.PLAIN, 12));
+        jl.setHorizontalAlignment(SwingConstants.CENTER);
+        return jl;
+    }
+    
+
+    private void layoutButtonPanel() {
+        pnlBottom.setLayout(new GridBagLayout());
+
+        // Add components to grid
+        GridBagConstraints c = new GridBagConstraints();
+        c.fill = GridBagConstraints.HORIZONTAL;
+        //c.insets = new Insets(1, 2, 1, 2);
+        c.weightx = 1;
+        c.weighty = 1;
+
+        c.anchor = GridBagConstraints.WEST;
+        addToPanel(pnlBottom, lblSimulation, c, 0, 0, 2, 1);
+        addToPanel(pnlBottom, lblSeed, c, 0, 1, 1, 1);
+        addToPanel(pnlBottom, lblMean, c, 0, 2, 1, 1);
+        addToPanel(pnlBottom, lblQueue, c, 0, 3, 1, 1);
+        addToPanel(pnlBottom, lblCancel, c, 0, 4, 1, 1);
+        addToPanel(pnlBottom, txtSeed, c, 1, 1, 1, 1);
+        addToPanel(pnlBottom, txtMean, c, 1, 2, 1, 1);
+        addToPanel(pnlBottom, txtQueue, c, 1, 3, 1, 1);
+        addToPanel(pnlBottom, txtCancel, c, 1, 4, 1, 1);
+
+        addToPanel(pnlBottom, lblFareClasses, c, 2, 0, 2, 1);
+        addToPanel(pnlBottom, lblFirst, c, 2, 1, 1, 1);
+        addToPanel(pnlBottom, lblBusiness, c, 2, 2, 1, 1);
+        addToPanel(pnlBottom, lblPremium, c, 2, 3, 1, 1);
+        addToPanel(pnlBottom, lblEconomy, c, 2, 4, 1, 1);
+        addToPanel(pnlBottom, txtFirst, c, 3, 1, 1, 1);
+        addToPanel(pnlBottom, txtBusiness, c, 3, 2, 1, 1);
+        addToPanel(pnlBottom, txtPremium, c, 3, 3, 1, 1);
+        addToPanel(pnlBottom, txtEconomy, c, 3, 4, 1, 1);
+        
+        c.anchor = GridBagConstraints.EAST;
+        c.fill = GridBagConstraints.BOTH;
+        addToPanel(pnlBottom, btnRun, c, 4, 1, 2, 2);
+        addToPanel(pnlBottom, btnSwitch, c, 4, 3, 2, 2);
+    }
+    
     /**
      * 
-     * A convenience method to add a component to given grid bag layout
-     * locations. Code due to Cay Horstmann
+     * A convenience method to add a component to given grid bag
+     * layout locations. Code due to Cay Horstmann 
      *
-     * @param c
-     *            the component to add
-     * @param constraints
-     *            the grid bag constraints to use
-     * @param x
-     *            the x grid position
-     * @param y
-     *            the y grid position
-     * @param w
-     *            the grid width
-     * @param h
-     *            the grid height
+     * @param c the component to add
+     * @param constraints the grid bag constraints to use
+     * @param x the x grid position
+     * @param y the y grid position
+     * @param w the grid width
+     * @param h the grid height
      */
     private void addToPanel(JPanel jp, Component c, GridBagConstraints constraints, int x, int y, int w, int h) {
         constraints.gridx = x;
@@ -183,18 +262,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Get event source
         Object src = e.getSource();
 
-        // Consider the alternatives - not all active at once.
-        if (src == btnLoad) {
+        // Determine which button was pressed
+        if (src == btnRun) {
             JButton btn = ((JButton) src);
-            areDisplay.setText(btn.getText().trim());
-        } else if (src == btnUnload) {
-            JButton btn = ((JButton) src);
-            areDisplay.setText(btn.getText().trim());
+            txtDisplay.setText(btn.getText().trim());
         } else if (src == btnSwitch) {
-            JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring Class: Warning",
-                    JOptionPane.WARNING_MESSAGE);
-        } else if (src == btnFind) {
-            JOptionPane.showMessageDialog(this, "An Error Message", "Wiring Class: Error", JOptionPane.ERROR_MESSAGE);
+            JButton btn = ((JButton) src);
+            txtDisplay.setText(btn.getText().trim());
         }
     }
 
