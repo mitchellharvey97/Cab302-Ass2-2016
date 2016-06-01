@@ -406,12 +406,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         Double tmp;
 
         // Extra Confusing for Integer Values
-              
+
         if (((tmp = (valueInRange(valSeed, 0, null, false))) == null) || (seed = tmp.intValue()) == null) {
             createErrorMessage("Seed Value");
             return false;
         }
-        
+
         if (((tmp = (valueInRange(valQueue, 0, null, false))) == null) || (queue = tmp.intValue()) == null) {
             createErrorMessage("Queue Value");
             return false;
@@ -422,33 +422,32 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             createErrorMessage("Mean Value");
             return false;
         }
-        
+
         if ((cancel = valueInRange(valCancel, 0, 100, true)) == null) {
             createErrorMessage("Cancel Value");
             return false;
         }
-        
 
         if ((first = valueInRange(valFirst, 0, 100, true)) == null) {
             createErrorMessage("First Value");
             return false;
         }
-       
+
         if ((business = valueInRange(valBusiness, 0, 100, true)) == null) {
             createErrorMessage("Business Value");
             return false;
         }
-        
+
         if ((premium = valueInRange(valPremium, 0, 100, true)) == null) {
             createErrorMessage("Premium Value");
             return false;
         }
-        
+
         if ((economy = valueInRange(valEconomy, 0, 100, true)) == null) {
             createErrorMessage("Economy Value");
             return false;
         }
-        
+
         if ((first + business + premium + economy) != 1) {
             createErrorMessage("Passenger split");
             return false;
@@ -525,7 +524,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         }
 
         TimeSeriesCollection data_points = new TimeSeriesCollection();
-
+        
         data_points.addSeries(tmsFirst);
         data_points.addSeries(tmsBusiness);
         data_points.addSeries(tmsPremium);
@@ -535,7 +534,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         System.out.println("Updating Chart");
         pnlChartController.SetData(data_points);
         displayGraph();
-        
+
         // Bar graph
         CategoryDataset data_bar = pnlChartController.createBarDataset();
         JFreeChart chart = pnlChartController.createBarChart(data_bar);
