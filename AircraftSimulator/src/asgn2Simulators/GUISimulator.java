@@ -28,6 +28,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import javax.swing.JSpinner;
+
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
@@ -68,14 +71,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private ChartPanel pnlChartController;
     private org.jfree.chart.ChartPanel pnlChart;
 
-    private JTextField txtSeed;
-    private JTextField txtMean;
-    private JTextField txtQueue;
-    private JTextField txtCancel;
-    private JTextField txtFirst;
-    private JTextField txtBusiness;
-    private JTextField txtPremium;
-    private JTextField txtEconomy;
+    private JSpinner valSeed;
+    private JSpinner valMean;
+    private JSpinner valQueue;
+    private JSpinner valCancel;
+    private JSpinner valFirst;
+    private JSpinner valBusiness;
+    private JSpinner valPremium;
+    private JSpinner valEconomy;
 
     private JLabel lblStartTop;
     private JLabel lblStartBottom;
@@ -165,14 +168,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblEconomy = createLabel("Economy (%)");
 
         // Text Fields
-        txtSeed = createTextField(String.valueOf(Constants.DEFAULT_SEED));
-        txtMean = createTextField(String.valueOf(Constants.DEFAULT_DAILY_BOOKING_MEAN));
-        txtQueue = createTextField(String.valueOf(Constants.DEFAULT_MAX_QUEUE_SIZE));
-        txtCancel = createTextField(String.valueOf(Constants.DEFAULT_CANCELLATION_PROB));
-        txtFirst = createTextField(String.valueOf(Constants.DEFAULT_FIRST_PROB));
-        txtBusiness = createTextField(String.valueOf(Constants.DEFAULT_BUSINESS_PROB));
-        txtPremium = createTextField(String.valueOf(Constants.DEFAULT_PREMIUM_PROB));
-        txtEconomy = createTextField(String.valueOf(Constants.DEFAULT_ECONOMY_PROB));
+        valSeed = createNumSpinner(Constants.DEFAULT_SEED);
+        valMean = createNumSpinner(Constants.DEFAULT_DAILY_BOOKING_MEAN);
+        valQueue = createNumSpinner(Constants.DEFAULT_MAX_QUEUE_SIZE);
+        valCancel = createNumSpinner(Constants.DEFAULT_CANCELLATION_PROB * 100);
+        valFirst = createNumSpinner(Constants.DEFAULT_FIRST_PROB * 100);
+        valBusiness = createNumSpinner(Constants.DEFAULT_BUSINESS_PROB * 100);
+        valPremium = createNumSpinner(Constants.DEFAULT_PREMIUM_PROB * 100);
+        valEconomy = createNumSpinner(Constants.DEFAULT_ECONOMY_PROB * 100);
 
         // Buttons
         btnRun = createButton("Run Simulation");
@@ -196,6 +199,19 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         JButton jb = new JButton(str);
         jb.addActionListener(this);
         return jb;
+    }
+
+    private JSpinner createNumSpinner(double val) {
+        JSpinner js = new JSpinner();
+        //js.setFont(new Font("Arial", Font.PLAIN, 12));
+        //js.setBorder(BorderFactory.createEtchedBorder());
+        js.setValue(val);
+        
+        // Center spinner value
+        JSpinner.DefaultEditor e = (JSpinner.DefaultEditor)js.getEditor();
+        e.getTextField().setHorizontalAlignment(JTextField.CENTER);
+        
+        return js;
     }
 
     private JTextField createTextField(String str) {
@@ -249,10 +265,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         addToPanel(pnlBottom, lblCancel, c, 0, 4, 1, 1);
         c.weightx = 100;
         c.weighty = 100;
-        addToPanel(pnlBottom, txtSeed, c, 1, 1, 2, 1);
-        addToPanel(pnlBottom, txtMean, c, 1, 2, 2, 1);
-        addToPanel(pnlBottom, txtQueue, c, 1, 3, 2, 1);
-        addToPanel(pnlBottom, txtCancel, c, 1, 4, 2, 1);
+        addToPanel(pnlBottom, valSeed, c, 1, 1, 2, 1);
+        addToPanel(pnlBottom, valMean, c, 1, 2, 2, 1);
+        addToPanel(pnlBottom, valQueue, c, 1, 3, 2, 1);
+        addToPanel(pnlBottom, valCancel, c, 1, 4, 2, 1);
 
         c.weightx = 1;
         c.weighty = 1;
@@ -263,10 +279,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         addToPanel(pnlBottom, lblEconomy, c, 3, 4, 1, 1);
         c.weightx = 100;
         c.weighty = 100;
-        addToPanel(pnlBottom, txtFirst, c, 4, 1, 2, 1);
-        addToPanel(pnlBottom, txtBusiness, c, 4, 2, 2, 1);
-        addToPanel(pnlBottom, txtPremium, c, 4, 3, 2, 1);
-        addToPanel(pnlBottom, txtEconomy, c, 4, 4, 2, 1);
+        addToPanel(pnlBottom, valFirst, c, 4, 1, 2, 1);
+        addToPanel(pnlBottom, valBusiness, c, 4, 2, 2, 1);
+        addToPanel(pnlBottom, valPremium, c, 4, 3, 2, 1);
+        addToPanel(pnlBottom, valEconomy, c, 4, 4, 2, 1);
 
         c.anchor = GridBagConstraints.EAST;
         c.fill = GridBagConstraints.BOTH;
@@ -315,14 +331,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring Class: Warning",
                     JOptionPane.WARNING_MESSAGE);
         } else if (src == btnRestore) {
-            txtSeed.setText(String.valueOf(Constants.DEFAULT_SEED));
-            txtMean.setText(String.valueOf(Constants.DEFAULT_DAILY_BOOKING_MEAN));
-            txtQueue.setText(String.valueOf(Constants.DEFAULT_MAX_QUEUE_SIZE));
-            txtCancel.setText(String.valueOf(Constants.DEFAULT_CANCELLATION_PROB));
-            txtFirst.setText(String.valueOf(Constants.DEFAULT_FIRST_PROB));
-            txtBusiness.setText(String.valueOf(Constants.DEFAULT_BUSINESS_PROB));
-            txtPremium.setText(String.valueOf(Constants.DEFAULT_PREMIUM_PROB));
-            txtEconomy.setText(String.valueOf(Constants.DEFAULT_ECONOMY_PROB));
+            valSeed.setValue(Constants.DEFAULT_SEED);
+            valMean.setValue(Constants.DEFAULT_DAILY_BOOKING_MEAN);
+            valQueue.setValue(Constants.DEFAULT_MAX_QUEUE_SIZE);
+            valCancel.setValue(Constants.DEFAULT_CANCELLATION_PROB / 100);
+            valFirst.setValue(Constants.DEFAULT_FIRST_PROB / 100);
+            valBusiness.setValue(Constants.DEFAULT_BUSINESS_PROB / 100);
+            valPremium.setValue(Constants.DEFAULT_PREMIUM_PROB / 100);
+            valEconomy.setValue(Constants.DEFAULT_ECONOMY_PROB / 100);
         }
     }
 
@@ -379,51 +395,37 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     private boolean prepareSim() throws IOException, SimulationException {
-        Integer seed, queueSize;
-        Double dailyMean, cancel, first, business, premium, economy, sdBooking;
+
+      //  Integer seed, queueSize;
+      //  Double dailyMean, cancel, first, business, premium, economy, sdBooking;
         // Check everything for errors, return false if there is a problem,
         // otherwise fall through and return true
-        if ((seed = strToInt(txtSeed.getText())) == null) {
-            createErrorMessage("Seed value");
-            return false;
-        }
-        if ((dailyMean = strToDouble(txtMean.getText(), null)) == null) {
-            createErrorMessage("Daily Mean");
-            return false;
-        }
-        if ((queueSize = strToInt(txtQueue.getText())) == null) {
-            createErrorMessage("Max Queue Size");
-            return false;
-        }
-        if ((cancel = strToDouble(txtCancel.getText(), 1.0)) == null) {
-            createErrorMessage("Cancel Value");
-            return false;
-        }
-        if ((first = strToDouble(txtFirst.getText(), 1.0)) == null) {
-            createErrorMessage("First Percent");
-            return false;
-        }
-        if ((business = strToDouble(txtBusiness.getText(), 1.0)) == null) {
-            createErrorMessage("Business Percent");
-            return false;
-        }
-        if ((premium = strToDouble(txtPremium.getText(), 1.0)) == null) {
-            createErrorMessage("Premium Percent");
-            return false;
-        }
-        if ((economy = strToDouble(txtEconomy.getText(), 1.0)) == null) {
-            createErrorMessage("Economy Percent");
-            return false;
-        }
+
+        Double sdBooking;
+        
+        int seed = ((Double)valSeed.getValue()).intValue();
+        double mean = (Double) valMean.getValue();
+        int queue = ((Double)valSeed.getValue()).intValue();
+        double cancel = (Double) valCancel.getValue();
+        double first = (Double) valFirst.getValue() / 100;
+        double business = (Double) valBusiness.getValue() / 100;
+        double premium = (Double) valPremium.getValue() / 100;
+        double economy = (Double) valEconomy.getValue() / 100;
+        
+
         if ((first + business + premium + economy) != 1) {
             createErrorMessage("Passenger split");
             return false;
         }
-        // overwriting the values
-        sdBooking = 0.33 * dailyMean;
-        sdBooking = 429.0;
+
+        
+        //overwriting the values
+        sdBooking = 0.33 * mean;
+        sdBooking  = 429.0;
+
         l = new Log();
-        sim = new Simulator(seed, queueSize, dailyMean, sdBooking, first, business, premium, economy, cancel);
+
+        sim = new Simulator(seed, queue, mean, sdBooking, first, business, premium, economy, cancel);
         return true;
     }
 
@@ -441,6 +443,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                                                                                                      // =
                                                                                                      // 0
                                                                                                      // ;
+
 
         TimeSeries tmsBooking = new TimeSeries("Bookings");
         TimeSeries tmsFirst = new TimeSeries("First");
