@@ -5,9 +5,7 @@ package asgn2Simulators;
 
 import java.awt.Component;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Random;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -30,10 +28,12 @@ public class ChartPanel extends Component {
     private TimeSeriesCollection data_points;
 
     public ChartPanel() {
-        data_points = initializeData();
+        SetData(initializeData());
+        System.out.println("Initializing Chart Constructor");
     }
 
     public org.jfree.chart.ChartPanel getChartPanel() {
+        System.out.println("Giving Chart Panel away for free");
         return new org.jfree.chart.ChartPanel(createChart(data_points));
     }
 
@@ -44,7 +44,7 @@ public class ChartPanel extends Component {
         Calendar cal = GregorianCalendar.getInstance();
         for (int i = 0; i <= 20; i++) {
             cal.set(2016, 0, i, 6, 0);
-            dataset.add(new Day(cal.getTime()), i);
+            dataset.add(new Day(cal.getTime()), Math.pow(i,10));
         }       
         tsc.addSeries(dataset);
         return tsc;

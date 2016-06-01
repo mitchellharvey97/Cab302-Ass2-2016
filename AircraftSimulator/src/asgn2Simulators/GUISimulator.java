@@ -54,7 +54,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 600;
     public static final int HEIGHT = 400;
 
-    private boolean startPage = true;
+    private boolean displayStart = true;
 
     private JPanel pnlDisplay;
     private JPanel pnlTop;
@@ -126,6 +126,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         SwingUtilities.invokeLater(new GUISimulator("Aircraft Simulator"));
     }
 
+    
+    
+    
     private void createGUI() {
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -138,22 +141,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlDisplay = new JPanel();
         pnlBottom = new JPanel();
         pnlStart = new JPanel();
-
-        // JFreeChart
-        pnlChartController = new ChartPanel();
-        pnlChart = pnlChartController.getChartPanel();
-        pnlDisplay.setLayout(new BorderLayout());
-        pnlDisplay.add(pnlChart);
-
-        // Start Image
-        lblStartTop = createLabel("Thank you for flying Air Hogie!", new Font("Arial", Font.BOLD, 15));
-        lblStartBottom = createLabel("We hope you enjoy our wide selection of in-flight memes.",
-                new Font("Arial", Font.BOLD, 15));
-        lblStartImg = new JLabel(new ImageIcon(getClass().getResource("img/jim.png")));
-        // if (this.startPage){
-     //   pnlDisplay.add(pnlStart);
-        // }
-        // }
 
         // Labels
         lblSimTitle = createLabel("Simulation Settings", new Font("Arial", Font.BOLD, 15));
@@ -182,7 +169,15 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         btnSwitch = createButton("Switch Charts");
         btnRestore = createButton("Restore Defaults");
 
+        
+        pnlChartController = new ChartPanel(); //Define the Controller...
+        
+        displayStart();
+        
         layoutStartPanel();
+        
+     //   displayGraph();
+        
         layoutButtonPanel();
 
         this.getContentPane().add(pnlTop, BorderLayout.NORTH);
@@ -234,6 +229,43 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         jl.setHorizontalAlignment(SwingConstants.RIGHT);
         return jl;
     }
+    
+    
+    
+    private void displayStart(){
+        // Start Image
+        lblStartTop = createLabel("Thank you for flying Air Hogie!", new Font("Arial", Font.BOLD, 15));
+        lblStartBottom = createLabel("We hope you enjoy our wide selection of in-flight memes.",
+                new Font("Arial", Font.BOLD, 15));
+        lblStartImg = new JLabel(new ImageIcon(getClass().getResource("img/jim.png")));
+        // if (this.startPage){
+       pnlDisplay.add(pnlStart);
+        // }
+        // }
+        
+    }
+    
+    private void displayGraph(){
+        pnlDisplay.remove(pnlStart);
+
+ 
+        
+        pnlChart = pnlChartController.getChartPanel();
+        
+        pnlChart.setBackground(Color.magenta);
+        pnlDisplay.setLayout(new BorderLayout());
+        
+        pnlDisplay.add(pnlChart);
+        
+   
+        pnlDisplay.repaint();
+        
+        repaint();   
+        System.out.println("Showing Chart");
+        this.setVisible(true);
+    }
+    
+    
 
     private void layoutStartPanel() {
         pnlStart.setLayout(new GridBagLayout());
@@ -245,8 +277,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         addToPanel(pnlStart, lblStartTop, c, 0, 0, 1, 1);
         addToPanel(pnlStart, lblStartImg, c, 0, 1, 1, 1);
         addToPanel(pnlStart, lblStartBottom, c, 0, 2, 1, 1);
+        
     }
-
+    
     private void layoutButtonPanel() {
         pnlBottom.setLayout(new GridBagLayout());
 
@@ -325,11 +358,15 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Determine which button was pressed
         if (src == btnRun) {
 
-            startPage = false;
+            //displayStart = false;
             complete_sim();
         } else if (src == btnSwitch) {
-            JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring Class: Warning",
-                    JOptionPane.WARNING_MESSAGE);
+            if (displayStart){
+                displayStart = false;
+                displayGraph();
+            }
+         //   JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring Class: Warning",
+          //          JOptionPane.WARNING_MESSAGE);
         } else if (src == btnRestore) {
             valSeed.setValue(Constants.DEFAULT_SEED);
             valMean.setValue(Constants.DEFAULT_DAILY_BOOKING_MEAN);
@@ -367,40 +404,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         System.out.println("All Done for now");
     }
 
-    private Integer strToInt(String input) {
-        Integer value;
-        try {
-            if ((value = Integer.parseInt(input)) > 0) {
-                return value;
-            } else {
-                return null;
-            }
-        } catch (NumberFormatException e) {
-            System.out.println("FAIL");
-            return null;
-        }
-    }
-
-    private Double strToDouble(String input, Double max) {
-        Double value;
-        try {
-            if ((value = Double.parseDouble(input)) > 0 && (max == null || value <= max)) {
-                return value;
-            }
-            return null;
-        } catch (NumberFormatException e) {
-            System.out.println("FAIL");
-            return null;
-        }
-    }
-
     private boolean prepareSim() throws IOException, SimulationException {
-
-      //  Integer seed, queueSize;
-      //  Double dailyMean, cancel, first, business, premium, economy, sdBooking;
-        // Check everything for errors, return false if there is a problem,
-        // otherwise fall through and return true
-
+//TODO check boundaries
         Double sdBooking;
         
         int seed = ((Double)valSeed.getValue()).intValue();
@@ -438,12 +443,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.l.initialEntry(this.sim);
         // Main simulation loop
 
-        int cumulativeBusness = 0, cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0;// ,
-                                                                                                     // cumulativeFlown
-                                                                                                     // =
-                                                                                                     // 0
-                                                                                                     // ;
-
+        int cumulativeBusness = 0, cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0;
 
         TimeSeries tmsBooking = new TimeSeries("Bookings");
         TimeSeries tmsFirst = new TimeSeries("First");
@@ -500,25 +500,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         data_points.addSeries(tmsBusiness);
         data_points.addSeries(tmsPremium);
         data_points.addSeries(tmsEconomy);
-        data_points.addSeries(tmsBooking);
-
-        
-        
+        data_points.addSeries(tmsBooking);  
     
-        
-   //     pnlDisplay.remove(pnlStart); 
-   //     pnlChartController = new ChartPanel();
-   //     pnlChart = pnlChartController.getChartPanel();  
-   //     pnlDisplay.setLayout(new BorderLayout());
-   //     pnlDisplay.setBackground(Color.GREEN);
-   //     pnlDisplay.add(pnlChart);     
-   
-        JFreeChart chart = pnlChartController.createChart(data_points);
-        pnlChart.setChart(chart);
+           System.out.println("Updating Chart");
+        pnlChart.setChart(pnlChartController.createChart(data_points));
         pnlChart.repaint();
- 
         
-        
+        displayGraph();
+    
         
         
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
