@@ -22,7 +22,6 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.data.time.Day;
-import org.jfree.data.time.Minute;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
@@ -114,7 +113,7 @@ public class RandomTimeSeries extends ApplicationFrame {
 		tsc.addSeries(bookTotal);
 		tsc.addSeries(econTotal);
 		tsc.addSeries(busTotal);
-		return tsc; 
+		return tsc;
 	}
 	
 	/**

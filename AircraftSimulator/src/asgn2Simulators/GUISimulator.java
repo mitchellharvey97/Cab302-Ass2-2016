@@ -18,6 +18,10 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Random;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -31,6 +35,16 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.XYPlot;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.xy.XYDataset;
 
 import asgn2Aircraft.AircraftException;
 import asgn2Passengers.PassengerException;
@@ -104,7 +118,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             IllegalAccessException, UnsupportedLookAndFeelException {
         // JFrame.setDefaultLookAndFeelDecorated(false);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        SwingUtilities.invokeLater(new GUISimulator("BorderLayout"));
+        SwingUtilities.invokeLater(new GUISimulator("Aircraft Simulator"));
     }
 
     private void createGUI() {
@@ -118,7 +132,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlRight = createPanel(); //Color.RED);
         pnlDisplay = createPanel(); //Color.WHITE);
         pnlBottom = createPanel(); //Color.BLUE);
-
+        
+        // JFreeChart
+        final TimeSeriesCollection dataset = createTimeSeriesData();
+        JFreeChart chart = createChart(dataset);
+        pnlDisplay.add(new ChartPanel(chart), BorderLayout.CENTER);
+        
         // Text Area
         txtDisplay = createTextArea();
         pnlDisplay.setLayout(new BorderLayout());
@@ -162,6 +181,80 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.setVisible(true);
     }
 
+    /**
+     * Private method creates the dataset. Lots of hack code in the 
+     * middle, but you should use the labelled code below  
+     * @return collection of time series for the plot 
+     */
+    private TimeSeriesCollection createTimeSeriesData() {
+        TimeSeriesCollection tsc = new TimeSeriesCollection(); 
+        TimeSeries bookTotal = new TimeSeries("Total Bookings");
+        TimeSeries econTotal = new TimeSeries("Economy"); 
+        TimeSeries busTotal = new TimeSeries("Business");
+        
+        //Base time, data set up - the calendar is needed for the time points
+        Calendar cal = GregorianCalendar.getInstance();
+        Random rng = new Random(250); 
+        
+        int economy = 0;
+        int business = 0; 
+        
+        //Hack loop to make it interesting. Grows for half of it, then declines
+        for (int i=0; i<=18*7; i++) {
+            //These lines are important 
+            cal.set(2016,0,i,6,0);
+            Date timePoint = cal.getTime();
+            
+            //HACK BEGINS
+            if (i<9*7) {
+                if (randomSuccess(0.2,rng)) {
+                    economy++; 
+                }
+                if (randomSuccess(0.1,rng)) {
+                    business++;
+                }
+            } else if (i < 18*7) {
+                if (randomSuccess(0.15,rng)) {
+                    economy++; 
+                } else if (randomSuccess(0.4,rng)) {
+                    economy = Math.max(economy-1,0);
+                }
+                if (randomSuccess(0.05,rng)) {
+                    business++; 
+                } else if (randomSuccess(0.2,rng)) {
+                    business = Math.max(business-1,0);
+                }
+            } else {
+                economy=0; 
+                business =0;
+            }
+            //HACK ENDS
+            
+            //This is important - steal it shamelessly 
+            busTotal.add(new Day(timePoint),business);
+            econTotal.add(new Day(timePoint),economy);
+            bookTotal.add(new Day(timePoint),economy+business);
+        }
+        
+        //Collection
+        tsc.addSeries(bookTotal);
+        tsc.addSeries(econTotal);
+        tsc.addSeries(busTotal);
+        return tsc;
+    }
+    
+    /**
+     * Utility method to implement a <a href="http://en.wikipedia.org/wiki/Bernoulli_trial">Bernoulli Trial</a>, 
+     * a coin toss with two outcomes: success (probability successProb) and failure (probability 1-successProb)
+     * @param successProb double holding the success probability 
+     * @param rng Random object 
+     * @return true if trial was successful, false otherwise
+     */
+    private boolean randomSuccess(double successProb,Random rng) {
+        boolean result = rng.nextDouble() <= successProb;
+        return result;
+    }
+
     private JPanel createPanel() { // Color c) {
         JPanel jp = new JPanel();
         // jp.setBackground(c);
@@ -203,7 +296,22 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         jl.setHorizontalAlignment(SwingConstants.RIGHT);
         return jl;
     }
-    
+
+    /**
+     * Helper method to deliver the Chart - currently uses default colours and auto range 
+     * @param dataset TimeSeriesCollection for plotting 
+     * @returns chart to be added to panel 
+     */
+    private JFreeChart createChart(final XYDataset dataset) {
+        final JFreeChart result = ChartFactory.createTimeSeriesChart(
+            "Dynamic Series", "Days", "Passengers", dataset, true, true, false);
+        final XYPlot plot = result.getXYPlot();
+        ValueAxis domain = plot.getDomainAxis();
+        domain.setAutoRange(true);
+        ValueAxis range = plot.getRangeAxis();
+        range.setAutoRange(true);
+        return result;
+    }
 
     private void layoutButtonPanel() {
         pnlBottom.setLayout(new GridBagLayout());
