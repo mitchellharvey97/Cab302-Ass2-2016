@@ -22,6 +22,7 @@ import asgn2Passengers.First;
 import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
 import asgn2Passengers.Premium;
+import asgn2Simulators.Simulator;
 
 /**
  * The AircraftTests class provides various JUnit tests designed to guarantee
@@ -57,52 +58,52 @@ public class AircraftTests {
     }
 
     /* Invalid Constructors */
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testDefaultConstructorNullFlightCode() throws AircraftException {
         a = new A380(null, 1);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testDefaultConstructorZeroDepartureTime() throws AircraftException {
         a = new A380("", 0);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testDefaultConstructorNegativeDepartureTime() throws AircraftException {
         a = new A380("", -1);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testFullConstructorNullFlightCode() throws AircraftException {
         a = new A380(null, 1, 0, 0, 0, 0);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testFullConstructorZeroDepartureTime() throws AircraftException {
         a = new A380("", 0, 0, 0, 0, 0);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testFullConstructorNegativeDepartureTime() throws AircraftException {
         a = new A380("", -1, 0, 0, 0, 0);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testFullConstructorNegativeFirstCapacity() throws AircraftException {
         a = new A380("", 1, -1, 0, 0, 0);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testFullConstructorNegativeBusinessCapacity() throws AircraftException {
         a = new A380("", 1, 0, -1, 0, 0);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testFullConstructorNegativePremiumCapacity() throws AircraftException {
         a = new A380("", 1, 0, 0, -1, 0);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testFullConstructorNegativeEconomyCapacity() throws AircraftException {
         a = new A380("", 1, 0, 0, 0, -1);
     }
@@ -117,48 +118,48 @@ public class AircraftTests {
         assertEquals(1, p.getBookingTime());
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testCancelBookingNewPassenger() throws AircraftException, PassengerException {
         a.confirmBooking(p, 1);
         p.cancelSeat(1);
         a.cancelBooking(p, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testCancelBookingQueuedPassenger() throws AircraftException, PassengerException {
         a.confirmBooking(p, 1);
         p.queuePassenger(1, 1);
         a.cancelBooking(p, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testCancelBookingRefusedPassenger() throws AircraftException, PassengerException {
         a.confirmBooking(p, 1);
         p.refusePassenger(1);
         a.cancelBooking(p, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testCancelBookingFlownPassenger() throws AircraftException, PassengerException {
         a.confirmBooking(p, 1);
         p.flyPassenger(1);
         a.cancelBooking(p, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testCancelBookingCancellationTimeLessThanZero() throws PassengerException, AircraftException {
         a.confirmBooking(p, 1);
         a.cancelBooking(p, -1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testCancelBookingCancellationTimeGreaterThanDepartureTime()
             throws PassengerException, AircraftException {
         a.confirmBooking(p, 1);
         a.cancelBooking(p, 2);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testCancelBookingPassengerNotRecordedInAircraftSeating() throws PassengerException, AircraftException {
         assertFalse(a.hasPassenger(p));
         a.cancelBooking(p, 1);
@@ -182,45 +183,45 @@ public class AircraftTests {
         assertEquals(1, p.getExitQueueTime());
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testConfirmBookingConfirmedPassenger() throws AircraftException, PassengerException {
         p.confirmSeat(1, 1);
         a.confirmBooking(p, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testConfirmBookingRefusedPassenger() throws PassengerException, AircraftException {
         p.refusePassenger(1);
         a.confirmBooking(p, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testConfirmBookingFlownPassenger() throws PassengerException, AircraftException {
         a.confirmBooking(p, 1);
         p.flyPassenger(1);
         a.confirmBooking(p, 1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testConfirmBookingConfirmationTimeLessThanZero() throws PassengerException, AircraftException {
         a.confirmBooking(p, -1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testConfirmBookingConfirmationTimeGreaterThanDepartureTime()
             throws PassengerException, AircraftException {
         assertTrue(p.getDepartureTime() < 2);
         a.confirmBooking(p, 2);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testConfirmBookingNoSeatsAvailableInPassengerClassEconomy()
             throws PassengerException, AircraftException {
         A380 a2 = new A380("", 3, 0, 0, 0, 0);
         a2.confirmBooking(p, 2);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testConfirmBookingNoSeatsAvailableInPassengerClassPremium()
             throws PassengerException, AircraftException {
         A380 a = new A380("", 3, 0, 0, 0, 0);
@@ -228,7 +229,7 @@ public class AircraftTests {
         a.confirmBooking(p, 2);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testConfirmBookingNoSeatsAvailableInPassengerClassBusiness()
             throws PassengerException, AircraftException {
         A380 a = new A380("", 3, 0, 0, 0, 0);
@@ -236,7 +237,7 @@ public class AircraftTests {
         a.confirmBooking(p, 2);
     }
 
-    @Test (expected = AircraftException.class)
+    @Test(expected = AircraftException.class)
     public void testConfirmBookingNoSeatsAvailableInPassengerClassFirst() throws PassengerException, AircraftException {
         A380 a = new A380("", 3, 0, 0, 0, 0);
         Passenger p = new First(1, 2);
@@ -292,7 +293,7 @@ public class AircraftTests {
         a.flyPassengers(1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testFlyPassengersNewPassenger() throws PassengerException, AircraftException {
         a.confirmBooking(p, 1);
         p.cancelSeat(1);
@@ -307,7 +308,7 @@ public class AircraftTests {
         assertFalse(p.isFlown());
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testFlyPassengersQueuedPassengerManualAddToQueue() throws AircraftException, PassengerException {
         a.confirmBooking(p, 1);
         p.cancelSeat(1);
@@ -324,7 +325,7 @@ public class AircraftTests {
         assertFalse(p.isFlown());
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testFlyPassengersRefusedPassengerManualAdd() throws PassengerException, AircraftException {
         a.confirmBooking(p, 1);
         p.cancelSeat(1);
@@ -333,20 +334,20 @@ public class AircraftTests {
         assertFalse(p.isFlown());
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testFlyPassengersFlownPassenger() throws PassengerException, AircraftException {
         a.confirmBooking(p, 1);
         p.flyPassenger(1);
         a.flyPassengers(1);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testFlyPassengersZeroDepartureTime() throws PassengerException, AircraftException {
         a.confirmBooking(p, 1);
         a.flyPassengers(0);
     }
 
-    @Test (expected = PassengerException.class)
+    @Test(expected = PassengerException.class)
     public void testFlyPassengersDepartureTimeLessThanZero() throws AircraftException, PassengerException {
         a.confirmBooking(p, 1);
         a.flyPassengers(-1);
@@ -490,5 +491,28 @@ public class AircraftTests {
         assertTrue(passengers.get(1) instanceof Business);
         assertTrue(passengers.get(2) instanceof First);
         assertTrue(passengers.get(3) instanceof First);
+    }
+
+    @Test
+    public void testConcurrentModificationExceptionIsNotThrownWhenModifyingInAnItterator()
+            throws PassengerException, AircraftException {
+        a = new A380("", 1, 10, 10, 10, 10);
+        int counter = 0;
+        Premium p2 = new Premium(1, 1);
+        Business p3 = new Business(1, 1);
+        First p4 = new First(1, 1);
+
+        a.confirmBooking(p, 1);
+        a.confirmBooking(p2, 1);
+        a.confirmBooking(p3, 1);
+        a.confirmBooking(p4, 1);
+
+        List<Passenger> passengers = a.getPassengers();
+        for (Passenger p : passengers) {
+            counter++;
+            if (counter == 1) {
+                a.cancelBooking(p, 1);
+            }
+        }
     }
 }

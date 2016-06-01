@@ -317,16 +317,10 @@ public abstract class Aircraft {
      * @return <code>List<Passenger></code> object containing the passengers.
      */
     public List<Passenger> getPassengers() {
+        // make a clone and return the clone object
         List<Passenger> returned = new ArrayList<Passenger>();
-
-        Iterator<Passenger> pass_itter = this.seats.iterator();
-        while (pass_itter.hasNext()) {
-            returned.add(pass_itter.next());
-            // System.out.println(pass_itter.next());
-        }
-//TODO I had to fix a bug here so we should add a test to catch the issue i found???
+        returned.addAll(seats);
         return returned;
-
     }
 
     /**
