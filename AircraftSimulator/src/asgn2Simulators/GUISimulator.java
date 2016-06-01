@@ -21,7 +21,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -53,8 +52,6 @@ import asgn2Passengers.PassengerException;
 public class GUISimulator extends JFrame implements ActionListener, Runnable {
     public static final int WIDTH = 600;
     public static final int HEIGHT = 400;
-
-    private boolean displayStart = true;
 
     private JPanel pnlDisplay;
     private JPanel pnlTop;
@@ -126,9 +123,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         SwingUtilities.invokeLater(new GUISimulator("Aircraft Simulator"));
     }
 
-    
-    
-    
     private void createGUI() {
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -141,6 +135,20 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlDisplay = new JPanel();
         pnlBottom = new JPanel();
         pnlStart = new JPanel();
+
+        // JFreeChart
+        pnlChartController = new ChartPanel();
+        pnlChart = pnlChartController.getChartPanel();
+        pnlDisplay.setLayout(new BorderLayout());
+        // pnlDisplay.add(pnlChart);
+
+        // Start Panel
+        lblStartTop = createLabel("Thank you for flying Air Hogie!", new Font("Arial", Font.BOLD, 15));
+        lblStartBottom = createLabel("We hope you enjoy our wide selection of in-flight memes.",
+                new Font("Arial", Font.BOLD, 15));
+        lblStartImg = new JLabel(new ImageIcon(getClass().getResource("img/jim.png")));
+        layoutStartPanel();
+        pnlDisplay.add(pnlStart);
 
         // Labels
         lblSimTitle = createLabel("Simulation Settings", new Font("Arial", Font.BOLD, 15));
@@ -168,24 +176,19 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         btnRun = createButton("Run Simulation");
         btnSwitch = createButton("Switch Charts");
         btnRestore = createButton("Restore Defaults");
-
-        
-        pnlChartController = new ChartPanel(); //Define the Controller...
-        
-        displayStart();
-        
-        layoutStartPanel();
-        
-     //   displayGraph();
-        
         layoutButtonPanel();
 
+        // Define the chart controller
+        pnlChartController = new ChartPanel();
+        displayStart();
+        // displayGraph();
+        
         this.getContentPane().add(pnlTop, BorderLayout.NORTH);
         this.getContentPane().add(pnlLeft, BorderLayout.WEST);
         this.getContentPane().add(pnlRight, BorderLayout.EAST);
         this.getContentPane().add(pnlDisplay, BorderLayout.CENTER);
         this.getContentPane().add(pnlBottom, BorderLayout.SOUTH);
-        repaint();
+        //repaint();
 
         this.setVisible(true);
     }
@@ -198,22 +201,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private JSpinner createNumSpinner(double val) {
         JSpinner js = new JSpinner();
-        //js.setFont(new Font("Arial", Font.PLAIN, 12));
-        //js.setBorder(BorderFactory.createEtchedBorder());
         js.setValue(val);
-        
-        // Center spinner value
-        JSpinner.DefaultEditor e = (JSpinner.DefaultEditor)js.getEditor();
-        e.getTextField().setHorizontalAlignment(JTextField.CENTER);
-        
-        return js;
-    }
 
-    private JTextField createTextField(String str) {
-        JTextField jtf = new JTextField(str);
-        jtf.setFont(new Font("Arial", Font.PLAIN, 12));
-        jtf.setBorder(BorderFactory.createEtchedBorder());
-        return jtf;
+        // Center spinner value
+        JSpinner.DefaultEditor e = (JSpinner.DefaultEditor) js.getEditor();
+        e.getTextField().setHorizontalAlignment(JTextField.CENTER);
+
+        return js;
     }
 
     private JLabel createLabel(String str, Font fnt) {
@@ -229,65 +223,50 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         jl.setHorizontalAlignment(SwingConstants.RIGHT);
         return jl;
     }
-    
-    
-    
-    private void displayStart(){
+
+    private void displayStart() {
         // Start Image
         lblStartTop = createLabel("Thank you for flying Air Hogie!", new Font("Arial", Font.BOLD, 15));
         lblStartBottom = createLabel("We hope you enjoy our wide selection of in-flight memes.",
                 new Font("Arial", Font.BOLD, 15));
         lblStartImg = new JLabel(new ImageIcon(getClass().getResource("img/jim.png")));
-        // if (this.startPage){
-       pnlDisplay.add(pnlStart);
-        // }
-        // }
-        
+        pnlDisplay.add(pnlStart);
     }
-    
-    private void displayGraph(){
-        pnlDisplay.remove(pnlStart);
 
- 
-        
-        pnlChart = pnlChartController.getChartPanel();
-        
-        pnlChart.setBackground(Color.magenta);
-        pnlDisplay.setLayout(new BorderLayout());
-        
-        pnlDisplay.add(pnlChart);
-        
-   
-        pnlDisplay.repaint();
-        
-        repaint();   
+    private void displayGraph() {
         System.out.println("Showing Chart");
+
+        pnlDisplay.remove(pnlStart);
+        pnlChart = pnlChartController.getChartPanel();
+        pnlDisplay.setLayout(new BorderLayout());
+        pnlDisplay.add(pnlChart);
+        pnlDisplay.repaint();
         this.setVisible(true);
     }
-    
-    
 
     private void layoutStartPanel() {
+        // Set grid bag constraints
         pnlStart.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.NONE;
         c.insets = new Insets(0, 0, 20, 0);
         c.weightx = 1;
         c.weighty = 1;
+
+        // Add Labels to start screen
         addToPanel(pnlStart, lblStartTop, c, 0, 0, 1, 1);
         addToPanel(pnlStart, lblStartImg, c, 0, 1, 1, 1);
         addToPanel(pnlStart, lblStartBottom, c, 0, 2, 1, 1);
-        
     }
-    
-    private void layoutButtonPanel() {
-        pnlBottom.setLayout(new GridBagLayout());
 
-        // Add components to grid
+    private void layoutButtonPanel() {
+        // Set default grid bag constraints
+        pnlBottom.setLayout(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
         c.insets = new Insets(0, 0, 0, 5);
 
+        // Simulation settings
         c.anchor = GridBagConstraints.WEST; // x, y, w, h
         c.weightx = 1;
         c.weighty = 1;
@@ -303,6 +282,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         addToPanel(pnlBottom, valQueue, c, 1, 3, 2, 1);
         addToPanel(pnlBottom, valCancel, c, 1, 4, 2, 1);
 
+        // Fare class probabilities
         c.weightx = 1;
         c.weighty = 1;
         addToPanel(pnlBottom, lblFareTitle, c, 3, 0, 3, 1);
@@ -317,6 +297,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         addToPanel(pnlBottom, valPremium, c, 4, 3, 2, 1);
         addToPanel(pnlBottom, valEconomy, c, 4, 4, 2, 1);
 
+        // Control buttons
         c.anchor = GridBagConstraints.EAST;
         c.fill = GridBagConstraints.BOTH;
         addToPanel(pnlBottom, btnRun, c, 6, 1, 2, 2);
@@ -325,22 +306,15 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     /**
-     * 
      * A convenience method to add a component to given grid bag layout
      * locations. Code due to Cay Horstmann
      *
-     * @param c
-     *            the component to add
-     * @param constraints
-     *            the grid bag constraints to use
-     * @param x
-     *            the x grid position
-     * @param y
-     *            the y grid position
-     * @param w
-     *            the grid width
-     * @param h
-     *            the grid height
+     * @param c the component to add
+     * @param constraints the grid bag constraints to use
+     * @param x the x grid position
+     * @param y the y grid position
+     * @param w the grid width
+     * @param h the grid height
      */
     private void addToPanel(JPanel jp, Component c, GridBagConstraints constraints, int x, int y, int w, int h) {
         constraints.gridx = x;
@@ -352,21 +326,16 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // Get event source
         Object src = e.getSource();
 
         // Determine which button was pressed
         if (src == btnRun) {
-
-            //displayStart = false;
             complete_sim();
         } else if (src == btnSwitch) {
-            if (displayStart){
-                displayStart = false;
-                displayGraph();
-            }
-         //   JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring Class: Warning",
-          //          JOptionPane.WARNING_MESSAGE);
+            displayGraph();
+            // JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring
+            // Class: Warning",
+            // JOptionPane.WARNING_MESSAGE);
         } else if (src == btnRestore) {
             valSeed.setValue(Constants.DEFAULT_SEED);
             valMean.setValue(Constants.DEFAULT_DAILY_BOOKING_MEAN);
@@ -405,28 +374,32 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     private boolean prepareSim() throws IOException, SimulationException {
-//TODO check boundaries
+        // TODO check boundaries
+        // Integer seed, queueSize;
+        // Double dailyMean, cancel, first, business, premium, economy,
+        // sdBooking;
+        // Check everything for errors, return false if there is a problem,
+        // otherwise fall through and return true
+
         Double sdBooking;
-        
-        int seed = ((Double)valSeed.getValue()).intValue();
+
+        int seed = ((Double) valSeed.getValue()).intValue();
         double mean = (Double) valMean.getValue();
-        int queue = ((Double)valSeed.getValue()).intValue();
+        int queue = ((Double) valSeed.getValue()).intValue();
         double cancel = (Double) valCancel.getValue();
         double first = (Double) valFirst.getValue() / 100;
         double business = (Double) valBusiness.getValue() / 100;
         double premium = (Double) valPremium.getValue() / 100;
         double economy = (Double) valEconomy.getValue() / 100;
-        
 
         if ((first + business + premium + economy) != 1) {
             createErrorMessage("Passenger split");
             return false;
         }
 
-        
-        //overwriting the values
+        // overwriting the values
         sdBooking = 0.33 * mean;
-        sdBooking  = 429.0;
+        sdBooking = 429.0;
 
         l = new Log();
 
@@ -453,7 +426,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         Calendar cal = GregorianCalendar.getInstance();
 
-        for (int time = 0; time <= Constants.DURATION; time++) {
+        for (int time = 0; time <= Constants.DURATION / 10; time++) {
             this.sim.resetStatus(time);
             this.sim.rebookCancelledPassengers(time);
             this.sim.generateAndHandleBookings(time);
@@ -504,16 +477,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         data_points.addSeries(tmsEconomy);
         data_points.addSeries(tmsBooking);  
     
-           System.out.println("Updating Chart");
-           pnlChartController.SetData(data_points);
-           
-     //   pnlChart.setChart(pnlChartController.createChart(data_points));
-     //   pnlChart.repaint();
-        
+        System.out.println("Updating Chart");
+        pnlChartController.SetData(data_points);
         displayGraph();
-    
-        
-        
+
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.l.logQREntries(Constants.DURATION, sim);
         this.l.finalise(this.sim);
