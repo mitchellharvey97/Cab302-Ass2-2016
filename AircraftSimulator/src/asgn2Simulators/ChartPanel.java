@@ -60,7 +60,7 @@ public class ChartPanel extends Component {
      *            TimeSeriesCollection for plotting
      * @returns chart to be added to panel
      */
-    private JFreeChart createChart(final XYDataset dataset) {
+    public JFreeChart createChart(final XYDataset dataset) {
         final JFreeChart result = ChartFactory.createTimeSeriesChart(TITLE, "Days", "Passengers", dataset, true, true,
                 false);
         final XYPlot plot = result.getXYPlot();
