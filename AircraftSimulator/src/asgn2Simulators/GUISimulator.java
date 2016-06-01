@@ -279,7 +279,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     private void createErrorMessage(String errorBody) {
-        JOptionPane.showMessageDialog(this, "Please Input a valid number for the" + errorBody, "Input Value Error", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Please Input a valid number for the " + errorBody, "Input Value Error", JOptionPane.WARNING_MESSAGE);
 
     }
 
@@ -289,8 +289,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private void complete_sim() {
         try {
-            if (prepare_sim()) {
-                run_sim();
+            if (prepareSim()) {
+                runSim();
             } else {
                 System.out.println("There where errors in setting up");
             }
@@ -318,14 +318,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private Double str_to_dbl(String input, Double max) {
         Double value;
         try {            
-            if ((value = Double.parseDouble(input)) > 0){
-                if (max == null || value <= max){
+            if ((value = Double.parseDouble(input)) > 0 && (max == null || value <= max)){
                 return value;
-                }
             }
-            
-                return null;
-            
+               return null; 
         } catch (NumberFormatException e) {
             System.out.println("FAIL");
             return null;
@@ -334,18 +330,17 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     
     
     
-    private boolean prepare_sim() throws IOException, SimulationException {
+    private boolean prepareSim() throws IOException, SimulationException {
         Integer seed,queue_size;
         
-        Double daily_mean, cancel, first, business, premium ,economy ,sd_booking;
-
+        Double dailyMean, cancel, first, business, premium ,economy ,sd_booking;
          
         if ((seed = str_to_int(txtSeed.getText())) == null) {
             
             createErrorMessage("Seed value");
             return false;
         }
-        if ((daily_mean = str_to_dbl(txtMean.getText(), null)) == null) {
+        if ((dailyMean = str_to_dbl(txtMean.getText(), null)) == null) {
             createErrorMessage("Daily Mean");
             return false;
         }
@@ -383,22 +378,27 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             return false;
         }
         
-        sd_booking = 0.33 * daily_mean;
+        sd_booking = 0.33 * dailyMean;
+        sd_booking  = 429.0;
         
         
         l = new Log();
 
-        sim = new Simulator(seed, queue_size, daily_mean, sd_booking, first, business, premium, economy, cancel);
+        sim = new Simulator(seed, queue_size, dailyMean, sd_booking, first, business, premium, economy, cancel);
 
         return true;
     }
 
-    private void run_sim() throws AircraftException, PassengerException, SimulationException, IOException {
+    private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
         System.out.println("Running the main sim");
         this.sim.createSchedule();
         this.l.initialEntry(this.sim);
 
         // Main simulation loop
+        int cumulativeBusness = 0,cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0 ;
+        
+        
+        
         for (int time = 0; time <= Constants.DURATION; time++) {
             this.sim.resetStatus(time);
             this.sim.rebookCancelledPassengers(time);
@@ -413,8 +413,22 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             } else {
                 this.sim.processQueue(time);
             }
-            // Log progress
-
+            int dailyBusiness = sim.getTotalBusiness() - cumulativeBusness;
+            cumulativeBusness = sim.getTotalBusiness();
+            
+            int dailyEconomy = sim.getTotalEconomy() - cumulativeEconomy;
+            cumulativeEconomy = sim.getTotalEconomy();
+                
+            int dailyFirst = sim.getTotalFirst() - cumulativeFirst;
+            cumulativeFirst= sim.getTotalFirst();
+           
+            int dailyPremium = sim.getTotalPremium() - cumulativePremium;
+            cumulativePremium= sim.getTotalPremium();
+                           
+            
+            System.out.println("Day: " + time);
+            System.out.println("First Class: " + dailyFirst + " Business Class: " + dailyBusiness + " Premium: " + dailyPremium + " Economy: " + dailyEconomy);
+            
             this.l.logQREntries(time, sim);
             this.l.logEntry(time, this.sim);
         }
@@ -423,5 +437,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.l.finalise(this.sim);
 
     }
+    
 
 }
