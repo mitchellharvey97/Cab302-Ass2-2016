@@ -12,10 +12,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asgn2Aircraft.B747;
+import asgn2Aircraft.A380;
 import asgn2Aircraft.AircraftException;
 import asgn2Passengers.Business;
 import asgn2Passengers.Economy;
 import asgn2Passengers.First;
+import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
 import asgn2Passengers.Premium;
 
@@ -31,7 +33,12 @@ public class B747Tests {
 
     public B747 b;
     public Economy p;
-
+  
+    static final int FIRST = 14;
+    static final int BUSINESS = 52;
+    static final int PREMIUM = 32;
+    static final int ECONOMY = 255;
+    
     /**
      * @throws javb.lang.Exception
      */
@@ -151,5 +158,65 @@ public class B747Tests {
         b.confirmBooking(p2, 1);
         assertFalse(b.seatsAvailable(p2));
     }
+    
+    private void fillPlaneWithProvidedValues(int first, int business, int premium, int economy)
+            throws AircraftException, PassengerException {
+        b = new B747("", 3);
+
+        for (int x = 0; x < first; x++) {
+            Passenger p = new First(1, 1);
+            b.confirmBooking(p, 2);
+        }
+
+        for (int x = 0; x < business; x++) {
+            Passenger p = new Business(1, 1);
+            b.confirmBooking(p, 2);
+        }
+
+        for (int x = 0; x < premium; x++) {
+            Passenger p = new Premium(1, 1);
+            b.confirmBooking(p, 2);
+        }
+
+        for (int x = 0; x < economy; x++) {
+            Passenger p = new Economy(1, 1);
+            b.confirmBooking(p, 2);
+        }
+    }
+
+    @Test
+    public void testSimpleConstructorFillDefaultPlane() throws AircraftException, PassengerException {
+       fillPlaneWithProvidedValues(FIRST, BUSINESS, PREMIUM, ECONOMY);
+        assertTrue(b.flightFull());
+        assertEquals(BUSINESS, b.getNumBusiness());
+        assertEquals(FIRST, b.getNumFirst());
+        assertEquals(PREMIUM, b.getNumPremium());
+        assertEquals(ECONOMY, b.getNumEconomy());
+    }
+    
+    @Test (expected = AircraftException.class)
+    public void testSimpleConstructorOverFillDefaultPlaneFirst() throws AircraftException, PassengerException {
+        fillPlaneWithProvidedValues(FIRST + 1 , BUSINESS, PREMIUM, ECONOMY);
+    }
+    
+    @Test (expected = AircraftException.class)
+    public void testSimpleConstructorOverFillDefaultPlaneBusiness() throws AircraftException, PassengerException {
+        fillPlaneWithProvidedValues(FIRST, BUSINESS + 1, PREMIUM, ECONOMY);
+    }
+    
+    @Test (expected = AircraftException.class)
+    public void testSimpleConstructorOverFillDefaultPlanePremium() throws AircraftException, PassengerException {
+        fillPlaneWithProvidedValues(FIRST, BUSINESS, PREMIUM + 1, ECONOMY);
+    }
+    
+    @Test (expected = AircraftException.class)
+    public void testSimpleConstructorOverFillDefaultPlaneEconomy() throws AircraftException, PassengerException {
+        fillPlaneWithProvidedValues(FIRST, BUSINESS, PREMIUM, ECONOMY + 1);
+    }
+
+    
+    
+    
+    
 
 }
