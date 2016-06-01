@@ -137,14 +137,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblEconomy = createLabel("Pr(Economy)");
         
         // Text Fields
-        txtSeed = createTextField("100");
-        txtMean = createTextField("1300.0");
-        txtQueue = createTextField("500");
-        txtCancel = createTextField("0.1");
-        txtFirst = createTextField("0.03");
-        txtBusiness = createTextField("0.14");
-        txtPremium = createTextField("0.13");
-        txtEconomy = createTextField("0.7");
+        txtSeed = createTextField(String.valueOf(Constants.DEFAULT_SEED));
+        txtMean = createTextField(String.valueOf(Constants.DEFAULT_DAILY_BOOKING_MEAN));
+        txtQueue = createTextField(String.valueOf(Constants.DEFAULT_MAX_QUEUE_SIZE));
+        txtCancel = createTextField(String.valueOf(Constants.DEFAULT_CANCELLATION_PROB));
+        txtFirst = createTextField(String.valueOf(Constants.DEFAULT_FIRST_PROB));
+        txtBusiness = createTextField(String.valueOf(Constants.DEFAULT_BUSINESS_PROB));
+        txtPremium = createTextField(String.valueOf(Constants.DEFAULT_PREMIUM_PROB));
+        txtEconomy = createTextField(String.valueOf(Constants.DEFAULT_ECONOMY_PROB));
 
         // Buttons
         btnRun = createButton("Run Simulation");
