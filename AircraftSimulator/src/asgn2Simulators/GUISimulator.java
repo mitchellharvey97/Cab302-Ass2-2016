@@ -16,6 +16,9 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -29,6 +32,10 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 
 import asgn2Aircraft.AircraftException;
 import asgn2Passengers.PassengerException;
@@ -54,7 +61,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private ChartPanel pnlChart;
     
-    private JTextArea txtDisplay;
 
     private JTextField txtSeed;
     private JTextField txtMean;
@@ -186,15 +192,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return jtf;
     }
 
-    private JTextArea createTextArea() {
-        JTextArea jta = new JTextArea();
-        jta.setEditable(false);
-        jta.setLineWrap(true);
-        jta.setFont(new Font("Arial", Font.BOLD, 24));
-        jta.setBorder(BorderFactory.createEtchedBorder());
-        return jta;
-    }
-
     private JLabel createLabel(String str, Font fnt) {
         JLabel jl = new JLabel(str);
         jl.setFont(fnt);
@@ -274,8 +271,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Determine which button was pressed
         if (src == btnRun) {
             complete_sim();
-            JButton btn = ((JButton) src);
-            txtDisplay.setText(btn.getText().trim());
+          //  JButton btn = ((JButton) src);
+            //txtDisplay.setText(btn.getText().trim());
         } else if (src == btnSwitch) {
             JOptionPane.showMessageDialog(this, "A Warning Message", "Wiring Class: Warning",
                     JOptionPane.WARNING_MESSAGE);
@@ -286,6 +283,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         JOptionPane.showMessageDialog(this, "Please Input a valid number for the " + errorBody, "Input Value Error", JOptionPane.WARNING_MESSAGE);
     }
 
+    
+    //Create the data set and much much more
+     
+    
+    
     // Simulation Running Code
     private Log l;
     private Simulator sim;
@@ -294,6 +296,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         try {
             if (prepareSim()) {
                 runSim();
+                repaint();
             } else {
                 System.out.println("There where errors in setting up");
             }
@@ -387,6 +390,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         return true;
     }
+    
+  
+    
 
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
         System.out.println("Running the main sim");
@@ -396,6 +402,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Main simulation loop
         int cumulativeBusness = 0,cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0 ;
 
+     
+        TimeSeries dataset = new TimeSeries("Updated Data");
+        Calendar cal = GregorianCalendar.getInstance();
+        
+        int temp = 0;
         for (int time = 0; time <= Constants.DURATION; time++) {
             this.sim.resetStatus(time);
             this.sim.rebookCancelledPassengers(time);
@@ -423,15 +434,37 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             cumulativePremium= sim.getTotalPremium();
                            
             
-            System.out.println("Day: " + time);
-            System.out.println("First Class: " + dailyFirst + " Business Class: " + dailyBusiness + " Premium: " + dailyPremium + " Economy: " + dailyEconomy);
+            cal.set(2016, 0, time, 6, 0);
+            Date timePoint = cal.getTime();
+            
+          //  System.out.println("Day: " + time);
+          //  System.out.println("First Class: " + dailyFirst + " Business Class: " + dailyBusiness + " Premium: " + dailyPremium + " Economy: " + dailyEconomy);
+            
+            dataset.add(new Day(timePoint), temp);
+            temp ++;
             
             this.l.logQREntries(time, sim);
             this.l.logEntry(time, this.sim);
         }
         
+        
+         TimeSeriesCollection data_points = new TimeSeriesCollection();
+
+        data_points.addSeries(dataset);
+        
+        
+        pnlChart.SetData(data_points);
+        
+        
+        
+        
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.l.logQREntries(Constants.DURATION, sim);
         this.l.finalise(this.sim);
     }
+    
+    
+
+    
+    
 }
