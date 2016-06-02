@@ -85,7 +85,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblBusiness;
     private JLabel lblPremium;
     private JLabel lblEconomy;
-    
+
     private boolean valuesLoaded = false;
     private int seed;
     private int maxQueueSize;
@@ -127,8 +127,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     public GUISimulator(int seed, int maxQueueSize, double meanBookings, double sdBookings, double firstProb,
-            double businessProb, double premiumProb, double economyProb, double cancelProb) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        
+            double businessProb, double premiumProb, double economyProb, double cancelProb)
+            throws ClassNotFoundException, InstantiationException, IllegalAccessException,
+            UnsupportedLookAndFeelException {
+
         // Assign all given values
         this.valuesLoaded = true;
         this.seed = seed;
@@ -140,7 +142,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.premiumProb = premiumProb;
         this.economyProb = economyProb;
         this.cancelProb = cancelProb;
-        
+
     }
 
     /*
@@ -310,7 +312,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Remove the placeholder Screen
         pnlDisplay.remove(pnlStart);
 
-        //Check a Boolean to decide which graph to load
+        // Check a Boolean to decide which graph to load
         if (lineGraph) {
             System.out.println("Showing Line Chart");
             pnlChart = pnlChartController.getChartPanel();
@@ -324,7 +326,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.setVisible(true);
     }
 
-    
     private void layoutStartPanel() {
         // Set grid bag constraints
         pnlStart.setLayout(new GridBagLayout());
@@ -534,27 +535,27 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return true;
     }
 
-    //Resrt Chart data to allow for mulipul run through
-    private void cleanup_charts() {
+    // Reset Chart data to allow for multi run through
+    private void cleanupCharts() {
         lineChartDataPoints = new XYSeriesCollection();
         barChartDataSet = new DefaultCategoryDataset();
     }
-    
+
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
-        cleanup_charts();
+        cleanupCharts();
         // Add chart to pnlDisplay
         System.out.println("Running the main sim");
-        
-        //SimulationRunner sr = new SimulationRunner();
-        //sr.runSimulation();
-        
+
+        // SimulationRunner sr = new SimulationRunner();
+        // sr.runSimulation();
+
         this.sim.createSchedule();
         this.log.initialEntry(this.sim);
         // Main simulation loop
         Bookings todaysBookings;
-        barQueue= 0;
+        barQueue = 0;
         barRefused = 0;
-        
+
         for (int time = 0; time <= Constants.DURATION; time++) {
             this.sim.resetStatus(time);
             this.sim.rebookCancelledPassengers(time);
@@ -569,39 +570,40 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 // we don't start logging till the first flight leaves
                 barCapacity = (sim.getFlights(time).getCurrentCounts().getTotal()
                         + sim.getFlights(time).getCurrentCounts().getAvailable());
-                
+
                 barQueue = Math.max(sim.numInQueue(), barQueue);
-                
+
                 barRefused = Math.max(sim.numInQueue(), barRefused);
-                
+
                 todaysBookings = this.sim.getFlights(time).getCurrentCounts();
-                //pass values to be logged
-                add_daily_points(time, todaysBookings);
+                // pass values to be logged
+                addDailyValues(time, todaysBookings);
             } else {
                 this.sim.processQueue(time);
             }
             this.log.logQREntries(time, sim);
             this.log.logEntry(time, this.sim);
         }
-        //Add all the data to the charts
-        prepare_charts();
-        
+        // Add all the data to the charts
+        prepareChart();
+
         System.out.println("Updating Chart");
         displayGraph();
-        displayGraph();       
-        
+        displayGraph();
+
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.log.logQREntries(Constants.DURATION, sim);
         this.log.finalise(this.sim);
+        System.out.println(customLog);
     }
 
-    private void prepare_charts() {
+    private void prepareChart() {
         // Add Line Chart Points to data set
         lineChartDataPoints.addSeries(tmsFirst);
         lineChartDataPoints.addSeries(tmsBusiness);
         lineChartDataPoints.addSeries(tmsPremium);
         lineChartDataPoints.addSeries(tmsEconomy);
-       // lineChartDataPoints.addSeries(tmsTotal);
+        // lineChartDataPoints.addSeries(tmsTotal);
         lineChartDataPoints.addSeries(tmsEmpty);
         pnlChartController.SetData(lineChartDataPoints);
 
@@ -613,13 +615,29 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         barChart = pnlChartController.createBarChart(barChartDataSet);
     }
 
-    private void add_daily_points(int time, Bookings todaysBookings) {
+    String customLog = "";
+
+    private void addDailyValues(int time, Bookings todaysBookings) {
         int firstClass = todaysBookings.getNumFirst();
         int businessClass = todaysBookings.getNumBusiness();
         int premiumClass = todaysBookings.getNumPremium();
         int economyClass = todaysBookings.getNumEconomy();
         int totalClass = todaysBookings.getTotal();
         int emptySeats = todaysBookings.getAvailable();
+        
+        String line_break = "----------\n";
+        customLog += "Day " + time + "\n" + 
+        "Daily Stats \n" + line_break +  
+        "First Class: " + firstClass + "\n" + 
+        "Business Class: " + businessClass + 
+        "\n" + "Premium Class: " + premiumClass + 
+        "\n" + "Economy Class: " + economyClass +
+        "\n" + "Empty Seats: " + emptySeats +
+        "\n" + "Refused: " + 
+        "\n" + "Queued: " + 
+        "\n" + "Flown: " + 
+        "\n" + line_break + "\n"+
+        "Cumulitive Stats ";
 
         tmsTotal.add(time, totalClass);
         tmsFirst.add(time, firstClass);
