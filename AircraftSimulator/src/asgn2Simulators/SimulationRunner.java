@@ -8,6 +8,10 @@ package asgn2Simulators;
 
 import java.io.IOException;
 
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
 import asgn2Aircraft.AircraftException;
 import asgn2Passengers.PassengerException;
 
@@ -24,10 +28,13 @@ public class SimulationRunner {
      * 
      * @param args Arguments to the simulation - 
      * see {@link asgn2Simulators.SimulationRunner#printErrorAndExit()}
+     * @throws UnsupportedLookAndFeelException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     * @throws ClassNotFoundException 
      */
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         final int NUM_ARGS = 9;
-        GUISimulator g = null;
         Simulator s = null;
         Log l = null;
         
@@ -37,8 +44,7 @@ public class SimulationRunner {
             switch (args.length) {
                 case NUM_ARGS: {
                     s = createSimulatorUsingArgs(args);
-                    g = createGUIUsingArgs(args);
-                    g.run();
+                    startGUIUsingArgs(args);
                     break;
                 }
                 case 0: {
@@ -84,6 +90,7 @@ public class SimulationRunner {
         double premiumProb = Double.parseDouble(args[6]);
         double economyProb = Double.parseDouble(args[7]);
         double cancelProb = Double.parseDouble(args[8]);
+        
         return new Simulator(seed, maxQueueSize, meanBookings, sdBookings, firstProb, businessProb, premiumProb,
                 economyProb, cancelProb);
     }
@@ -93,10 +100,14 @@ public class SimulationRunner {
      * 
      * @param args Command line arguments (see usage message) 
      * @return new <code>Simulator</code> from the arguments 
+     * @throws UnsupportedLookAndFeelException 
+     * @throws IllegalAccessException 
+     * @throws InstantiationException 
+     * @throws ClassNotFoundException 
      * @throws SimulationException if invalid arguments. 
      * See {@link asgn2Simulators.Simulator#Simulator(int, int, double, double, double, double, double, double, double)}
      */
-    private static GUISimulator createGUIUsingArgs(String[] args) {
+    private static void startGUIUsingArgs(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         int seed = Integer.parseInt(args[0]);
         int maxQueueSize = Integer.parseInt(args[1]);
         double meanBookings = Double.parseDouble(args[2]);
@@ -106,8 +117,11 @@ public class SimulationRunner {
         double premiumProb = Double.parseDouble(args[6]);
         double economyProb = Double.parseDouble(args[7]);
         double cancelProb = Double.parseDouble(args[8]);
-        return new GUISimulator(seed, maxQueueSize, meanBookings, sdBookings, firstProb, businessProb, premiumProb,
-                economyProb, cancelProb);
+        
+        // From GUISimulator.main()
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        SwingUtilities.invokeLater(new GUISimulator(seed, maxQueueSize, meanBookings, sdBookings, firstProb, businessProb, premiumProb,
+                economyProb, cancelProb));
     }
 
     /**

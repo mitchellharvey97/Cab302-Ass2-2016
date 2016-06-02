@@ -114,9 +114,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     public GUISimulator(int seed, int maxQueueSize, double meanBookings, double sdBookings, double firstProb,
-            double businessProb, double premiumProb, double economyProb, double cancelProb) {
-        super("Aircraft Simulator");
-        // TODO Auto-generated constructor stub
+            double businessProb, double premiumProb, double economyProb, double cancelProb) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         
         // Assign all given values
         this.valuesLoaded = true;
@@ -129,6 +127,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.premiumProb = premiumProb;
         this.economyProb = economyProb;
         this.cancelProb = cancelProb;
+        
+        main(null);
         
     }
 
@@ -544,6 +544,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         cleanup_charts();
         // Add chart to pnlDisplay
         System.out.println("Running the main sim");
+        
+        SimulationRunner sr = new SimulationRunner();
+        sr.runSimulation();
+        
         this.sim.createSchedule();
         this.log.initialEntry(this.sim);
         // Main simulation loop
