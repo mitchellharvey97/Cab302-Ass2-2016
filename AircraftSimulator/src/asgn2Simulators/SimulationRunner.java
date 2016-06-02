@@ -16,22 +16,24 @@ import asgn2Aircraft.AircraftException;
 import asgn2Passengers.PassengerException;
 
 /**
- * Class to operate the simulation, taking parameters and utility methods from the Simulator
- * to control the available resources, and using Log to provide a record of operation. 
+ * Class to operate the simulation, taking parameters and utility methods from
+ * the Simulator to control the available resources, and using Log to provide a
+ * record of operation.
  * 
  * @author hogan
  *
  */
 public class SimulationRunner {
     /**
-     * Main program for the simulation 
+     * Main program for the simulation
      * 
-     * @param args Arguments to the simulation - 
-     * see {@link asgn2Simulators.SimulationRunner#printErrorAndExit()}
-     * @throws UnsupportedLookAndFeelException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
-     * @throws ClassNotFoundException 
+     * @param args
+     *            Arguments to the simulation - see
+     *            {@link asgn2Simulators.SimulationRunner#printErrorAndExit()}
+     * @throws UnsupportedLookAndFeelException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws ClassNotFoundException
      */
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException, UnsupportedLookAndFeelException {
@@ -42,44 +44,41 @@ public class SimulationRunner {
 
         try {
             switch (args.length) {
-                case NUM_ARGS: {
-                    // Check if GUI was called
-                    if (args[0].equals("gui")) {
-                        System.out.println("Starting GUI with custom params");
-                        g = createGUIUsingArgs(args);
-                        GUISimulator.startGUI(g);
-                    } else if (args[0].equals("nogui")) {
-                        // TODO add 'start simulation' code
-                        System.out.println("Starting simulation with default params");
-                    }
-
-                    s = createSimulatorUsingArgs(args);
-                    break;
+            case NUM_ARGS: {
+                // Check if GUI was called
+                if (args[0].equals("gui")) {
+                    System.out.println("Starting GUI with custom params");
+                    g = createGUIUsingArgs(args);
+                    GUISimulator.startGUI(g);
+                } else if (args[0].equals("nogui")) {
+                    System.out.println("Starting CLI simulation with Custom params");
                 }
-                case 1: {
-                    if (args[0].equals("gui")) {
-                        System.out.println("Starting GUI with default params");
-                        g = createGUIUsingArgs(args);
-                        GUISimulator.startGUI(g);
-                    } else if (args[0].equals("nogui")) {
-                        // TODO add 'start simulation' code
-                        System.out.println("Starting simulation with default params");
-                    }
-
-                    s = createSimulatorUsingArgs(args);
-
-                    break;
-                }
-                case 0: {
-                    System.out.println("Zero arguments. Starting GUI with default params");
+                s = createSimulatorUsingArgs(args);
+                break;
+            }
+            case 1: {
+                if (args[0].equals("gui")) {
+                    System.out.println("Starting GUI with default params");
                     g = new GUISimulator();
                     GUISimulator.startGUI(g);
-                    s = new Simulator();
-                    break;
+                    s = createSimulatorUsingArgs(args);
+                } else if (args[0].equals("nogui")) {
+
+                    System.out.println("Starting CLI simulation with default params");
+                    s = createSimulatorDefault();
                 }
-                default: {
-                    printErrorAndExit(args.length);
-                }
+                break;
+            }
+            case 0: {
+                System.out.println("Zero arguments. Starting GUI with default params");
+                g = new GUISimulator();
+                GUISimulator.startGUI(g);
+                s = new Simulator();
+                break;
+            }
+            default: {
+                printErrorAndExit(args.length);
+            }
             }
             l = new Log();
         } catch (SimulationException | IOException e1) {
@@ -98,12 +97,31 @@ public class SimulationRunner {
     }
 
     /**
-     * Helper to process args for Simulator  
+     * Helper to process args for CLI Simulator
      * 
-     * @param args Command line arguments (see usage message) 
-     * @return new <code>Simulator</code> from the arguments 
-     * @throws SimulationException if invalid arguments. 
-     * See {@link asgn2Simulators.Simulator#Simulator(int, int, double, double, double, double, double, double, double)}
+     * @param args
+     *            Command line arguments (see usage message)
+     * @return new <code>Simulator</code> from the arguments
+     * @throws SimulationException
+     *             if invalid arguments. See
+     *             {@link asgn2Simulators.Simulator#Simulator(int, int, double, double, double, double, double, double, double)}
+     */
+    private static Simulator createSimulatorDefault() throws SimulationException {
+        return new Simulator(Constants.DEFAULT_SEED, Constants.DEFAULT_MAX_QUEUE_SIZE,
+                Constants.DEFAULT_DAILY_BOOKING_MEAN, Constants.DEFAULT_DAILY_BOOKING_SD, Constants.DEFAULT_FIRST_PROB,
+                Constants.DEFAULT_BUSINESS_PROB, Constants.DEFAULT_PREMIUM_PROB, Constants.DEFAULT_ECONOMY_PROB,
+                Constants.DEFAULT_CANCELLATION_PROB);
+    }
+
+    /**
+     * Helper to process args for CLI Simulator
+     * 
+     * @param args
+     *            Command line arguments (see usage message)
+     * @return new <code>Simulator</code> from the arguments
+     * @throws SimulationException
+     *             if invalid arguments. See
+     *             {@link asgn2Simulators.Simulator#Simulator(int, int, double, double, double, double, double, double, double)}
      */
     private static Simulator createSimulatorUsingArgs(String[] args) throws SimulationException {
         int seed = Integer.parseInt(args[1]);
@@ -121,13 +139,14 @@ public class SimulationRunner {
     }
 
     /**
-     * Helper to process args for GUISimulator  
+     * Helper to process args for GUISimulator
      * 
-     * @param args Command line arguments (see usage message) 
-     * @return new <code>Simulator</code> from the arguments 
-     * @throws UnsupportedLookAndFeelException 
-     * @throws IllegalAccessException 
-     * @throws InstantiationException 
+     * @param args
+     *            Command line arguments (see usage message)
+     * @return new <code>Simulator</code> from the arguments
+     * @throws UnsupportedLookAndFeelException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
      * @throws ClassNotFoundException
      */
     private static GUISimulator createGUIUsingArgs(String[] args) throws ClassNotFoundException, InstantiationException,
@@ -147,7 +166,7 @@ public class SimulationRunner {
     }
 
     /**
-     *  Helper to generate usage message 
+     * Helper to generate usage message
      */
     private static void printErrorAndExit(int args) {
         String str = "Expected 0, 1 or 10 args. Got " + String.valueOf(args) + "\n";
@@ -163,10 +182,12 @@ public class SimulationRunner {
     private Log log;
 
     /**
-     * Constructor just does initialisation 
+     * Constructor just does initialisation
      * 
-     * @param sim <code>Simulator</code> containing simulation parameters
-     * @param log <code>Log</code> object supporting record of operation 
+     * @param sim
+     *            <code>Simulator</code> containing simulation parameters
+     * @param log
+     *            <code>Log</code> object supporting record of operation
      */
     public SimulationRunner(Simulator sim, Log log) {
         this.sim = sim;
@@ -174,13 +195,18 @@ public class SimulationRunner {
     }
 
     /**
-     * Method to run the simulation from start to finish.
-     * Exceptions are propagated upwards as necessary
+     * Method to run the simulation from start to finish. Exceptions are
+     * propagated upwards as necessary
      * 
-     * @throws AircraftException See methods from {@link asgn2Simulators.Simulator}
-     * @throws PassengerException See methods from {@link asgn2Simulators.Simulator}
-     * @throws SimulationException See methods from {@link asgn2Simulators.Simulator}
-     * @throws IOException on logging failures See methods from {@link asgn2Simulators.Log}
+     * @throws AircraftException
+     *             See methods from {@link asgn2Simulators.Simulator}
+     * @throws PassengerException
+     *             See methods from {@link asgn2Simulators.Simulator}
+     * @throws SimulationException
+     *             See methods from {@link asgn2Simulators.Simulator}
+     * @throws IOException
+     *             on logging failures See methods from
+     *             {@link asgn2Simulators.Log}
      */
     public void runSimulation() throws AircraftException, PassengerException, SimulationException, IOException {
         this.sim.createSchedule();

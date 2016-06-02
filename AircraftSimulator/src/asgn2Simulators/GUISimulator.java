@@ -24,8 +24,11 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
@@ -57,6 +60,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JPanel pnlStart;
 
     private JButton btnRun;
+    private JButton btnLog;
     private JButton btnSwitch;
     private JButton btnRestore;
 
@@ -98,6 +102,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private double economyProb;
     private double cancelProb;
 
+    private JScrollPane scrlLog;
     // Line Chart Variables
     XYSeries tmsTotal = new XYSeries("Total Bookings");
     XYSeries tmsFirst = new XYSeries("First");
@@ -236,8 +241,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         // Buttons
         btnRun = createButton("Run Simulation");
+        btnLog = createButton("Show Logs");
         btnSwitch = createButton("Switch Charts");
         btnRestore = createButton("Restore Defaults");
+        btnLog.setEnabled(false);
+        btnSwitch.setEnabled(false);
         layoutButtonPanel();
 
         // Define the chart controller
@@ -311,7 +319,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private void displayGraph() {
         // Remove the placeholder Screen
         pnlDisplay.remove(pnlStart);
-
+       // pnlDisplay.remove(scrlLog);
+        
         // Check a Boolean to decide which graph to load
         if (lineGraph) {
             System.out.println("Showing Line Chart");
@@ -382,7 +391,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Control buttons
         c.anchor = GridBagConstraints.EAST;
         c.fill = GridBagConstraints.BOTH;
-        addToPanel(pnlBottom, btnRun, c, 6, 1, 2, 2);
+        addToPanel(pnlBottom, btnRun, c, 6, 1, 2, 1);
+        addToPanel(pnlBottom, btnLog, c, 6, 2, 2, 1);
         addToPanel(pnlBottom, btnSwitch, c, 6, 3, 2, 1);
         addToPanel(pnlBottom, btnRestore, c, 6, 4, 2, 1);
     }
@@ -430,7 +440,27 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             valBusiness.setValue(Constants.DEFAULT_BUSINESS_PROB * 100);
             valPremium.setValue(Constants.DEFAULT_PREMIUM_PROB * 100);
             valEconomy.setValue(Constants.DEFAULT_ECONOMY_PROB * 100);
+        } else if (src == btnLog) {
+            showLogs();
         }
+    }
+
+    private void showLogs() {
+        pnlDisplay.setLayout(new BorderLayout());
+        pnlDisplay.remove(pnlStart);
+        pnlDisplay.remove(pnlChart);
+        JTextArea tbxLog = new JTextArea();
+        tbxLog.setText(customLog);
+        tbxLog.setEditable(false);
+        tbxLog.setWrapStyleWord(true);
+
+        scrlLog = new JScrollPane(tbxLog);
+        scrlLog.setBackground(Color.pink);
+        scrlLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        pnlDisplay.add(scrlLog);
+        
+        this.setVisible(true);
+        repaint();
     }
 
     private void createErrorMessage(String errorBody) {
@@ -591,11 +621,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         System.out.println("Updating Chart");
         displayGraph();
         displayGraph();
+        btnLog.setEnabled(true);
+        btnSwitch.setEnabled(true);
 
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.log.logQREntries(Constants.DURATION, sim);
         this.log.finalise(this.sim);
-        System.out.println(customLog);
     }
 
     private void prepareData() {
@@ -613,14 +644,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         barChartDataSet.addValue(barQueue, "Queue Size", types);
         barChartDataSet.addValue(barRefused, "Passengers Refused", types);
         barChartDataSet.addValue(barCapacity, "Daily Capacity", types);
-        
+
         barChart = pnlChartController.createBarChart(barChartDataSet);
 
         customLog += "Final Statistics" + "----------\n" + "First Class: " + sim.getTotalFirst() + "\n"
                 + "Business Class: " + sim.getTotalBusiness() + "\n" + "Premium Class: " + sim.getTotalPremium() + "\n"
                 + "Economy Class: " + sim.getTotalEconomy() + "\n" + "Empty Seats: " + "\n" + "Refused: "
                 + sim.numRefused() + "\n" + "Queued: " + sim.numInQueue() + "\n" + "Flown: ";
-        ;
+
     }
 
     String customLog = "";
