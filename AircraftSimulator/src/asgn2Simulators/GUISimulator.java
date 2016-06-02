@@ -38,8 +38,12 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
+import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 import asgn2Aircraft.AircraftException;
+import asgn2Aircraft.Bookings;
 import asgn2Passengers.PassengerException;
 
 /**
@@ -393,7 +397,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     private boolean prepareSim() throws IOException, SimulationException {
-        // TODO check boundaries
         // Integer seed, queueSize;
         // Double dailyMean, cancel, first, business, premium, economy,
         // sdBooking;
@@ -418,7 +421,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         }
 
         // A much easier way without casting to Integers
-        if ((mean = valueInRange(valMean, 0, null, true)) == null) {
+        if ((mean = valueInRange(valMean, 0, null, false)) == null) {
             createErrorMessage("Mean Value");
             return false;
         }
@@ -452,35 +455,28 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             createErrorMessage("Passenger split");
             return false;
         }
-
-        // overwriting the values
-        sdBooking = 0.33 * mean;
-        sdBooking = 429.0;
+         sdBooking = 0.33 * mean;
 
         l = new Log();
         sim = new Simulator(seed, queue, mean, sdBooking, first, business, premium, economy, cancel);
         return true;
     }
 
+    XYSeries tmsTotal = new XYSeries("Total Bookings");
+    XYSeries tmsFirst = new XYSeries("First");
+    XYSeries tmsBusiness = new XYSeries("Business");
+    XYSeries tmsPremium = new XYSeries("Premium");
+    XYSeries tmsEconomy = new XYSeries("Economy");
+    XYSeries tmsEmpty = new XYSeries("Empty");
+
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
         // Add chart to pnlDisplay
-
         System.out.println("Running the main sim");
         this.sim.createSchedule();
         this.l.initialEntry(this.sim);
         // Main simulation loop
-
-        int cumulativeBusness = 0, cumulativeEconomy = 0, cumulativeFirst = 0, cumulativePremium = 0;
-
-        TimeSeries tmsBooking = new TimeSeries("Bookings");
-        TimeSeries tmsFirst = new TimeSeries("First");
-        TimeSeries tmsBusiness = new TimeSeries("Business");
-        TimeSeries tmsPremium = new TimeSeries("Premium");
-        TimeSeries tmsEconomy = new TimeSeries("Economy");
-
-        Calendar cal = GregorianCalendar.getInstance();
-
-        for (int time = 0; time <= Constants.DURATION / 10; time++) {
+        Bookings todaysBookings;
+        for (int time = 0; time <= Constants.DURATION; time++) {
             this.sim.resetStatus(time);
             this.sim.rebookCancelledPassengers(time);
             this.sim.generateAndHandleBookings(time);
@@ -491,45 +487,24 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 this.sim.flyPassengers(time);
                 this.sim.updateTotalCounts(time);
                 this.l.logFlightEntries(time, sim);
+
+                todaysBookings = this.sim.getFlights(time).getCurrentCounts();
+                add_daily_points(time, todaysBookings);
+
             } else {
                 this.sim.processQueue(time);
             }
-            int dailyBusiness = sim.getTotalBusiness() - cumulativeBusness;
-            cumulativeBusness = sim.getTotalBusiness();
-
-            int dailyEconomy = sim.getTotalEconomy() - cumulativeEconomy;
-            cumulativeEconomy = sim.getTotalEconomy();
-
-            int dailyFirst = sim.getTotalFirst() - cumulativeFirst;
-            cumulativeFirst = sim.getTotalFirst();
-
-            int dailyPremium = sim.getTotalPremium() - cumulativePremium;
-
-            cumulativePremium = sim.getTotalPremium();
-
-            cal.set(2016, 0, time, 6, 0);
-            Date timePoint = cal.getTime();
-
-            tmsBooking.add(new Day(timePoint), time);
-
-            System.out.println(sim.getTotalBusiness());
-
-            tmsFirst.add(new Day(timePoint), dailyFirst);
-            tmsBusiness.add(new Day(timePoint), dailyBusiness);
-            tmsPremium.add(new Day(timePoint), dailyPremium);
-            tmsEconomy.add(new Day(timePoint), dailyEconomy);
-
             this.l.logQREntries(time, sim);
             this.l.logEntry(time, this.sim);
+            System.out.println("Today is " + time);
         }
-
-        TimeSeriesCollection data_points = new TimeSeriesCollection();
-        
+        XYSeriesCollection data_points = new XYSeriesCollection();
         data_points.addSeries(tmsFirst);
         data_points.addSeries(tmsBusiness);
         data_points.addSeries(tmsPremium);
         data_points.addSeries(tmsEconomy);
-        data_points.addSeries(tmsBooking);
+        data_points.addSeries(tmsTotal);
+        data_points.addSeries(tmsEmpty);
 
         System.out.println("Updating Chart");
         pnlChartController.SetData(data_points);
@@ -544,5 +519,21 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.l.logQREntries(Constants.DURATION, sim);
         this.l.finalise(this.sim);
+    }
+
+    private void add_daily_points(int time, Bookings todaysBookings) {
+        int firstClass = todaysBookings.getNumFirst();
+        int businessClass = todaysBookings.getNumBusiness();
+        int premiumClass = todaysBookings.getNumPremium();
+        int economyClass = todaysBookings.getNumEconomy();
+        int totalClass = firstClass + businessClass + premiumClass + economyClass;
+        int emptySeats = todaysBookings.getAvailable();
+
+        tmsTotal.add(time, totalClass);
+        tmsFirst.add(time, firstClass);
+        tmsBusiness.add(time, businessClass);
+        tmsPremium.add(time, premiumClass);
+        tmsEconomy.add(time, economyClass);
+        tmsEmpty.add(time, emptySeats);
     }
 }

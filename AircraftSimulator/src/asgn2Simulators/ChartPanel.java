@@ -20,10 +20,9 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.time.Day;
-import org.jfree.data.time.TimeSeries;
-import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  * @author Andrew
@@ -34,7 +33,7 @@ public class ChartPanel extends Component {
 
     protected static JFreeChart chart;
     private static final String TITLE = "Random Bookings";
-    private TimeSeriesCollection data_points;
+    private XYSeriesCollection data_points;
 
     public ChartPanel() {
         SetData(initializeData());
@@ -46,24 +45,22 @@ public class ChartPanel extends Component {
         return new org.jfree.chart.ChartPanel(createChart(data_points));
     }
 
-    private TimeSeriesCollection initializeData() {
-        TimeSeriesCollection tsc = new TimeSeriesCollection();
-        TimeSeries dataset = new TimeSeries("Amount of Alchol Consumed to make this report");
+    private XYSeriesCollection initializeData() {
+        XYSeriesCollection tsc = new XYSeriesCollection();
+        XYSeries dataset = new XYSeries("Amount of Alchol Consumed to make this report");
         // Base time, data set up - the calendar is needed for the time points
-        Calendar cal = GregorianCalendar.getInstance();
         for (int i = 0; i <= 20; i++) {
-            cal.set(2016, 0, i, 6, 0);
-            dataset.add(new Day(cal.getTime()), Math.pow(i,10));
-        }       
+            dataset.add(i, Math.pow(i, 10));
+        }
         tsc.addSeries(dataset);
         return tsc;
     }
 
-    public void SetData(TimeSeriesCollection data) {
+    public void SetData(XYSeriesCollection data) {
         data_points = data;
     }
 
-    public void SetBarData(CategoryDataset data) {
+    public void SetBarData(XYSeriesCollection data) {
         data_points = data;
     }
 
@@ -86,25 +83,26 @@ public class ChartPanel extends Component {
         range.setAutoRange(true);
         return result;
     }
-    
+
     /**
      * Creates a sample chart.
      * 
-     * @param dataset  the dataset.
+     * @param dataset
+     *            the dataset.
      * 
      * @return The chart.
      */
     public JFreeChart createBarChart(final CategoryDataset dataset) {
-     // create the chart...
-        final JFreeChart chart = ChartFactory.createBarChart(
-            "Bar Chart Demo",         // chart title
-            "Category",               // domain axis label
-            "Value",                  // range axis label
-            dataset,                  // data
-            PlotOrientation.VERTICAL, // orientation
-            true,                     // include legend
-            true,                     // tooltips?
-            false                     // URLs?
+        // create the chart...
+        final JFreeChart chart = ChartFactory.createBarChart("Bar Chart Demo", // chart
+                                                                               // title
+                "Category", // domain axis label
+                "Value", // range axis label
+                dataset, // data
+                PlotOrientation.VERTICAL, // orientation
+                true, // include legend
+                true, // tooltips?
+                false // URLs?
         );
 
         // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
@@ -125,27 +123,25 @@ public class ChartPanel extends Component {
         // disable bar outlines...
         final BarRenderer renderer = (BarRenderer) plot.getRenderer();
         renderer.setDrawBarOutline(false);
-        
+
         renderer.setSeriesFillPaint(0, Color.RED);
         renderer.setSeriesPaint(1, Color.GREEN);
         renderer.setSeriesPaint(2, Color.BLUE);
 
         final CategoryAxis domainAxis = plot.getDomainAxis();
-        domainAxis.setCategoryLabelPositions(
-            CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 6.0)
-        );
+        domainAxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(Math.PI / 6.0));
         // OPTIONAL CUSTOMISATION COMPLETED.
-        
+
         return chart;
     }
-    
+
     /**
      * Returns a sample dataset.
      * 
      * @return The dataset.
      */
     public CategoryDataset createBarDataset() {
-        
+
         // row keys...
         final String series1 = "First";
         final String series2 = "Second";
@@ -178,8 +174,8 @@ public class ChartPanel extends Component {
         dataset.addValue(2.0, series3, category3);
         dataset.addValue(3.0, series3, category4);
         dataset.addValue(6.0, series3, category5);
-        
+
         return dataset;
-        
+
     }
 }
