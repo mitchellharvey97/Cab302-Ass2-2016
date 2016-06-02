@@ -164,9 +164,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
      */
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException, UnsupportedLookAndFeelException {
-        // JFrame.setDefaultLookAndFeelDecorated(false);
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        SwingUtilities.invokeLater(new GUISimulator());
+        startGUI(new GUISimulator());
     }
 
     /**
@@ -178,6 +176,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
      */
     public static void startGUI(GUISimulator g) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException, UnsupportedLookAndFeelException {
+        // JFrame.setDefaultLookAndFeelDecorated(false);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(g);
     }
@@ -215,7 +214,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblSeed = createLabel("RNG Seed");
         lblMean = createLabel("Daily Mean");
         lblQueue = createLabel("Queue Size");
-        lblCancel = createLabel("Cancel %");
+        lblCancel = createLabel("Cancels (%)");
         lblFirst = createLabel("First (%)");
         lblBusiness = createLabel("Business (%)");
         lblPremium = createLabel("Premium (%)");
@@ -584,6 +583,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             this.log.logQREntries(time, sim);
             this.log.logEntry(time, this.sim);
         }
+
         // Add all the data to the charts
         prepareData();
 
@@ -613,16 +613,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         barChartDataSet.addValue(barQueue, "Type", types);
         barChartDataSet.addValue(barRefused, "Refused", types);
         barChart = pnlChartController.createBarChart(barChartDataSet);
-        
-        customLog += "Final Statistics" + "----------\n" + 
-                "First Class: "  + sim.getTotalFirst() + "\n"+
-                "Business Class: "  + sim.getTotalBusiness() + 
-                "\n" + "Premium Class: "  + sim.getTotalPremium() + 
-                "\n" + "Economy Class: "  + sim.getTotalEconomy() + 
-                "\n" + "Empty Seats: " +
-                "\n" + "Refused: " + sim.numRefused() +
-                "\n" + "Queued: " + sim.numInQueue() +
-                "\n" + "Flown: ";
+
+        customLog += "Final Statistics" + "----------\n" + "First Class: " + sim.getTotalFirst() + "\n"
+                + "Business Class: " + sim.getTotalBusiness() + "\n" + "Premium Class: " + sim.getTotalPremium() + "\n"
+                + "Economy Class: " + sim.getTotalEconomy() + "\n" + "Empty Seats: " + "\n" + "Refused: "
+                + sim.numRefused() + "\n" + "Queued: " + sim.numInQueue() + "\n" + "Flown: ";
         ;
     }
 
@@ -635,19 +630,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         int economyClass = todaysBookings.getNumEconomy();
         int totalClass = todaysBookings.getTotal();
         int emptySeats = todaysBookings.getAvailable();
-        
+
         String line_break = "----------\n";
-        customLog += "Day " + time + "\n" + 
-        "Daily Stats \n" + line_break +  
-        "First Class: " + firstClass + "\n" + 
-        "Business Class: " + businessClass + 
-        "\n" + "Premium Class: " + premiumClass + 
-        "\n" + "Economy Class: " + economyClass +
-        "\n" + "Empty Seats: " + emptySeats +
-        "\n" + "Refused: " + 
-        "\n" + "Queued: " + 
-        "\n" + "Flown: " + 
-        "\n" + line_break + "\n";
+        customLog += "Day " + time + "\n" + "Daily Stats \n" + line_break + "First Class: " + firstClass + "\n"
+                + "Business Class: " + businessClass + "\n" + "Premium Class: " + premiumClass + "\n"
+                + "Economy Class: " + economyClass + "\n" + "Empty Seats: " + emptySeats + "\n" + "Refused: " + "\n"
+                + "Queued: " + "\n" + "Flown: " + "\n" + line_break + "\n";
 
         tmsTotal.add(time, totalClass);
         tmsFirst.add(time, firstClass);

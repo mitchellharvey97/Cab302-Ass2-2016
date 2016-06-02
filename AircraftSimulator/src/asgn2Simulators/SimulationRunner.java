@@ -33,36 +33,52 @@ public class SimulationRunner {
      * @throws InstantiationException 
      * @throws ClassNotFoundException 
      */
-    public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    public static void main(String[] args) throws ClassNotFoundException, InstantiationException,
+            IllegalAccessException, UnsupportedLookAndFeelException {
         final int NUM_ARGS = 10;
         GUISimulator g = null;
         Simulator s = null;
         Log l = null;
-        
+
         try {
             switch (args.length) {
                 case NUM_ARGS: {
                     // Check if GUI was called
                     if (args[0].equals("gui")) {
-                        System.out.println("Starting GUI");
+                        System.out.println("Starting GUI with custom params");
                         g = createGUIUsingArgs(args);
                         GUISimulator.startGUI(g);
+                    } else if (args[0].equals("nogui")) {
+                        // TODO add 'start simulation' code
+                        System.out.println("Starting simulation with default params");
                     }
-                    
+
                     s = createSimulatorUsingArgs(args);
                     break;
                 }
+                case 1: {
+                    if (args[0].equals("gui")) {
+                        System.out.println("Starting GUI with default params");
+                        g = createGUIUsingArgs(args);
+                        GUISimulator.startGUI(g);
+                    } else if (args[0].equals("nogui")) {
+                        // TODO add 'start simulation' code
+                        System.out.println("Starting simulation with default params");
+                    }
+
+                    s = createSimulatorUsingArgs(args);
+
+                    break;
+                }
                 case 0: {
-                    System.out.println("Zero arguments");
+                    System.out.println("Zero arguments. Starting GUI with default params");
                     g = new GUISimulator();
                     GUISimulator.startGUI(g);
-                    
                     s = new Simulator();
                     break;
                 }
                 default: {
-                    System.out.println("Expected " + NUM_ARGS + " args. Got " + String.valueOf(args.length) + "\n");
-                    printErrorAndExit();
+                    printErrorAndExit(args.length);
                 }
             }
             l = new Log();
@@ -99,7 +115,7 @@ public class SimulationRunner {
         double premiumProb = Double.parseDouble(args[7]);
         double economyProb = Double.parseDouble(args[8]);
         double cancelProb = Double.parseDouble(args[9]);
-        
+
         return new Simulator(seed, maxQueueSize, meanBookings, sdBookings, firstProb, businessProb, premiumProb,
                 economyProb, cancelProb);
     }
@@ -114,7 +130,8 @@ public class SimulationRunner {
      * @throws InstantiationException 
      * @throws ClassNotFoundException
      */
-    private static GUISimulator createGUIUsingArgs(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+    private static GUISimulator createGUIUsingArgs(String[] args) throws ClassNotFoundException, InstantiationException,
+            IllegalAccessException, UnsupportedLookAndFeelException {
         int seed = Integer.parseInt(args[1]);
         int maxQueueSize = Integer.parseInt(args[2]);
         double meanBookings = Double.parseDouble(args[3]);
@@ -124,7 +141,7 @@ public class SimulationRunner {
         double premiumProb = Double.parseDouble(args[7]);
         double economyProb = Double.parseDouble(args[8]);
         double cancelProb = Double.parseDouble(args[9]);
-        
+
         return new GUISimulator(seed, maxQueueSize, meanBookings, sdBookings, firstProb, businessProb, premiumProb,
                 economyProb, cancelProb);
     }
@@ -132,9 +149,10 @@ public class SimulationRunner {
     /**
      *  Helper to generate usage message 
      */
-    private static void printErrorAndExit() {
-        String str = "Usage: java asgn2Simulators.SimulationRunner [SIM Args]\n";
-        str += "SIM Args: seed maxQueueSize meanBookings sdBookings ";
+    private static void printErrorAndExit(int args) {
+        String str = "Expected 0, 1 or 10 args. Got " + String.valueOf(args) + "\n";
+        str += "Usage: java asgn2Simulators.SimulationRunner [SIM Args]\n";
+        str += "SIM Args: [no]gui seed maxQueueSize meanBookings sdBookings ";
         str += "firstProb businessProb premiumProb economyProb cancelProb\n";
         str += "If no arguments, default values are used\n";
         System.err.println(str);
