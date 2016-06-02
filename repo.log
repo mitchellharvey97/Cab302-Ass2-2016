@@ -1,0 +1,977 @@
+* e2c55f6 : Update Test Plan
+*   797c7b1 : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\  
+| * 74dee6d : Updated Statment + Bug Squash
+* | d7a4ec0 : Cleanup up error messages
+|/  
+* 95427c9 : Modified statement.txt
+* da3b002 : Adding Statment of complete
+*   79a822c : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\  
+| * cc36e20 : Fixed repaint issue switching from charts to log
+* |   4a9f2db : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\ \  
+| |/  
+| * 388fa02 : ACTUALLY fixed merge issues
+| *   eefe7ec : Fixed merge issues
+| |\  
+| * \   9985a3d : Merged commits and fixed scroll log
+| |\ \  
+| * | | 84a7eaf : Fixed graphs drawing multiple times.
+* | | | f38583d : Fixed Chart Type
+| |_|/  
+|/| |   
+* | | 7bc2fde : Minor formatting + Updated Test Plan
+| |/  
+|/|   
+* | 80d7221 : Fixing Imports
+|/  
+* ed8c801 : Finalized Logs
+* b27c69d : Create Log Screen
+* 85ed655 : Added test guidelines
+* 200413b : Updated chart to match recommended colours
+* c50bb9d : Added test guide
+* 0d79787 : Updated command line handling
+* 5f18c55 : Computer is about to die again
+* 79d5f65 : Adding half the logging
+* 261fc78 : Changed gui boolean to string for CLI arguments
+*   255230c : Merged conflicts
+|\  
+| * cbfccf9 : Clean up and comments
+* | a7ac482 : Added gui / nogui boolean
+|/  
+*   90ae6fd : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\  
+| *   c2f1f39 : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+| |\  
+| * | 4ef0da8 : Commit to merge
+* | | 2a2376c : Fixed GUI styling
+| |/  
+|/|   
+* | e983ed4 : Merged changes and added CLI argument parsing for GUI
+|/  
+* 12a8fe7 : Graphs all working
+* ef09923 : Got Charts working
+* ae85951 : Almost done on the chart swapping
+* 678c286 : GOT THE LINE CHART WORKING!!!!!!
+* 384f3c8 : Don't think there is acutally any changes here
+*   e136e70 : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\  
+| *   7657fcc : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+| |\  
+| * | 5716cbc : Added bar chart functionality for demo
+| * | 120a240 : Added bar chart methods to ChartPanel
+* | | d7deae2 : Added Boundary Constraints to inputs and fixed defaults values
+| |/  
+|/|   
+* |   2cf5d8b : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\ \  
+| |/  
+| * 77116ef : Merged changes and minor cleanup
+* | 763827c : Starting the Error Checking
+|/  
+* 4546597 : All fixed and working
+* 06ac6bf : Fixed thechart but we have errors
+*   e717b3c : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\  
+| * 95c9722 : Fixed commit conflicts
+* | ee90571 : Cleaning the chart
+|/  
+* 920041e : Fixed the crash, now Jim won't go away
+*   4b55c2c : PS I didnt break it Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\  
+| * 4862ce8 : Removed unused imports
+| * bf3616b : Added start screen
+* | cdf09fd : adding semi-real data
+* |   a2c534f : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\ \  
+| |/  
+| * fdfbb2b : Added dirty method to modify current chart
+* | e7acafe : Pre merge commit
+|/  
+*   502828c : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\  
+| * eaff9b8 : Fixed the jfreechart sizing in the JPanel
+* | 40f567e : Chart almsot there
+|/  
+* 9cede65 : Added ChartPanel.java
+* 35d61b8 : Add Tests to cover ConcurrentModificationException
+* 597254e : Added chart object to GUISimulator
+* cdfb372 : Added Default values from constant
+*   9cbe52c : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\  
+| *   6cffc3e : Merge remote-tracking branch 'refs/remotes/origin/master'
+| |\  
+| * | cd80b20 : Implemented example jfreechart package
+* | | 28d3274 : Adding daily values
+| |/  
+|/|   
+* |   cf5a0de : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\ \  
+| |/  
+| * ec37992 : Added asgn2Examples package and default simulation values
+* | 07703f5 : Added error checking to values provided
+|/  
+* 100dfe6 : Fixed merging issues
+*   7fcf1d8 : Merged latest commit
+|\  
+| * 3b1e542 : Adding GUI sim code
+* | 852d938 : Updated GUI with basic parameter editing
+|/  
+* 72a110c : Added gitigore and fixed runner
+* 1f358d6 : Added basic GUI skeleton with native styling
+* d1381cc : Finalied tests
+*   ecd0c57 : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\  
+| * d4aa16b : Minor code cleanup and added logSummary
+* | 86e356f : No CLue what these are
+|/  
+*   4f8dd14 : Merge remote-tracking branch 'Jims/master'
+|\  
+| * 0dab636 : updated Simulator.toString() to include maxQueueSize, cancelProb
+| * 9cf799c : Restore Constants.SAVE_STATUS to false.
+| * 2efdda1 : Bug fix: createPassenger; final state of queue, cancelled; doc update
+* | 4f7723d : Added Max load testing on defaults for A380
+* | 7070bdf : Checking and fixing aircraft tests
+* | dec90a8 : Finalized all passenger testing
+* | 16423ca : Proofed and finished Passenger Class Tests
+* | a90c985 : Fixed passenger upgrade tests.
+* | 8736abc : Added jfreechart and asgn2Examples
+* | cba8733 : Added Part 2 documentation
+* | a5046b9 : Changed all tabs to spaces in asgn2Simulators
+* | 3607c93 : Fixed all files to conform to CAB302 style guide. Finished all tests.
+* | f97a44f : Finished all Aircraft tests
+* |   44addab : Merge branch 'master' of https://bitbucket.org/cab302/assignment2release
+|\ \  
+| |/  
+| * 28a5b5f : Part 2 Release; asgn2Simulators package, Major javadoc update
+* | 6d2471f : Adding some more passenger tests and tweeking the before class
+* | 81b3550 : Changing Static for passenger
+* |   2f94008 : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\ \  
+| * | 184dc2c : adding some more tests
+* | | ced2623 : Almost finished fixing A380 tests
+|/ /  
+* | 5a5ce05 : Fixed upgraded passenger IDs and the relavent tests
+* | 0daf745 : Attempt to fix Passenger IDs and related tests.
+* |   d207719 : Sync latest remote changes.
+|\ \  
+| |/  
+| * f0cbc8a : fix to name getNumEconomy
+* | 8a1735c : Fixed test formatting. Fixed minor issues in Aircraft. Started working on correcting Passenger upgrading.
+* |   fbfa7bd : Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+|\ \  
+| * | 7b89966 : Done all specifc tests for Pass, but still more to go on the general passenger class test
+| * | ee3f0a3 : All Aircraft done - just need exception throwing now
+| * | c43bd1b : Finished A380 Maybe
+| * | 6e0dd6e : Finished Aircraft (Missing Upgrade correctness and error checking)
+* | | 912c312 : Updated some aircraft tests. Fixed some minor issues in passenger.
+|/ /  
+* | b893e31 : Added some Aircraft class tests. Fixed minor issues in various places.
+* | 80dde57 : Almost finished Aircraft
+* | 163e1af : Adding Aircraft 3/4 complete
+* | 7123c20 : Fixed wasConfirmed and wasQueued methods. Modified skeleton JUnit Tests
+* | 88808ce : Implemented passengers and created JUnit test files
+* | 7dd074c : My Changes to aircraft - not much
+* | 09ed842 : Added assignment spec
+|/  
+* a54e38b : Fixed typo in Passenger.confirmSeat; Regenerated javadoc
+* 1532a03 : javadoc: POSTs on key methods; Fix Aircraft.upgradeBookings()
+* d8baff1 : Initial release of Passenger, Aircraft for studentscommit e2c55f68703555da89cd558d81dd64eb14a1f12b
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 22:20:38 2016 +1000
+
+    Update Test Plan
+
+commit 797c7b15e1b428fb943a5c4c37246532f368cfe4
+Merge: d7a4ec0 74dee6d
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 22:14:21 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit d7a4ec01b07eef5548c61943ed3c4e8caadfa920
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 22:14:06 2016 +1000
+
+    Cleanup up error messages
+
+commit 74dee6d63fb5eb34d256e5dafcfd336e2f819a56
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 22:11:53 2016 +1000
+
+    Updated Statment + Bug Squash
+
+commit 95427c9f4c1fa8338af25ec9dafd5f48036f8c8c
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 22:07:11 2016 +1000
+
+    Modified statement.txt
+
+commit da3b00265f9ab4681744c1c1ec792d389c9551a2
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 21:50:22 2016 +1000
+
+    Adding Statment of complete
+
+commit 79a822cad94d09e36918b8132ceab84f55b8d774
+Merge: 4a9f2db cc36e20
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 21:48:03 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit 4a9f2db3ec7f2c98f9e2f05e4e71bd59c3ca094b
+Merge: f38583d 388fa02
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 21:47:49 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+    
+    # Conflicts:
+    #	AircraftSimulator/src/asgn2Simulators/ChartPanel.java
+    #	AircraftSimulator/src/asgn2Simulators/GUISimulator.java
+
+commit cc36e20571931ca8ce98134e4a1d35468f058691
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 21:45:35 2016 +1000
+
+    Fixed repaint issue switching from charts to log
+
+commit f38583d5f5920ae64c81ec4fa3fe03d404ec1e08
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 21:40:12 2016 +1000
+
+    Fixed Chart Type
+
+commit 388fa02cae699fb401a5f7d363e6b5c16ce49bd3
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 21:34:51 2016 +1000
+
+    ACTUALLY fixed merge issues
+
+commit eefe7ec9acf65fc64a62ed31155bcec70cab5e3a
+Merge: 9985a3d 7bc2fde
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 21:30:19 2016 +1000
+
+    Fixed merge issues
+
+commit 9985a3d6e39f8293e42cd02bbcc6c7c31462ae64
+Merge: 84a7eaf 80d7221
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 21:28:21 2016 +1000
+
+    Merged commits and fixed scroll log
+
+commit 7bc2fde7fdef20605fae479a5d597a88013c7315
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 21:23:07 2016 +1000
+
+    Minor formatting + Updated Test Plan
+
+commit 84a7eafc990b3d9d61bfa84070ff732c0db21bff
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 21:08:01 2016 +1000
+
+    Fixed graphs drawing multiple times.
+
+commit 80d7221165c2e80445a8ddc83aba687ec73d06da
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 21:05:41 2016 +1000
+
+    Fixing Imports
+
+commit ed8c8010fe9d0871ac0915e398c12ee4583ead3d
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 20:27:46 2016 +1000
+
+    Finalized Logs
+
+commit b27c69d1924fd05a57bedcd534d18741d5031c13
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 18:24:35 2016 +1000
+
+    Create Log Screen
+
+commit 85ed655871edf13ead485a361169951331943fe5
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 15:20:13 2016 +1000
+
+    Added test guidelines
+
+commit 200413b03877534f5e4eb67681a10c7e6cada87b
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 14:42:00 2016 +1000
+
+    Updated chart to match recommended colours
+
+commit c50bb9d243d98337e462f458fcad1b0aa26de1b6
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 14:15:31 2016 +1000
+
+    Added test guide
+
+commit 0d79787a12a0d2ea09b6d832e90d1f5c221912d6
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 14:02:42 2016 +1000
+
+    Updated command line handling
+
+commit 5f18c557ad60826658bc86582a8be18a9e946f50
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 13:39:20 2016 +1000
+
+    Computer is about to die again
+
+commit 79d5f65ac37355669aa63c37b9898837d994bc2a
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 13:25:02 2016 +1000
+
+    Adding half the logging
+
+commit 261fc789997054603f480fae0692a6c46b1bf0d6
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 12:57:00 2016 +1000
+
+    Changed gui boolean to string for CLI arguments
+
+commit 255230c3a1e4afd0242b1189d9ce19e6cfe75bba
+Merge: a7ac482 cbfccf9
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 12:44:57 2016 +1000
+
+    Merged conflicts
+
+commit a7ac482ec1916ff1bf4464ebeabbe55e01c56cbd
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 12:44:02 2016 +1000
+
+    Added gui / nogui boolean
+
+commit cbfccf9885f6217603d2153878e7ac2473e8dd0e
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 12:43:44 2016 +1000
+
+    Clean up and comments
+
+commit 90ae6fd4a90f3c86678e8b06f053568e3f2d26a2
+Merge: 2a2376c c2f1f39
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 12:26:33 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit 2a2376caf1e81d615e30e257c855d07b636642e5
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 12:26:07 2016 +1000
+
+    Fixed GUI styling
+
+commit c2f1f39ef074a012362ee7ca6430dc4855752f19
+Merge: 4ef0da8 e983ed4
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 12:16:17 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit 4ef0da8f32b8f18d4a7664fd37e23110a1dfd65e
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 12:16:04 2016 +1000
+
+    Commit to merge
+
+commit e983ed4df28653aa4ae4659f4283d1a191163b5d
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu Jun 2 12:12:47 2016 +1000
+
+    Merged changes and added CLI argument parsing for GUI
+
+commit 12a8fe7cef57f976ab62a4120e54ff69e273f349
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 12:02:51 2016 +1000
+
+    Graphs all working
+
+commit ef099235c7d15b9cc38eb26c86e600c3e3c6eb1c
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 11:42:19 2016 +1000
+
+    Got Charts working
+
+commit ae859513e44f9950d6c80963de8c8a274ee53b37
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 10:54:28 2016 +1000
+
+    Almost done on the chart swapping
+
+commit 678c28672a719464d83dd1af6cf3be30bd6d89e3
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu Jun 2 10:34:54 2016 +1000
+
+    GOT THE LINE CHART WORKING!!!!!!
+
+commit 384f3c8c172f9456eb5725acacb108b9771ab1ac
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 23:56:44 2016 +1000
+
+    Don't think there is acutally any changes here
+
+commit e136e70a55ebff6c5fc75470d15e7c3a38a32744
+Merge: d7deae2 7657fcc
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 23:19:29 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+    
+    # Conflicts:
+    #	AircraftSimulator/src/asgn2Simulators/GUISimulator.java
+
+commit d7deae28334a9a20f96ee1a3047e4c35f8946895
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 23:16:56 2016 +1000
+
+    Added Boundary Constraints to inputs and fixed defaults values
+
+commit 7657fccb19906a3b3fe44807fe17fe7dffcbc497
+Merge: 5716cbc 2cf5d8b
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 22:49:41 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit 5716cbc3a04bae06df53cd0b7e5d4311c7f76d0a
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 22:40:19 2016 +1000
+
+    Added bar chart functionality for demo
+
+commit 120a24059bd4fa2a43ab6491d5d55e9381e7a089
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 22:24:17 2016 +1000
+
+    Added bar chart methods to ChartPanel
+
+commit 2cf5d8b20be45dbcb7d43dce218853b79527665d
+Merge: 763827c 77116ef
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 22:07:46 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+    
+    # Conflicts:
+    #	AircraftSimulator/src/asgn2Simulators/GUISimulator.java
+
+commit 763827cf99f51eaeebf7267fa391f82fe7397712
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 22:04:39 2016 +1000
+
+    Starting the Error Checking
+
+commit 77116efcc556c9e369c658cde028d255c75b8843
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 22:03:21 2016 +1000
+
+    Merged changes and minor cleanup
+
+commit 454659754f2f1f5c7855fa0c9b58354ee479d32a
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 21:53:15 2016 +1000
+
+    All fixed and working
+
+commit 06ac6bfb955b970e279a60f51e488ac058dfa32b
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 21:47:32 2016 +1000
+
+    Fixed thechart but we have errors
+
+commit e717b3c578da02f9497ab2664cdfb3904e3d39d8
+Merge: ee90571 95c9722
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 21:07:44 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+    
+    # Conflicts:
+    #	AircraftSimulator/src/asgn2Simulators/GUISimulator.java
+
+commit ee90571063863b66e611abcdfc2f09ff781131eb
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 20:58:36 2016 +1000
+
+    Cleaning the chart
+
+commit 95c9722db010358509b7a40596bf3a7d1e44c7d3
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 20:47:32 2016 +1000
+
+    Fixed commit conflicts
+
+commit 920041edfe05e0c417b86e500254d32c4b264c6c
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 20:13:16 2016 +1000
+
+    Fixed the crash, now Jim won't go away
+
+commit 4b55c2ce7e146f6cb6e9bd6529401246bfd58292
+Merge: cdf09fd 4862ce8
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 19:55:39 2016 +1000
+
+    PS I didnt break it
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+    
+    # Conflicts:
+    #	AircraftSimulator/src/asgn2Simulators/GUISimulator.java
+
+commit cdf09fd9c385eba7ddf58ea36a86fe08b4356149
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 19:44:13 2016 +1000
+
+    adding semi-real data
+
+commit 4862ce808c107dd1dce210d6fb5ad82505680347
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 19:44:06 2016 +1000
+
+    Removed unused imports
+
+commit bf3616bf4aaf9f5f180a4aae52ebd98e5bb4ae77
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 19:39:52 2016 +1000
+
+    Added start screen
+
+commit a2c534fbae51547c12bff40b3fb0ee682d744276
+Merge: e7acafe fdfbb2b
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 19:25:47 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit e7acafebc1421e1895754a14d226c7c4e8b6ad02
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 19:25:27 2016 +1000
+
+    Pre merge commit
+
+commit fdfbb2b76b19c32270046fe1762e06f55b43a6f5
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 18:20:34 2016 +1000
+
+    Added dirty method to modify current chart
+
+commit 502828c141b11aaff3943d1ea90303584da68b57
+Merge: 40f567e eaff9b8
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 16:55:55 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+    
+    # Conflicts:
+    #	AircraftSimulator/src/asgn2Simulators/GUISimulator.java
+
+commit 40f567e1c6fcdaabf49c1284617ea0a7902a9d62
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 16:54:18 2016 +1000
+
+    Chart almsot there
+
+commit eaff9b8495a134c82eda30455648f6f552a10626
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 16:51:04 2016 +1000
+
+    Fixed the jfreechart sizing in the JPanel
+
+commit 9cede65e4df69c5a87f16959c77389d0fb08a69a
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 16:03:51 2016 +1000
+
+    Added ChartPanel.java
+
+commit 35d61b89fc6e4b54105e6c2485afd137264ac56c
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 15:29:32 2016 +1000
+
+    Add Tests to cover ConcurrentModificationException
+
+commit 597254e80197d29b3c30156f9cd75af9563d725a
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 14:43:24 2016 +1000
+
+    Added chart object to GUISimulator
+
+commit cdfb372dd4d15dab88f8f13702e033f6e8ae0e50
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 14:41:26 2016 +1000
+
+    Added Default values from constant
+
+commit 9cbe52cc49c9614ea4750a78dcd00bf9962a3412
+Merge: 28d3274 6cffc3e
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 14:21:19 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit 28d327434aeb2b01ced1ef6192db411d94482cb7
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 14:21:09 2016 +1000
+
+    Adding daily values
+
+commit 6cffc3e7f682a2bfb953760824ba981cd83bb522
+Merge: cd80b20 cf5a0de
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 14:00:43 2016 +1000
+
+    Merge remote-tracking branch 'refs/remotes/origin/master'
+
+commit cd80b200c4d0a809c8b158fb4959f5590a1d707c
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 13:58:09 2016 +1000
+
+    Implemented example jfreechart package
+
+commit cf5a0de748f84590a3ab614fd2f3ff77a8447002
+Merge: 07703f5 ec37992
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 13:42:32 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit 07703f5126b2897a46e26e6644d1d4b33727131e
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 13:42:10 2016 +1000
+
+    Added error checking to values provided
+
+commit ec37992105e69b0151b810891183230487496f0e
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 13:40:40 2016 +1000
+
+    Added asgn2Examples package and default simulation values
+
+commit 100dfe640bf8c886747cdb546bf637e182472fa4
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 13:05:56 2016 +1000
+
+    Fixed merging issues
+
+commit 7fcf1d8ad62715ec29b50c49b1fbb36bbd3c3f8e
+Merge: 852d938 3b1e542
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 13:04:44 2016 +1000
+
+    Merged latest commit
+
+commit 852d938289cee38aaebe243bfc17b7e7b87c63c2
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 13:01:55 2016 +1000
+
+    Updated GUI with basic parameter editing
+
+commit 3b1e542a92535567361be860dd91ed8da254c9b7
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 12:59:10 2016 +1000
+
+    Adding GUI sim code
+
+commit 72a110c74878261564bd2cdfd01c484e9c5c03a2
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 10:54:38 2016 +1000
+
+    Added gitigore and fixed runner
+
+commit 1f358d6c611f83403d06dd30aaf5d0b333d99385
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed Jun 1 10:49:07 2016 +1000
+
+    Added basic GUI skeleton with native styling
+
+commit d1381cc883f4bc9fc708d9ac04c236c69141861b
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 10:24:33 2016 +1000
+
+    Finalied tests
+
+commit ecd0c57e77b9f49142f19162787b6630fc975c83
+Merge: 86e356f d4aa16b
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 10:11:28 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit 86e356f445a5ebda1c13666620f0932502dff41d
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Wed Jun 1 10:11:08 2016 +1000
+
+    No CLue what these are
+
+commit d4aa16bb08f9ffa94cf7a414d91af6d89c68d86e
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Tue May 31 20:31:19 2016 +1000
+
+    Minor code cleanup and added logSummary
+
+commit 4f8dd1420454fc193b6db69a0b6452f466077122
+Merge: 4f7723d 0dab636
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Sat May 28 11:21:36 2016 +1000
+
+    Merge remote-tracking branch 'Jims/master'
+    
+    # Conflicts:
+    #	AircraftSimulator/src/asgn2Simulators/SimulationRunner.java
+    #	AircraftSimulator/src/asgn2Simulators/Simulator.java
+
+commit 0dab6367f87ce2767d3a712865f1fab734cfee38
+Author: James M. Hogan <j.hogan@qut.edu.au>
+Date:   Wed May 25 21:25:58 2016 +1000
+
+    updated Simulator.toString() to include maxQueueSize, cancelProb
+
+commit 9cf799c486bf6a9ab8fda21efd7d68191f1064a4
+Author: James M. Hogan <j.hogan@qut.edu.au>
+Date:   Wed May 25 00:06:15 2016 +1000
+
+    Restore Constants.SAVE_STATUS to false.
+
+commit 2efdda1e53d692af74f2c0b108075746a40915d8
+Author: James M. Hogan <j.hogan@qut.edu.au>
+Date:   Wed May 25 00:03:33 2016 +1000
+
+    Bug fix: createPassenger; final state of queue, cancelled; doc update
+
+commit 4f7723dfdb791c441da2248160ccd8ed82f0cbf0
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Mon May 23 17:50:07 2016 +1000
+
+    Added Max load testing on defaults for A380
+
+commit 7070bdfff8405b3f1e569698ac943ced423667ca
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Mon May 23 15:39:36 2016 +1000
+
+    Checking and fixing aircraft tests
+
+commit dec90a853ad8a9f351c9bc8573e0db259732dd69
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Mon May 23 11:38:56 2016 +1000
+
+    Finalized all passenger testing
+
+commit 16423ca2114ecadb43206b3aaa5c933f0f26be71
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Mon May 23 11:15:50 2016 +1000
+
+    Proofed and finished Passenger Class Tests
+
+commit a90c985111bf755557a40531a3a4af257073f2fa
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Mon May 23 03:42:25 2016 +1000
+
+    Fixed passenger upgrade tests.
+
+commit 8736abc397e9daba7f988322a1779262d0a769e2
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Mon May 23 03:21:53 2016 +1000
+
+    Added jfreechart and asgn2Examples
+
+commit cba87332ad269e50f2180c2574c1963eeb796762
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Mon May 23 02:53:52 2016 +1000
+
+    Added Part 2 documentation
+
+commit a5046b93c3dad875ad6b11fd4ab611b27acd07c8
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Mon May 23 01:42:40 2016 +1000
+
+    Changed all tabs to spaces in asgn2Simulators
+
+commit 3607c9321062df00d9f2c3644035504384fc7be9
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Mon May 23 01:38:23 2016 +1000
+
+    Fixed all files to conform to CAB302 style guide. Finished all tests.
+
+commit f97a44f1caef371f53b817186f93c2a11630cf0c
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Sun May 22 21:39:14 2016 +1000
+
+    Finished all Aircraft tests
+
+commit 44addab3d10e05472d9583a3d69ea287eea2e205
+Merge: 6d2471f 28a5b5f
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Sun May 22 17:49:09 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/cab302/assignment2release
+
+commit 28a5b5f2ab7fa81822ccb3b3e992074378800455
+Author: James M. Hogan <j.hogan@qut.edu.au>
+Date:   Fri May 20 22:35:56 2016 +1000
+
+    Part 2 Release; asgn2Simulators package, Major javadoc update
+
+commit 6d2471fc8a98af4f047b6fee097a130366c1437e
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu May 19 12:22:47 2016 +1000
+
+    Adding some more passenger tests and tweeking the before class
+
+commit 81b3550c58d8a8336dc3c7fb3073f42f4e1bb5bc
+Author: mitch <mitchellharvey97@gmail.com>
+Date:   Thu May 19 10:50:21 2016 +1000
+
+    Changing Static for passenger
+
+commit 2f9400844c623319cb4aff93d7ddeaa4b04e0107
+Merge: ced2623 184dc2c
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed May 18 17:21:54 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit ced26233d51516321f0433c4986b0655e49d1af9
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed May 18 17:20:37 2016 +1000
+
+    Almost finished fixing A380 tests
+
+commit 184dc2c49b96481517a0c216beec5cf2242ddf01
+Author: Mitchell Harvey <Mitchell Harvey>
+Date:   Wed May 18 06:58:37 2016 +0100
+
+    adding some more tests
+
+commit 5a5ce0529b22c47f334e886c963d02b8b18c4e9f
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Wed May 18 15:12:32 2016 +1000
+
+    Fixed upgraded passenger IDs and the relavent tests
+
+commit 0daf745bf5146a3284025d9369a261d76e715498
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Sun May 15 17:55:44 2016 +1000
+
+    Attempt to fix Passenger IDs and related tests.
+
+commit d207719bf9c64da570af997eb9d1b292bea4c636
+Merge: 8a1735c f0cbc8a
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Sun May 15 16:44:40 2016 +1000
+
+    Sync latest remote changes.
+
+commit 8a1735cbdb8b481803d3ef35454a125007b44efa
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Sun May 15 16:39:38 2016 +1000
+
+    Fixed test formatting. Fixed minor issues in Aircraft. Started working on correcting Passenger upgrading.
+
+commit fbfa7bd0461a551f73dc0ac77e517dde1a59f945
+Merge: 912c312 7b89966
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Sun May 15 14:09:17 2016 +1000
+
+    Merge branch 'master' of https://bitbucket.org/mharv4/cab302-assignmnent
+
+commit 912c3124b2f9768f63a2b75848b0e084825d5dc2
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Sun May 15 14:06:18 2016 +1000
+
+    Updated some aircraft tests. Fixed some minor issues in passenger.
+
+commit f0cbc8ace3f627cafe62ab0dd21e88dde328dd34
+Author: James M. Hogan <j.hogan@qut.edu.au>
+Date:   Sun May 15 11:07:05 2016 +1000
+
+    fix to name getNumEconomy
+
+commit 7b89966615bfd89a343a626642000dd060ada244
+Author: Mitchell Harvey <Mitchell Harvey>
+Date:   Sun May 15 01:37:38 2016 +0100
+
+    Done all specifc tests for Pass, but still more to go on the general passenger class test
+
+commit ee3f0a3d6f0b2f4cd506b3a4eeb9bef8450cfb73
+Author: Mitchell Harvey <Mitchell Harvey>
+Date:   Sun May 15 00:34:40 2016 +0100
+
+    All Aircraft done - just need exception throwing now
+
+commit c43bd1b7cb8d93db4e55d12fbdf898746553beea
+Author: Mitchell Harvey <Mitchell Harvey>
+Date:   Sun May 15 00:32:57 2016 +0100
+
+    Finished A380 Maybe
+
+commit 6e0dd6e4b5892f1de1d2c776d729a1ea51e7d789
+Author: Mitchell Harvey <Mitchell Harvey>
+Date:   Sun May 15 00:23:58 2016 +0100
+
+    Finished Aircraft (Missing Upgrade correctness and error checking)
+
+commit b893e31d6e1aa44c8c4b47a7de18fed5dbb3d4f2
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Sat May 14 01:59:48 2016 +1000
+
+    Added some Aircraft class tests. Fixed minor issues in various places.
+
+commit 80dde57bb409d6e1ab34d0ac91c5ded441896a34
+Author: Mitchell Harvey <Mitchell Harvey>
+Date:   Fri May 13 09:27:02 2016 +0100
+
+    Almost finished Aircraft
+
+commit 163e1afd9ae648d9269d62e19b4e6ad81a982dc9
+Author: Mitchell Harvey <Mitchell Harvey>
+Date:   Fri May 13 07:36:18 2016 +0100
+
+    Adding Aircraft 3/4 complete
+
+commit 7123c209c5dac4f77b48a08c7c7606bfff11367d
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Fri May 13 14:29:01 2016 +1000
+
+    Fixed wasConfirmed and wasQueued methods. Modified skeleton JUnit Tests
+
+commit 88808ce2b3d50500ba65b988fd01680aa0b1ffbb
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Fri May 13 02:38:09 2016 +1000
+
+    Implemented passengers and created JUnit test files
+
+commit 7dd074c127aa4b3f4648ff753487819daf00edec
+Author: Mitchell Harvey <Mitchell Harvey>
+Date:   Thu May 12 06:20:56 2016 +0100
+
+    My Changes to aircraft - not much
+
+commit 09ed8423a07e055b8f8df88fa7f4f497e7d131d4
+Author: DeathIsUnknown <deathisunknown@gmail.com>
+Date:   Thu May 12 15:19:13 2016 +1000
+
+    Added assignment spec
+
+commit a54e38bf29ab90c258086e408391072120465b85
+Author: James M. Hogan <j.hogan@qut.edu.au>
+Date:   Thu May 12 13:10:12 2016 +1000
+
+    Fixed typo in Passenger.confirmSeat; Regenerated javadoc
+
+commit 1532a031449ab4a2bab5c7cb344edeb96e75d1ec
+Author: James M. Hogan <j.hogan@qut.edu.au>
+Date:   Thu May 12 10:35:21 2016 +1000
+
+    javadoc: POSTs on key methods; Fix Aircraft.upgradeBookings()
+
+commit d8baff101b14ee95f5b342bac4c869a09b64feea
+Author: James M. Hogan <j.hogan@qut.edu.au>
+Date:   Mon May 9 22:24:23 2016 +1000
+
+    Initial release of Passenger, Aircraft for students
