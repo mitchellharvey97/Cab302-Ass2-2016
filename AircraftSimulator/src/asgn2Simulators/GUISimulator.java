@@ -93,13 +93,43 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblBusiness;
     private JLabel lblPremium;
     private JLabel lblEconomy;
+    
+    private boolean valuesLoaded = false;
+    private int seed;
+    private int maxQueueSize;
+    private double meanBookings;
+    private double sdBookings;
+    private double firstProb;
+    private double businessProb;
+    private double premiumProb;
+    private double economyProb;
+    private double cancelProb;
 
     /**
      * @param arg0
      * @throws HeadlessException
      */
-    public GUISimulator(String arg0) throws HeadlessException {
-        super(arg0);
+    public GUISimulator() throws HeadlessException {
+        super("Aircraft Simulator");
+    }
+
+    public GUISimulator(int seed, int maxQueueSize, double meanBookings, double sdBookings, double firstProb,
+            double businessProb, double premiumProb, double economyProb, double cancelProb) {
+        super("Aircraft Simulator");
+        // TODO Auto-generated constructor stub
+        
+        // Assign all given values
+        this.valuesLoaded = true;
+        this.seed = seed;
+        this.maxQueueSize = maxQueueSize;
+        this.meanBookings = meanBookings;
+        this.sdBookings = sdBookings;
+        this.firstProb = firstProb;
+        this.businessProb = businessProb;
+        this.premiumProb = premiumProb;
+        this.economyProb = economyProb;
+        this.cancelProb = cancelProb;
+        
     }
 
     /*
@@ -123,7 +153,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             IllegalAccessException, UnsupportedLookAndFeelException {
         // JFrame.setDefaultLookAndFeelDecorated(false);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        SwingUtilities.invokeLater(new GUISimulator("Aircraft Simulator"));
+        SwingUtilities.invokeLater(new GUISimulator());
     }
 
     private void createGUI() {
@@ -166,14 +196,17 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblEconomy = createLabel("Economy (%)");
 
         // Text Fields
-        valSeed = createNumSpinner(Constants.DEFAULT_SEED);
-        valMean = createNumSpinner(Constants.DEFAULT_DAILY_BOOKING_MEAN);
-        valQueue = createNumSpinner(Constants.DEFAULT_MAX_QUEUE_SIZE);
-        valCancel = createNumSpinner(Constants.DEFAULT_CANCELLATION_PROB * 100);
-        valFirst = createNumSpinner(Constants.DEFAULT_FIRST_PROB * 100);
-        valBusiness = createNumSpinner(Constants.DEFAULT_BUSINESS_PROB * 100);
-        valPremium = createNumSpinner(Constants.DEFAULT_PREMIUM_PROB * 100);
-        valEconomy = createNumSpinner(Constants.DEFAULT_ECONOMY_PROB * 100);
+        if (!valuesLoaded) {
+            loadDefaultValues();
+        }
+        valSeed = createNumSpinner(this.seed);
+        valMean = createNumSpinner(this.meanBookings);
+        valQueue = createNumSpinner(this.maxQueueSize);
+        valCancel = createNumSpinner(this.cancelProb * 100);
+        valFirst = createNumSpinner(this.firstProb * 100);
+        valBusiness = createNumSpinner(this.businessProb * 100);
+        valPremium = createNumSpinner(this.premiumProb * 100);
+        valEconomy = createNumSpinner(this.economyProb * 100);
 
         // Buttons
         btnRun = createButton("Run Simulation");
@@ -194,6 +227,17 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // repaint();
 
         this.setVisible(true);
+    }
+
+    private void loadDefaultValues() {
+        this.seed = Constants.DEFAULT_SEED;
+        this.meanBookings = Constants.DEFAULT_DAILY_BOOKING_MEAN;
+        this.maxQueueSize = Constants.DEFAULT_MAX_QUEUE_SIZE;
+        this.cancelProb = Constants.DEFAULT_CANCELLATION_PROB;
+        this.firstProb = Constants.DEFAULT_FIRST_PROB;
+        this.businessProb = Constants.DEFAULT_BUSINESS_PROB;
+        this.premiumProb = Constants.DEFAULT_PREMIUM_PROB;
+        this.economyProb = Constants.DEFAULT_ECONOMY_PROB;
     }
 
     private JButton createButton(String str) {
@@ -406,7 +450,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     // Create the data set and much much more
     // Simulation Running Code
-    private Log l;
+    private Log log;
     private Simulator sim;
 
     private void complete_sim() {
@@ -483,9 +527,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             createErrorMessage("Passenger split");
             return false;
         }
+
         sdBooking = 0.33 * mean;
 
-        l = new Log();
+        log = new Log();
         sim = new Simulator(seed, queue, mean, sdBooking, first, business, premium, economy, cancel);
         return true;
     }
@@ -494,13 +539,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lineChartDataPoints = new XYSeriesCollection();
         barChartDataSet = new DefaultCategoryDataset();
     }
-
+    
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
         cleanup_charts();
         // Add chart to pnlDisplay
         System.out.println("Running the main sim");
         this.sim.createSchedule();
-        this.l.initialEntry(this.sim);
+        this.log.initialEntry(this.sim);
         // Main simulation loop
         Bookings todaysBookings;
         barQueue= 0;
@@ -515,7 +560,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 this.sim.processQueue(time);
                 this.sim.flyPassengers(time);
                 this.sim.updateTotalCounts(time);
-                this.l.logFlightEntries(time, sim);
+                this.log.logFlightEntries(time, sim);
                 // we don't start logging till the first flight leaves
                 barCapacity = (sim.getFlights(time).getCurrentCounts().getTotal()
                         + sim.getFlights(time).getCurrentCounts().getAvailable());
@@ -529,17 +574,18 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             } else {
                 this.sim.processQueue(time);
             }
-            this.l.logQREntries(time, sim);
-            this.l.logEntry(time, this.sim);
+            this.log.logQREntries(time, sim);
+            this.log.logEntry(time, this.sim);
         }
+        
         prepare_charts();
 
         System.out.println("Updating Chart");
         displayGraph();
 
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
-        this.l.logQREntries(Constants.DURATION, sim);
-        this.l.finalise(this.sim);
+        this.log.logQREntries(Constants.DURATION, sim);
+        this.log.finalise(this.sim);
     }
 
     private void prepare_charts() {
