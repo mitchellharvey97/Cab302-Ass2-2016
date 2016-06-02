@@ -597,6 +597,15 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private void cleanupCharts() {
         lineChartDataPoints = new TimeSeriesCollection ();
         barChartDataSet = new DefaultCategoryDataset();
+        
+        //Clean Series
+         tmsTotal = new TimeSeries("Total Bookings");
+        tmsFirst = new TimeSeries("First");
+        tmsBusiness = new TimeSeries("Business");
+        tmsPremium = new TimeSeries("Premium");
+        tmsEconomy = new TimeSeries("Economy");
+        tmsEmpty = new TimeSeries("Empty");
+        
     }
 
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
@@ -614,6 +623,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         barQueue = 0;
         barRefused = 0;
 
+        
         for (int time = 0; time <= Constants.DURATION; time++) {
             this.sim.resetStatus(time);
             this.sim.rebookCancelledPassengers(time);
