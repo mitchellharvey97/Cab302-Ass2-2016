@@ -235,10 +235,26 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlDisplay.add(pnlStart);
     }
 
+    
+    private boolean lineGraph = false;
+    
     private void displayGraph() {
-        System.out.println("Showing Chart");
-
+        
         pnlDisplay.remove(pnlStart);
+
+        
+        
+       if (lineGraph){//display like graph
+           
+           System.out.println("Showing Line Chart");     
+       }
+       else{
+           System.out.println("Showing Bar Chart");
+           
+       }
+       
+        lineGraph = !lineGraph;
+
         pnlChart = pnlChartController.getChartPanel();
         pnlDisplay.setLayout(new BorderLayout());
         pnlDisplay.add(pnlChart);
@@ -364,7 +380,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // A crazy way of extracting a double from a spinner
         Object returned_value = js.getValue();
         Double returned = Double.parseDouble(returned_value.toString());
-
         // Check if there are valid parameters then if the value is in bounds
         if (returned == null || (min != null && returned < min) || (max != null && returned > max)) {
             return null;
@@ -468,7 +483,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     XYSeries tmsPremium = new XYSeries("Premium");
     XYSeries tmsEconomy = new XYSeries("Economy");
     XYSeries tmsEmpty = new XYSeries("Empty");
-
+    XYSeriesCollection lineChartDataPoints = new XYSeriesCollection();
+    
+    
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
         // Add chart to pnlDisplay
         System.out.println("Running the main sim");
@@ -498,16 +515,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             this.l.logEntry(time, this.sim);
             System.out.println("Today is " + time);
         }
-        XYSeriesCollection data_points = new XYSeriesCollection();
-        data_points.addSeries(tmsFirst);
-        data_points.addSeries(tmsBusiness);
-        data_points.addSeries(tmsPremium);
-        data_points.addSeries(tmsEconomy);
-        data_points.addSeries(tmsTotal);
-        data_points.addSeries(tmsEmpty);
+        
+        prepare_charts();
 
+        
         System.out.println("Updating Chart");
-        pnlChartController.SetData(data_points);
+        pnlChartController.SetData(lineChartDataPoints);
         displayGraph();
 
         // Bar graph
@@ -519,6 +532,15 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.l.logQREntries(Constants.DURATION, sim);
         this.l.finalise(this.sim);
+    }
+    
+    private void prepare_charts(){
+        lineChartDataPoints.addSeries(tmsFirst);
+        lineChartDataPoints.addSeries(tmsBusiness);
+        lineChartDataPoints.addSeries(tmsPremium);
+        lineChartDataPoints.addSeries(tmsEconomy);
+        lineChartDataPoints.addSeries(tmsTotal);
+        lineChartDataPoints.addSeries(tmsEmpty);     
     }
 
     private void add_daily_points(int time, Bookings todaysBookings) {
