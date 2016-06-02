@@ -585,7 +585,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             this.log.logEntry(time, this.sim);
         }
         // Add all the data to the charts
-        prepareChart();
+        prepareData();
 
         System.out.println("Updating Chart");
         displayGraph();
@@ -597,7 +597,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         System.out.println(customLog);
     }
 
-    private void prepareChart() {
+    private void prepareData() {
         // Add Line Chart Points to data set
         lineChartDataPoints.addSeries(tmsFirst);
         lineChartDataPoints.addSeries(tmsBusiness);
@@ -613,6 +613,17 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         barChartDataSet.addValue(barQueue, "Type", types);
         barChartDataSet.addValue(barRefused, "Refused", types);
         barChart = pnlChartController.createBarChart(barChartDataSet);
+        
+        customLog += "Final Statistics" + "----------\n" + 
+                "First Class: "  + sim.getTotalFirst() + "\n"+
+                "Business Class: "  + sim.getTotalBusiness() + 
+                "\n" + "Premium Class: "  + sim.getTotalPremium() + 
+                "\n" + "Economy Class: "  + sim.getTotalEconomy() + 
+                "\n" + "Empty Seats: " +
+                "\n" + "Refused: " + sim.numRefused() +
+                "\n" + "Queued: " + sim.numInQueue() +
+                "\n" + "Flown: ";
+        ;
     }
 
     String customLog = "";
@@ -636,8 +647,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         "\n" + "Refused: " + 
         "\n" + "Queued: " + 
         "\n" + "Flown: " + 
-        "\n" + line_break + "\n"+
-        "Cumulitive Stats ";
+        "\n" + line_break + "\n";
 
         tmsTotal.add(time, totalClass);
         tmsFirst.add(time, firstClass);
