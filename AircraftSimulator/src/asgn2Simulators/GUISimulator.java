@@ -7,7 +7,6 @@
 package asgn2Simulators;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -94,6 +93,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblPremium;
     private JLabel lblEconomy;
 
+
+    private boolean lineGraph = true;
     private boolean valuesLoaded = false;
     private int seed;
     private int maxQueueSize;
@@ -323,9 +324,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlDisplay.add(pnlStart);
     }
 
-    private boolean lineGraph = false;
-
-    private void displayGraph() {
+    private void displayChart() {
         // Remove the placeholder Screen
         if (pnlStart.getParent() == pnlDisplay) {
             pnlDisplay.remove(pnlStart);
@@ -470,7 +469,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         if (src == btnRun) {
             complete_sim();
         } else if (src == btnSwitch) {
-            displayGraph();
+            displayChart();
         } else if (src == btnRestore) {
             valSeed.setValue(Constants.DEFAULT_SEED);
             valMean.setValue(Constants.DEFAULT_DAILY_BOOKING_MEAN);
@@ -641,7 +640,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         prepareData();
 
         System.out.println("Updating Chart");
-        displayGraph();
+        displayChart();
         btnLog.setEnabled(true);
         btnSwitch.setEnabled(true);
 
