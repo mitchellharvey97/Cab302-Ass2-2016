@@ -29,6 +29,7 @@ public class ChartPanel extends Component {
 
     protected static JFreeChart chart;
     private static final String TITLE = "Random Bookings";
+
     private TimeSeriesCollection line_data_points;
 
     public ChartPanel() {
@@ -37,11 +38,12 @@ public class ChartPanel extends Component {
 
     public org.jfree.chart.ChartPanel getChartPanel() {
         System.out.println("Generating Chart");
-        return new org.jfree.chart.ChartPanel(createChart(line_data_points));
+        return new org.jfree.chart.ChartPanel(createLineChart(line_data_points));
     }
 
     public void SetData(TimeSeriesCollection data) {
         line_data_points = data;
+
     }
 
     /**
@@ -52,7 +54,7 @@ public class ChartPanel extends Component {
      *            TimeSeriesCollection for plotting
      * @returns chart to be added to panel
      */
-    public JFreeChart createChart(final XYDataset dataset) {
+    public JFreeChart createLineChart(final XYDataset dataset) {
         System.out.println("Creating the line chart");
         final JFreeChart result = ChartFactory.createTimeSeriesChart(TITLE, "Days", "Passengers", dataset, true, true,
                 false);

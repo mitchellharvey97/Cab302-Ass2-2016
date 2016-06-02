@@ -7,7 +7,6 @@
 package asgn2Simulators;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -70,6 +69,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblStartImg;
     private ChartPanel pnlChartController;
     private org.jfree.chart.ChartPanel pnlChart;
+    
+    private JScrollPane scrlLog;
+    private JTextArea txtLog;
 
     private JSpinner valSeed;
     private JSpinner valMean;
@@ -94,11 +96,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblPremium;
     private JLabel lblEconomy;
 
+
+    private boolean lineGraph = true;
     private boolean valuesLoaded = false;
     private int seed;
     private int maxQueueSize;
     private double meanBookings;
-    @SuppressWarnings("unused")
     private double sdBookings;
     private double firstProb;
     private double businessProb;
@@ -107,8 +110,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private double cancelProb;
 
     String customLog = "";
-
-    private JScrollPane scrlLog;
+    
     // Line Chart Variables
     TimeSeries  tmsTotal = new TimeSeries("Total Bookings");
     TimeSeries tmsFirst = new TimeSeries("First");
@@ -118,12 +120,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     TimeSeries tmsEmpty = new TimeSeries("Empty");
     TimeSeriesCollection  lineChartDataPoints = new TimeSeriesCollection ();
 
+    JFreeChart lineChart;
     // Bar Chart Variables
     int barCapacity;
     int barQueue;
     int barRefused;
-    DefaultCategoryDataset barChartDataSet = new DefaultCategoryDataset();
     JFreeChart barChart;
+    DefaultCategoryDataset barChartDataSet = new DefaultCategoryDataset();
 
     // Create the data set and much much more
     // Simulation Running Code
@@ -142,7 +145,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             double businessProb, double premiumProb, double economyProb, double cancelProb)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
-
         // Assign all given values
         this.valuesLoaded = true;
         this.seed = seed;
@@ -154,7 +156,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.premiumProb = premiumProb;
         this.economyProb = economyProb;
         this.cancelProb = cancelProb;
-
     }
 
     /*
@@ -188,12 +189,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
      */
     public static void startGUI(GUISimulator g) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException, UnsupportedLookAndFeelException {
-        // JFrame.setDefaultLookAndFeelDecorated(false);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(g);
     }
 
     private void createGUI() {
+        // Window properties
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -206,12 +207,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlBottom = new JPanel();
         pnlStart = new JPanel();
 
-        // JFreeChart
-        pnlChartController = new ChartPanel();
-        pnlChart = pnlChartController.getChartPanel();
-        pnlDisplay.setLayout(new BorderLayout());
-        // pnlDisplay.add(pnlChart);
-
         // Start Panel
         lblStartTop = createLabel("Thank you for flying Air Hogie!", new Font("Arial", Font.BOLD, 15));
         lblStartBottom = createLabel("We hope you enjoy our wide selection of in-flight memes.",
@@ -219,6 +214,18 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblStartImg = new JLabel(new ImageIcon(getClass().getResource("img/jim.png")));
         layoutStartPanel();
         pnlDisplay.add(pnlStart);
+
+        // JFreeChart
+        pnlChartController = new ChartPanel();
+        pnlChart = pnlChartController.getChartPanel();
+        pnlDisplay.setLayout(new BorderLayout());
+        
+        // Scrollable Log
+        txtLog = new JTextArea();
+        txtLog.setEditable(false);
+        txtLog.setWrapStyleWord(true);
+        scrlLog = new JScrollPane(txtLog);
+        scrlLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         // Labels
         lblSimTitle = createLabel("Simulation Settings", new Font("Arial", Font.BOLD, 15));
@@ -320,24 +327,53 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlDisplay.add(pnlStart);
     }
 
-    private boolean lineGraph = false;
-
-    private void displayGraph() {
+    private void displayChart() {
         // Remove the placeholder Screen
-        pnlDisplay.remove(pnlStart);
-        // pnlDisplay.remove(scrlLog);
+        if (pnlStart.getParent() == pnlDisplay) {
+            pnlDisplay.remove(pnlStart);
+        }
+        
+        // Remove the log screen
+        if (scrlLog.getParent() == pnlDisplay) {
+            pnlDisplay.remove(scrlLog);
+        }
 
+        // Add the chart panel
+        if (pnlChart.getParent() != pnlDisplay) {
+            pnlDisplay.add(pnlChart);
+        }
+        
         // Check a Boolean to decide which graph to load
         if (lineGraph) {
             System.out.println("Showing Line Chart");
-            pnlChart = pnlChartController.getChartPanel();
-            pnlDisplay.setLayout(new BorderLayout());
-            pnlDisplay.add(pnlChart);
+            pnlChart.setChart(lineChart);
         } else {
             System.out.println("Showing Bar Chart");
             pnlChart.setChart(barChart);
         }
+        
         lineGraph = !lineGraph;
+        this.setVisible(true);
+    }
+
+    private void displayLogs() {
+        // Remove the placeholder Screen
+        if (pnlStart.getParent() == pnlDisplay) {
+            pnlDisplay.remove(pnlStart);
+        }
+
+        // Remove the chart panel
+        if (pnlChart.getParent() == pnlDisplay) {
+            pnlDisplay.remove(pnlChart);
+        }
+        
+        txtLog.setText(customLog);
+
+        // Add the log screen
+        if (scrlLog.getParent() != pnlDisplay) {
+            pnlDisplay.add(scrlLog);
+        }
+        
         this.setVisible(true);
     }
 
@@ -436,7 +472,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         if (src == btnRun) {
             complete_sim();
         } else if (src == btnSwitch) {
-            displayGraph();
+            displayChart();
         } else if (src == btnRestore) {
             valSeed.setValue(Constants.DEFAULT_SEED);
             valMean.setValue(Constants.DEFAULT_DAILY_BOOKING_MEAN);
@@ -447,26 +483,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             valPremium.setValue(Constants.DEFAULT_PREMIUM_PROB * 100);
             valEconomy.setValue(Constants.DEFAULT_ECONOMY_PROB * 100);
         } else if (src == btnLog) {
-            showLogs();
+            displayLogs();
         }
-    }
-
-    private void showLogs() {
-        pnlDisplay.setLayout(new BorderLayout());
-        pnlDisplay.remove(pnlStart);
-        pnlDisplay.remove(pnlChart);
-        JTextArea tbxLog = new JTextArea();
-        tbxLog.setText(customLog);
-        tbxLog.setEditable(false);
-        tbxLog.setWrapStyleWord(true);
-
-        scrlLog = new JScrollPane(tbxLog);
-        scrlLog.setBackground(Color.pink);
-        scrlLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        pnlDisplay.add(scrlLog);
-
-        this.setVisible(true);
-        repaint();
     }
 
     private void createErrorMessage(String errorBody) {
@@ -563,6 +581,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             return false;
         }
 
+        sdBooking = sdBookings;
         sdBooking = 0.33 * mean;
 
         log = new Log();
@@ -578,8 +597,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
         cleanupCharts();
-        // Add chart to pnlDisplay
-  
+        
+        System.out.println("Running the main sim");
+
+        // SimulationRunner sr = new SimulationRunner();
+        // sr.runSimulation();
+
         this.sim.createSchedule();
         this.log.initialEntry(this.sim);
         // Main simulation loop
@@ -620,8 +643,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         prepareData();
 
         System.out.println("Updating Chart");
-        displayGraph();
-        displayGraph();
+        displayChart();
         btnLog.setEnabled(true);
         btnSwitch.setEnabled(true);
 
@@ -638,13 +660,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lineChartDataPoints.addSeries(tmsEconomy);
         lineChartDataPoints.addSeries(tmsTotal);
         lineChartDataPoints.addSeries(tmsEmpty);
-        pnlChartController.SetData(lineChartDataPoints);
+        lineChart = pnlChartController.createLineChart(lineChartDataPoints);
 
         // Bar graph
         barChartDataSet.addValue(barQueue, "Queue Size", "");
         barChartDataSet.addValue(barRefused, "Passengers Refused", "");
         barChartDataSet.addValue(barCapacity, "Daily Capacity", "");
-
         barChart = pnlChartController.createBarChart(barChartDataSet);
 
         customLog += "Final Statistics\n" + "----------\n" + "First Class: " + sim.getTotalFirst() + "\n"
