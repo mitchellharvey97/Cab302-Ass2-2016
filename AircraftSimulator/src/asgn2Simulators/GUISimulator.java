@@ -534,9 +534,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         }
         prepare_charts();
 
+        
         System.out.println("Updating Chart");
         displayGraph();
-
+        displayGraph();
+        
+        
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.l.logQREntries(Constants.DURATION, sim);
         this.l.finalise(this.sim);
@@ -548,7 +551,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lineChartDataPoints.addSeries(tmsBusiness);
         lineChartDataPoints.addSeries(tmsPremium);
         lineChartDataPoints.addSeries(tmsEconomy);
-        lineChartDataPoints.addSeries(tmsTotal);
+       // lineChartDataPoints.addSeries(tmsTotal);
         lineChartDataPoints.addSeries(tmsEmpty);
         pnlChartController.SetData(lineChartDataPoints);
 
@@ -569,7 +572,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         int businessClass = todaysBookings.getNumBusiness();
         int premiumClass = todaysBookings.getNumPremium();
         int economyClass = todaysBookings.getNumEconomy();
-        int totalClass = firstClass + businessClass + premiumClass + economyClass;
+        int totalClass = todaysBookings.getTotal();
         int emptySeats = todaysBookings.getAvailable();
 
         tmsTotal.add(time, totalClass);
