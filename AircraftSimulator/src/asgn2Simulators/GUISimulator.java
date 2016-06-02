@@ -35,6 +35,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.time.Day;
 import org.jfree.data.time.TimeSeries;
 import org.jfree.data.time.TimeSeriesCollection;
@@ -235,29 +236,26 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlDisplay.add(pnlStart);
     }
 
-    
     private boolean lineGraph = false;
-    
-    private void displayGraph() {
-        
-        pnlDisplay.remove(pnlStart);
 
+    private void displayGraph() {
+        //Get rid of Jim
+        pnlDisplay.remove(pnlStart);
         
-        
-       if (lineGraph){//display like graph
-           
-           System.out.println("Showing Line Chart");     
-       }
-       else{
-           System.out.println("Showing Bar Chart");
-           
-       }
-       
+        if (lineGraph) {// display like graph
+            System.out.println("Showing Line Chart");
+            pnlChart = pnlChartController.getChartPanel();
+            pnlDisplay.setLayout(new BorderLayout());
+            pnlDisplay.add(pnlChart);
+        } else {
+            System.out.println("Showing Bar Chart");
+            pnlChart.setChart(barChart);
+            
+        }
+
         lineGraph = !lineGraph;
 
-        pnlChart = pnlChartController.getChartPanel();
-        pnlDisplay.setLayout(new BorderLayout());
-        pnlDisplay.add(pnlChart);
+
         this.setVisible(true);
     }
 
@@ -391,6 +389,22 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return returned;
     }
 
+    
+    XYSeries tmsTotal = new XYSeries("Total Bookings");
+    XYSeries tmsFirst = new XYSeries("First");
+    XYSeries tmsBusiness = new XYSeries("Business");
+    XYSeries tmsPremium = new XYSeries("Premium");
+    XYSeries tmsEconomy = new XYSeries("Economy");
+    XYSeries tmsEmpty = new XYSeries("Empty");
+    XYSeriesCollection lineChartDataPoints = new XYSeriesCollection();
+
+    int barCapacity;
+    int barQueue;
+    int barRefused;
+
+    DefaultCategoryDataset barChartDataSet = new DefaultCategoryDataset();
+    JFreeChart barChart;
+
     // Create the data set and much much more
     // Simulation Running Code
     private Log l;
@@ -470,22 +484,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             createErrorMessage("Passenger split");
             return false;
         }
-         sdBooking = 0.33 * mean;
+        sdBooking = 0.33 * mean;
 
         l = new Log();
         sim = new Simulator(seed, queue, mean, sdBooking, first, business, premium, economy, cancel);
         return true;
     }
 
-    XYSeries tmsTotal = new XYSeries("Total Bookings");
-    XYSeries tmsFirst = new XYSeries("First");
-    XYSeries tmsBusiness = new XYSeries("Business");
-    XYSeries tmsPremium = new XYSeries("Premium");
-    XYSeries tmsEconomy = new XYSeries("Economy");
-    XYSeries tmsEmpty = new XYSeries("Empty");
-    XYSeriesCollection lineChartDataPoints = new XYSeriesCollection();
-    
-    
+
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
         // Add chart to pnlDisplay
         System.out.println("Running the main sim");
@@ -504,43 +510,52 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 this.sim.flyPassengers(time);
                 this.sim.updateTotalCounts(time);
                 this.l.logFlightEntries(time, sim);
-
+//we don't start logging till the first flight leaves
                 todaysBookings = this.sim.getFlights(time).getCurrentCounts();
                 add_daily_points(time, todaysBookings);
-
             } else {
                 this.sim.processQueue(time);
             }
             this.l.logQREntries(time, sim);
             this.l.logEntry(time, this.sim);
-            System.out.println("Today is " + time);
         }
-        
+
+        barCapacity = 60;
+        barQueue = 10;
+        barRefused = 40;
+
         prepare_charts();
 
-        
         System.out.println("Updating Chart");
-        pnlChartController.SetData(lineChartDataPoints);
-        displayGraph();
-
-        // Bar graph
-        CategoryDataset data_bar = pnlChartController.createBarDataset();
-        JFreeChart chart = pnlChartController.createBarChart(data_bar);
-        pnlChart.setChart(chart);
         displayGraph();
 
         this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
         this.l.logQREntries(Constants.DURATION, sim);
         this.l.finalise(this.sim);
     }
-    
-    private void prepare_charts(){
+
+    private void prepare_charts() {
+        // Add Line Chart Points to data set
         lineChartDataPoints.addSeries(tmsFirst);
         lineChartDataPoints.addSeries(tmsBusiness);
         lineChartDataPoints.addSeries(tmsPremium);
         lineChartDataPoints.addSeries(tmsEconomy);
         lineChartDataPoints.addSeries(tmsTotal);
-        lineChartDataPoints.addSeries(tmsEmpty);     
+        lineChartDataPoints.addSeries(tmsEmpty);
+        pnlChartController.SetData(lineChartDataPoints);
+        
+        
+        // Bar graph
+        final String types = "";
+        // create the data set...
+
+        barChartDataSet.addValue(barCapacity, "Capacity", types);
+        barChartDataSet.addValue(barQueue, "Type", types);
+        barChartDataSet.addValue(barRefused, "Refused", types);
+
+        
+        barChart = pnlChartController.createBarChart(barChartDataSet);
+        
     }
 
     private void add_daily_points(int time, Bookings todaysBookings) {
