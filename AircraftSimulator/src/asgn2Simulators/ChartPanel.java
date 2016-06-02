@@ -18,7 +18,6 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 /**
@@ -33,24 +32,12 @@ public class ChartPanel extends Component {
     private XYSeriesCollection data_points;
 
     public ChartPanel() {
-        SetData(initializeData());
         System.out.println("Initializing Chart Constructor");
     }
 
     public org.jfree.chart.ChartPanel getChartPanel() {
         System.out.println("Giving Chart Panel away for free");
         return new org.jfree.chart.ChartPanel(createChart(data_points));
-    }
-
-    private XYSeriesCollection initializeData() {
-        XYSeriesCollection tsc = new XYSeriesCollection();
-        XYSeries dataset = new XYSeries("Amount of Alchol Consumed to make this report");
-        // Base time, data set up - the calendar is needed for the time points
-        for (int i = 0; i <= 20; i++) {
-            dataset.add(i, Math.pow(i, 10));
-        }
-        tsc.addSeries(dataset);
-        return tsc;
     }
 
     public void SetData(XYSeriesCollection data) {
