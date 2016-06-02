@@ -7,6 +7,7 @@
 package asgn2Simulators;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -603,15 +604,16 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lineChartDataPoints.addSeries(tmsBusiness);
         lineChartDataPoints.addSeries(tmsPremium);
         lineChartDataPoints.addSeries(tmsEconomy);
-        // lineChartDataPoints.addSeries(tmsTotal);
+        lineChartDataPoints.addSeries(tmsTotal);
         lineChartDataPoints.addSeries(tmsEmpty);
         pnlChartController.SetData(lineChartDataPoints);
 
         // Bar graph
         final String types = "";
-        barChartDataSet.addValue(barCapacity, "Capacity", types);
-        barChartDataSet.addValue(barQueue, "Type", types);
-        barChartDataSet.addValue(barRefused, "Refused", types);
+        barChartDataSet.addValue(barQueue, "Queue Size", types);
+        barChartDataSet.addValue(barRefused, "Passengers Refused", types);
+        barChartDataSet.addValue(barCapacity, "Daily Capacity", types);
+        
         barChart = pnlChartController.createBarChart(barChartDataSet);
 
         customLog += "Final Statistics" + "----------\n" + "First Class: " + sim.getTotalFirst() + "\n"
