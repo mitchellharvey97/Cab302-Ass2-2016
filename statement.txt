@@ -24,7 +24,7 @@ Contribution Summary:
       - PremiumTests
     • asgn2Simulators [Simulation]
       - GUISimulator
-      -  !! TODO
+      - ChartPanel
 
 Summary Agreement Statement:
   We (Andrew & Mitchell) hereby declare that the summary (as written above) is true, correct and fully discloses the contrubutions to the assessment.
