@@ -17,8 +17,8 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.time.TimeSeriesCollection;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeriesCollection;
 
 /**
  * @author Andrew & Mitch
@@ -29,23 +29,19 @@ public class ChartPanel extends Component {
 
     protected static JFreeChart chart;
     private static final String TITLE = "Random Bookings";
-    private XYSeriesCollection data_points;
+    private TimeSeriesCollection line_data_points;
 
     public ChartPanel() {
         System.out.println("Initializing Chart Constructor");
     }
 
     public org.jfree.chart.ChartPanel getChartPanel() {
-        System.out.println("Giving Chart Panel away for free");
-        return new org.jfree.chart.ChartPanel(createChart(data_points));
+        System.out.println("Generating Chart");
+        return new org.jfree.chart.ChartPanel(createChart(line_data_points));
     }
 
-    public void SetData(XYSeriesCollection data) {
-        data_points = data;
-    }
-
-    public void SetBarData(XYSeriesCollection data) {
-        data_points = data;
+    public void SetData(TimeSeriesCollection data) {
+        line_data_points = data;
     }
 
     /**
@@ -58,10 +54,10 @@ public class ChartPanel extends Component {
      */
     public JFreeChart createChart(final XYDataset dataset) {
         System.out.println("Creating the line chart");
-        final JFreeChart result = ChartFactory.createTimeSeriesChart(TITLE,
-                "Days", "Passengers", dataset, true, true, false);
+        final JFreeChart result = ChartFactory.createTimeSeriesChart(TITLE, "Days", "Passengers", dataset, true, true,
+                false);
         final XYPlot plot = result.getXYPlot();
-        
+
         XYLineAndShapeRenderer r = new XYLineAndShapeRenderer(true, false);
         r.setSeriesPaint(0, Color.BLACK); // First
         r.setSeriesPaint(1, Color.BLUE); // Business
@@ -70,7 +66,7 @@ public class ChartPanel extends Component {
         r.setSeriesPaint(4, Color.GREEN); // Total
         r.setSeriesPaint(5, Color.RED); // Seats Available
         plot.setRenderer(r);
-        
+
         ValueAxis domain = plot.getDomainAxis();
         domain.setAutoRange(true);
         ValueAxis range = plot.getRangeAxis();
@@ -89,7 +85,8 @@ public class ChartPanel extends Component {
     public JFreeChart createBarChart(final CategoryDataset dataset) {
         System.out.println("Creating the bar chart");
         // create the chart...
-        final JFreeChart chart = ChartFactory.createBarChart("Bar Chart Demo", // chart title
+        final JFreeChart chart = ChartFactory.createBarChart("Bar Chart Demo", // chart
+                                                                               // title
                 "Category", // domain axis label
                 "Value", // range axis label
                 dataset, // data
@@ -99,25 +96,12 @@ public class ChartPanel extends Component {
                 false // URLs?
         );
 
-        // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
-
-        // set the background color for the chart...
-        //chart.setBackgroundPaint(Color.white);
-
         // get a reference to the plot for further customization...
         final CategoryPlot plot = chart.getCategoryPlot();
-        
-        //plot.setBackgroundPaint(Color.lightGray);
-        //plot.setDomainGridlinePaint(Color.white);
-        //plot.setRangeGridlinePaint(Color.white);
-
-        // set the range axis to display integers only...
-        //final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        //rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
 
         // disable bar outlines...
         final BarRenderer renderer = (BarRenderer) plot.getRenderer();
-        //renderer.setDrawBarOutline(false);
+        // renderer.setDrawBarOutline(false);
         renderer.setSeriesPaint(0, Color.BLACK); // Queue size
         renderer.setSeriesPaint(1, Color.RED); // Passengers refused
         renderer.setSeriesPaint(2, Color.GREEN); // Daily passenger capacity

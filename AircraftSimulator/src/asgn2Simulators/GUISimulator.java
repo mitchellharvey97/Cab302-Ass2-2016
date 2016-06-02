@@ -17,6 +17,8 @@ import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -36,8 +38,9 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.xy.XYSeries;
-import org.jfree.data.xy.XYSeriesCollection;
+import org.jfree.data.time.Day;
+import org.jfree.data.time.TimeSeries;
+import org.jfree.data.time.TimeSeriesCollection;
 
 import asgn2Aircraft.AircraftException;
 import asgn2Aircraft.Bookings;
@@ -107,13 +110,13 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private JScrollPane scrlLog;
     // Line Chart Variables
-    XYSeries tmsTotal = new XYSeries("Total Bookings");
-    XYSeries tmsFirst = new XYSeries("First");
-    XYSeries tmsBusiness = new XYSeries("Business");
-    XYSeries tmsPremium = new XYSeries("Premium");
-    XYSeries tmsEconomy = new XYSeries("Economy");
-    XYSeries tmsEmpty = new XYSeries("Empty");
-    XYSeriesCollection lineChartDataPoints = new XYSeriesCollection();
+    TimeSeries  tmsTotal = new TimeSeries("Total Bookings");
+    TimeSeries tmsFirst = new TimeSeries("First");
+    TimeSeries tmsBusiness = new TimeSeries("Business");
+    TimeSeries tmsPremium = new TimeSeries("Premium");
+    TimeSeries tmsEconomy = new TimeSeries("Economy");
+    TimeSeries tmsEmpty = new TimeSeries("Empty");
+    TimeSeriesCollection  lineChartDataPoints = new TimeSeriesCollection ();
 
     // Bar Chart Variables
     int barCapacity;
@@ -569,7 +572,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     // Reset Chart data to allow for multi run through
     private void cleanupCharts() {
-        lineChartDataPoints = new XYSeriesCollection();
+        lineChartDataPoints = new TimeSeriesCollection ();
         barChartDataSet = new DefaultCategoryDataset();
     }
 
@@ -660,17 +663,23 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         int queuedSeats = sim.numInQueue();
         int refusedSeats = sim.numRefused();
 
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.set(2016, 0, time, 6, 0);
+        java.util.Date timePoint = cal.getTime();
+        
+       Day day_val = new Day(timePoint);
+        
         String lineBreak = "\n----------\n";
         customLog += "Day " + time + "\n" + "Daily Stats" + lineBreak + "First Class: " + firstClass + "\n"
                 + "Business Class: " + businessClass + "\n" + "Premium Class: " + premiumClass + "\n"
                 + "Economy Class: " + economyClass + "\n" + "Empty Seats: " + emptySeats + "\n" + "Refused: " + refusedSeats + "\n"
                 + "Queued: " + queuedSeats + "\n" + "Flown: " + totalClass + lineBreak + "\n";
 
-        tmsTotal.add(time, totalClass);
-        tmsFirst.add(time, firstClass);
-        tmsBusiness.add(time, businessClass);
-        tmsPremium.add(time, premiumClass);
-        tmsEconomy.add(time, economyClass);
-        tmsEmpty.add(time, emptySeats);
+        tmsTotal.add(day_val, totalClass);
+        tmsFirst.add(day_val, firstClass);
+        tmsBusiness.add(day_val, businessClass);
+        tmsPremium.add(day_val, premiumClass);
+        tmsEconomy.add(day_val, economyClass);
+        tmsEmpty.add(day_val, emptySeats);
     }
 }
