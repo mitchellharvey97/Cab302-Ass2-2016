@@ -239,9 +239,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private boolean lineGraph = false;
 
     private void displayGraph() {
-        //Get rid of Jim
+        // Get rid of Jim
         pnlDisplay.remove(pnlStart);
-        
+
         if (lineGraph) {// display like graph
             System.out.println("Showing Line Chart");
             pnlChart = pnlChartController.getChartPanel();
@@ -250,11 +250,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         } else {
             System.out.println("Showing Bar Chart");
             pnlChart.setChart(barChart);
-            
+
         }
 
         lineGraph = !lineGraph;
-
 
         this.setVisible(true);
     }
@@ -389,7 +388,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return returned;
     }
 
-    
+    // Line Chart Variables
     XYSeries tmsTotal = new XYSeries("Total Bookings");
     XYSeries tmsFirst = new XYSeries("First");
     XYSeries tmsBusiness = new XYSeries("Business");
@@ -398,10 +397,10 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     XYSeries tmsEmpty = new XYSeries("Empty");
     XYSeriesCollection lineChartDataPoints = new XYSeriesCollection();
 
+    // Bar Chart Variables
     int barCapacity;
     int barQueue;
     int barRefused;
-
     DefaultCategoryDataset barChartDataSet = new DefaultCategoryDataset();
     JFreeChart barChart;
 
@@ -491,14 +490,21 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return true;
     }
 
+    private void cleanup_charts() {
+        lineChartDataPoints = new XYSeriesCollection();
+        barChartDataSet = new DefaultCategoryDataset();
+    }
 
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
+        cleanup_charts();
         // Add chart to pnlDisplay
         System.out.println("Running the main sim");
         this.sim.createSchedule();
         this.l.initialEntry(this.sim);
         // Main simulation loop
         Bookings todaysBookings;
+        barQueue= 0;
+        
         for (int time = 0; time <= Constants.DURATION; time++) {
             this.sim.resetStatus(time);
             this.sim.rebookCancelledPassengers(time);
@@ -510,7 +516,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 this.sim.flyPassengers(time);
                 this.sim.updateTotalCounts(time);
                 this.l.logFlightEntries(time, sim);
-//we don't start logging till the first flight leaves
+                // we don't start logging till the first flight leaves
+                barCapacity = (sim.getFlights(time).getCurrentCounts().getTotal()
+                        + sim.getFlights(time).getCurrentCounts().getAvailable());
+                
+                barQueue = Math.max(sim.numInQueue(), barQueue);
+                
+                barRefused = Math.max(sim.numInQueue(), barRefused);
+                
                 todaysBookings = this.sim.getFlights(time).getCurrentCounts();
                 add_daily_points(time, todaysBookings);
             } else {
@@ -519,11 +532,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             this.l.logQREntries(time, sim);
             this.l.logEntry(time, this.sim);
         }
-
-        barCapacity = 60;
-        barQueue = 10;
-        barRefused = 40;
-
         prepare_charts();
 
         System.out.println("Updating Chart");
@@ -543,8 +551,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lineChartDataPoints.addSeries(tmsTotal);
         lineChartDataPoints.addSeries(tmsEmpty);
         pnlChartController.SetData(lineChartDataPoints);
-        
-        
+
         // Bar graph
         final String types = "";
         // create the data set...
@@ -553,9 +560,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         barChartDataSet.addValue(barQueue, "Type", types);
         barChartDataSet.addValue(barRefused, "Refused", types);
 
-        
         barChart = pnlChartController.createBarChart(barChartDataSet);
-        
+
     }
 
     private void add_daily_points(int time, Bookings todaysBookings) {
