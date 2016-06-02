@@ -545,8 +545,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Add chart to pnlDisplay
         System.out.println("Running the main sim");
         
-        SimulationRunner sr = new SimulationRunner();
-        sr.runSimulation();
+        //SimulationRunner sr = new SimulationRunner();
+        //sr.runSimulation();
         
         this.sim.createSchedule();
         this.log.initialEntry(this.sim);

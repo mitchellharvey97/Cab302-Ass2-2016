@@ -34,25 +34,30 @@ public class SimulationRunner {
      * @throws ClassNotFoundException 
      */
     public static void main(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        final int NUM_ARGS = 9;
+        final int NUM_ARGS = 10;
+        GUISimulator g = null;
         Simulator s = null;
         Log l = null;
-        
-        System.out.println(String.valueOf(args.length));
         
         try {
             switch (args.length) {
                 case NUM_ARGS: {
+                    if (Boolean.parseBoolean(args[0])) {
+                        System.out.println("Starting GUI");
+                        g = createGUIUsingArgs(args);
+                        startGUI(g);
+                    }
                     s = createSimulatorUsingArgs(args);
-                    startGUIUsingArgs(args);
                     break;
                 }
                 case 0: {
                     //s = new Simulator();
                     System.out.println("Zero arguments");
+                    startGUI(new GUISimulator());
                     break;
                 }
                 default: {
+                    System.out.println("Expected " + NUM_ARGS + " args. Got " + String.valueOf(args.length) + "\n");
                     printErrorAndExit();
                 }
             }
@@ -81,15 +86,15 @@ public class SimulationRunner {
      * See {@link asgn2Simulators.Simulator#Simulator(int, int, double, double, double, double, double, double, double)}
      */
     private static Simulator createSimulatorUsingArgs(String[] args) throws SimulationException {
-        int seed = Integer.parseInt(args[0]);
-        int maxQueueSize = Integer.parseInt(args[1]);
-        double meanBookings = Double.parseDouble(args[2]);
-        double sdBookings = Double.parseDouble(args[3]);
-        double firstProb = Double.parseDouble(args[4]);
-        double businessProb = Double.parseDouble(args[5]);
-        double premiumProb = Double.parseDouble(args[6]);
-        double economyProb = Double.parseDouble(args[7]);
-        double cancelProb = Double.parseDouble(args[8]);
+        int seed = Integer.parseInt(args[1]);
+        int maxQueueSize = Integer.parseInt(args[2]);
+        double meanBookings = Double.parseDouble(args[3]);
+        double sdBookings = Double.parseDouble(args[4]);
+        double firstProb = Double.parseDouble(args[5]);
+        double businessProb = Double.parseDouble(args[6]);
+        double premiumProb = Double.parseDouble(args[7]);
+        double economyProb = Double.parseDouble(args[8]);
+        double cancelProb = Double.parseDouble(args[9]);
         
         return new Simulator(seed, maxQueueSize, meanBookings, sdBookings, firstProb, businessProb, premiumProb,
                 economyProb, cancelProb);
@@ -103,25 +108,27 @@ public class SimulationRunner {
      * @throws UnsupportedLookAndFeelException 
      * @throws IllegalAccessException 
      * @throws InstantiationException 
-     * @throws ClassNotFoundException 
-     * @throws SimulationException if invalid arguments. 
-     * See {@link asgn2Simulators.Simulator#Simulator(int, int, double, double, double, double, double, double, double)}
+     * @throws ClassNotFoundException
      */
-    private static void startGUIUsingArgs(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        int seed = Integer.parseInt(args[0]);
-        int maxQueueSize = Integer.parseInt(args[1]);
-        double meanBookings = Double.parseDouble(args[2]);
-        double sdBookings = Double.parseDouble(args[3]);
-        double firstProb = Double.parseDouble(args[4]);
-        double businessProb = Double.parseDouble(args[5]);
-        double premiumProb = Double.parseDouble(args[6]);
-        double economyProb = Double.parseDouble(args[7]);
-        double cancelProb = Double.parseDouble(args[8]);
+    private static GUISimulator createGUIUsingArgs(String[] args) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+        int seed = Integer.parseInt(args[1]);
+        int maxQueueSize = Integer.parseInt(args[2]);
+        double meanBookings = Double.parseDouble(args[3]);
+        double sdBookings = Double.parseDouble(args[4]);
+        double firstProb = Double.parseDouble(args[5]);
+        double businessProb = Double.parseDouble(args[6]);
+        double premiumProb = Double.parseDouble(args[7]);
+        double economyProb = Double.parseDouble(args[8]);
+        double cancelProb = Double.parseDouble(args[9]);
         
-        // From GUISimulator.main()
+        return new GUISimulator(seed, maxQueueSize, meanBookings, sdBookings, firstProb, businessProb, premiumProb,
+                economyProb, cancelProb);
+    }
+
+    // From GUISimulator.main()
+    private static void startGUI(GUISimulator g) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        SwingUtilities.invokeLater(new GUISimulator(seed, maxQueueSize, meanBookings, sdBookings, firstProb, businessProb, premiumProb,
-                economyProb, cancelProb));
+        SwingUtilities.invokeLater(g);
     }
 
     /**
