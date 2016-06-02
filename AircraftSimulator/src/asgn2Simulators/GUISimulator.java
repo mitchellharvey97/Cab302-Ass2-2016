@@ -69,7 +69,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblStartImg;
     private ChartPanel pnlChartController;
     private org.jfree.chart.ChartPanel pnlChart;
-    
+
     private JScrollPane scrlLog;
     private JTextArea txtLog;
 
@@ -96,7 +96,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblPremium;
     private JLabel lblEconomy;
 
-
     private boolean lineGraph = true;
     private boolean valuesLoaded = false;
     private int seed;
@@ -110,15 +109,15 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private double cancelProb;
 
     String customLog = "";
-    
+
     // Line Chart Variables
-    TimeSeries  tmsTotal = new TimeSeries("Total Bookings");
+    TimeSeries tmsTotal = new TimeSeries("Total Bookings");
     TimeSeries tmsFirst = new TimeSeries("First");
     TimeSeries tmsBusiness = new TimeSeries("Business");
     TimeSeries tmsPremium = new TimeSeries("Premium");
     TimeSeries tmsEconomy = new TimeSeries("Economy");
     TimeSeries tmsEmpty = new TimeSeries("Empty");
-    TimeSeriesCollection  lineChartDataPoints = new TimeSeriesCollection ();
+    TimeSeriesCollection lineChartDataPoints = new TimeSeriesCollection();
 
     JFreeChart lineChart;
     // Bar Chart Variables
@@ -219,7 +218,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlChartController = new ChartPanel();
         pnlChart = pnlChartController.getChartPanel();
         pnlDisplay.setLayout(new BorderLayout());
-        
+
         // Scrollable Log
         txtLog = new JTextArea();
         txtLog.setEditable(false);
@@ -287,12 +286,22 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.economyProb = Constants.DEFAULT_ECONOMY_PROB;
     }
 
+    /**
+     * Method to create 
+     * @param str
+     * @return
+     */
     private JButton createButton(String str) {
         JButton jb = new JButton(str);
         jb.addActionListener(this);
         return jb;
     }
 
+    /**
+     * Method to create a spinner for the GUI
+     * @param val Default value of the spinner
+     * @return JSpinner
+     */
     private JSpinner createNumSpinner(double val) {
         JSpinner js = new JSpinner();
         js.setValue(val);
@@ -304,6 +313,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return js;
     }
 
+    /**
+     * Method to create a label for the GUI
+     * @param str Test to place inside the label
+     * @param fnt Font to draw the text in
+     * @return JLabel
+     */
     private JLabel createLabel(String str, Font fnt) {
         JLabel jl = new JLabel(str);
         jl.setFont(fnt);
@@ -311,6 +326,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return jl;
     }
 
+    /**
+     * Alternative constructor to create a label for the GUI
+     * @param str Text to place inside the label
+     * @return JLabel
+     */
     private JLabel createLabel(String str) {
         JLabel jl = new JLabel(str);
         jl.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -318,6 +338,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return jl;
     }
 
+    /**
+     * Method to display the start screen to the user
+     */
     private void displayStart() {
         // Start Image
         lblStartTop = createLabel("Thank you for flying Air Hogie!", new Font("Arial", Font.BOLD, 15));
@@ -327,12 +350,15 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlDisplay.add(pnlStart);
     }
 
+    /**
+     * Method to display the chart results to the user
+     */
     private void displayChart() {
         // Remove the placeholder Screen
         if (pnlStart.getParent() == pnlDisplay) {
             pnlDisplay.remove(pnlStart);
         }
-        
+
         // Remove the log screen
         if (scrlLog.getParent() == pnlDisplay) {
             pnlDisplay.remove(scrlLog);
@@ -342,7 +368,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         if (pnlChart.getParent() != pnlDisplay) {
             pnlDisplay.add(pnlChart);
         }
-        
+
         // Check a Boolean to decide which graph to load
         if (lineGraph) {
             System.out.println("Showing Line Chart");
@@ -351,15 +377,18 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             System.out.println("Showing Bar Chart");
             pnlChart.setChart(barChart);
         }
-        
+
         lineGraph = !lineGraph;
         this.setVisible(true);
         repaint();
     }
 
+    /**
+     * Method to display simulation logs to the user
+     */
     private void displayLogs() {
         System.out.println("Showing logs");
-        
+
         // Remove the placeholder Screen
         if (pnlStart.getParent() == pnlDisplay) {
             pnlDisplay.remove(pnlStart);
@@ -369,18 +398,21 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         if (pnlChart.getParent() == pnlDisplay) {
             pnlDisplay.remove(pnlChart);
         }
-        
+
         txtLog.setText(customLog);
 
         // Add the log screen
         if (scrlLog.getParent() != pnlDisplay) {
             pnlDisplay.add(scrlLog);
         }
-        
+
         this.setVisible(true);
         repaint();
     }
 
+    /**
+     * Method to handle placing all elements within the start panel
+     */
     private void layoutStartPanel() {
         // Set grid bag constraints
         pnlStart.setLayout(new GridBagLayout());
@@ -396,6 +428,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         addToPanel(pnlStart, lblStartBottom, c, 0, 2, 1, 1);
     }
 
+    /**
+     * Method to handle placing all elements within the bottom button panel
+     */
     private void layoutButtonPanel() {
         // Set default grid bag constraints
         pnlBottom.setLayout(new GridBagLayout());
@@ -447,18 +482,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
      * A convenience method to add a component to given grid bag layout
      * locations. Code due to Cay Horstmann
      *
-     * @param c
-     *            the component to add
-     * @param constraints
-     *            the grid bag constraints to use
-     * @param x
-     *            the x grid position
-     * @param y
-     *            the y grid position
-     * @param w
-     *            the grid width
-     * @param h
-     *            the grid height
+     * @param c the component to add
+     * @param constraints the grid bag constraints to use
+     * @param x the x grid position
+     * @param y the y grid position
+     * @param w the grid width
+     * @param hthe grid height
      */
     private void addToPanel(JPanel jp, Component c, GridBagConstraints constraints, int x, int y, int w, int h) {
         constraints.gridx = x;
@@ -491,11 +520,23 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         }
     }
 
+    /**
+     * Create an error message for the user to be notified of an error.
+     * @param errorBody Text for the body of the message dialog
+     */
     private void createErrorMessage(String errorBody) {
         JOptionPane.showMessageDialog(this, errorBody, "WE'VE CRASHED! Retrieving Black Box records...",
                 JOptionPane.WARNING_MESSAGE);
     }
 
+    /**
+     * Reads and parses value from JSpinner, checking range.
+     * @param js JSpinner
+     * @param min Minimum value
+     * @param max Maximum value
+     * @param percent Determines whether value provided is in percentage format
+     * @return value in JSpinner in (double) format, or null if it is out of bounds
+     */
     private Double valueInRange(JSpinner js, Integer min, Integer max, boolean percent) {
         // A crazy way of extracting a double from a spinner
         Object returned_value = js.getValue();
@@ -511,13 +552,16 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return returned;
     }
 
+    /**
+     * Controller to run everything and handle errors
+     */
     private void completeSim() {
         try {
             if (prepareSim()) {
                 runSim();
                 repaint();
             } else {
-                System.out.println("There where errors in setting up");
+                System.out.println("Errors in setting up!");
             }
         } catch (IOException | SimulationException e) {
             e.printStackTrace();
@@ -525,6 +569,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         System.out.println("All Done for now");
     }
 
+    /**
+     * Prepare the simulation by checking all inputs and generating new log and simulator objects
+     * @return
+     * @throws IOException
+     * @throws SimulationException
+     */
     private boolean prepareSim() throws IOException, SimulationException {
         // Integer seed, queueSize;
         // Double dailyMean, cancel, first, business, premium, economy,
@@ -593,24 +643,29 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return true;
     }
 
-    // Reset Chart data to allow for multi run through
+    /**
+     *  Reset Chart data to allow for multi run through
+     */
     private void cleanupCharts() {
-        lineChartDataPoints = new TimeSeriesCollection ();
+        lineChartDataPoints = new TimeSeriesCollection();
         barChartDataSet = new DefaultCategoryDataset();
-        
-        //Clean Series
-         tmsTotal = new TimeSeries("Total Bookings");
+
+        // Clean Series
+        tmsTotal = new TimeSeries("Total Bookings");
         tmsFirst = new TimeSeries("First");
         tmsBusiness = new TimeSeries("Business");
         tmsPremium = new TimeSeries("Premium");
         tmsEconomy = new TimeSeries("Economy");
         tmsEmpty = new TimeSeries("Empty");
-        
+
     }
 
+    /**
+     * Run the custom simulation
+     */
     private void runSim() {
         cleanupCharts();
-        
+
         System.out.println("Running the main sim");
 
         // SimulationRunner sr = new SimulationRunner();
@@ -620,11 +675,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         Bookings todaysBookings;
         barQueue = 0;
         barRefused = 0;
-        
+
         try {
             this.sim.createSchedule();
             this.log.initialEntry(this.sim);
-        
+
             for (int time = 0; time <= Constants.DURATION; time++) {
                 this.sim.resetStatus(time);
                 this.sim.rebookCancelledPassengers(time);
@@ -639,11 +694,11 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                     // we don't start logging till the first flight leaves
                     barCapacity = (sim.getFlights(time).getCurrentCounts().getTotal()
                             + sim.getFlights(time).getCurrentCounts().getAvailable());
-    
+
                     barQueue = Math.max(sim.numInQueue(), barQueue);
-    
+
                     barRefused = Math.max(sim.numInQueue(), barRefused);
-    
+
                     todaysBookings = this.sim.getFlights(time).getCurrentCounts();
                     // pass values to be logged
                     addDailyValues(time, todaysBookings);
@@ -688,8 +743,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         customLog += "Final Statistics\n" + "----------\n" + "First Class: " + sim.getTotalFirst() + "\n"
                 + "Business Class: " + sim.getTotalBusiness() + "\n" + "Premium Class: " + sim.getTotalPremium() + "\n"
-                + "Economy Class: " + sim.getTotalEconomy() + "\n" + "Empty Seats: " + sim.getTotalEmpty() + "\nRefused: "
-                + sim.numRefused() + "\n" + "Queued: " + sim.numInQueue() + "\n" + "Flown: " + sim.getTotalFlown();
+                + "Economy Class: " + sim.getTotalEconomy() + "\n" + "Empty Seats: " + sim.getTotalEmpty()
+                + "\nRefused: " + sim.numRefused() + "\n" + "Queued: " + sim.numInQueue() + "\n" + "Flown: "
+                + sim.getTotalFlown();
     }
 
     private void addDailyValues(int time, Bookings todaysBookings) {
@@ -705,14 +761,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         Calendar cal = GregorianCalendar.getInstance();
         cal.set(2016, 0, time, 6, 0);
         java.util.Date timePoint = cal.getTime();
-        
+
         Day day_val = new Day(timePoint);
-        
+
         String lineBreak = "\n----------\n";
         customLog += "Day " + time + "\n" + "Daily Stats" + lineBreak + "First Class: " + firstClass + "\n"
                 + "Business Class: " + businessClass + "\n" + "Premium Class: " + premiumClass + "\n"
-                + "Economy Class: " + economyClass + "\n" + "Empty Seats: " + emptySeats + "\n" + "Refused: " + refusedSeats + "\n"
-                + "Queued: " + queuedSeats + "\n" + "Flown: " + totalClass + lineBreak + "\n";
+                + "Economy Class: " + economyClass + "\n" + "Empty Seats: " + emptySeats + "\n" + "Refused: "
+                + refusedSeats + "\n" + "Queued: " + queuedSeats + "\n" + "Flown: " + totalClass + lineBreak + "\n";
 
         tmsTotal.add(day_val, totalClass);
         tmsFirst.add(day_val, firstClass);
