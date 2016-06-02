@@ -18,7 +18,6 @@ import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.xy.XYDataset;
-import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 /**
@@ -30,10 +29,30 @@ public class ChartPanel extends Component {
 
     protected static JFreeChart chart;
     private static final String TITLE = "Random Bookings";
+<<<<<<< HEAD
 
     public org.jfree.chart.ChartPanel getChartPanel() {
         System.out.println("Giving Chart Panel away for free");
         return new org.jfree.chart.ChartPanel(null);
+=======
+    private XYSeriesCollection data_points;
+
+    public ChartPanel() {
+        System.out.println("Initializing Chart Constructor");
+    }
+
+    public org.jfree.chart.ChartPanel getChartPanel() {
+        System.out.println("Giving Chart Panel away for free");
+        return new org.jfree.chart.ChartPanel(createChart(data_points));
+    }
+
+    public void SetData(XYSeriesCollection data) {
+        data_points = data;
+    }
+
+    public void SetBarData(XYSeriesCollection data) {
+        data_points = data;
+>>>>>>> 7bc2fde7fdef20605fae479a5d597a88013c7315
     }
 
     /**

@@ -595,12 +595,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
     private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
         cleanupCharts();
-        // Add chart to pnlDisplay
+        
         System.out.println("Running the main sim");
 
         // SimulationRunner sr = new SimulationRunner();
         // sr.runSimulation();
-        
+
         this.sim.createSchedule();
         this.log.initialEntry(this.sim);
         // Main simulation loop
