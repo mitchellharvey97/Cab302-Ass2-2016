@@ -31,35 +31,10 @@ public class ChartPanel extends Component {
 
     protected static JFreeChart chart;
     private static final String TITLE = "Random Bookings";
-    private XYSeriesCollection data_points;
-
-    public ChartPanel() {
-        SetData(initializeData());
-        System.out.println("Initializing Chart Constructor");
-    }
 
     public org.jfree.chart.ChartPanel getChartPanel() {
         System.out.println("Giving Chart Panel away for free");
-        return new org.jfree.chart.ChartPanel(createChart(data_points));
-    }
-
-    private XYSeriesCollection initializeData() {
-        XYSeriesCollection tsc = new XYSeriesCollection();
-        XYSeries dataset = new XYSeries("Amount of Alchol Consumed to make this report");
-        // Base time, data set up - the calendar is needed for the time points
-        for (int i = 0; i <= 20; i++) {
-            dataset.add(i, Math.pow(i, 10));
-        }
-        tsc.addSeries(dataset);
-        return tsc;
-    }
-
-    public void SetData(XYSeriesCollection data) {
-        data_points = data;
-    }
-
-    public void SetBarData(XYSeriesCollection data) {
-        data_points = data;
+        return new org.jfree.chart.ChartPanel(null);
     }
 
     /**
@@ -70,7 +45,7 @@ public class ChartPanel extends Component {
      *            TimeSeriesCollection for plotting
      * @returns chart to be added to panel
      */
-    public JFreeChart createChart(final XYDataset dataset) {
+    public JFreeChart createLineChart(final XYDataset dataset) {
         System.out.println("Creating the line chart");
         final JFreeChart result = ChartFactory.createTimeSeriesChart(TITLE,
                 "Days", "Passengers", dataset, true, true, false);
