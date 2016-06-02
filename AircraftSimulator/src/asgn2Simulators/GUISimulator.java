@@ -95,6 +95,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private int seed;
     private int maxQueueSize;
     private double meanBookings;
+    @SuppressWarnings("unused")
     private double sdBookings;
     private double firstProb;
     private double businessProb;

@@ -8,8 +8,6 @@ package asgn2Simulators;
 
 import java.io.IOException;
 
-import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import asgn2Aircraft.AircraftException;
