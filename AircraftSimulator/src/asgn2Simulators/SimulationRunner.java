@@ -42,18 +42,22 @@ public class SimulationRunner {
         try {
             switch (args.length) {
                 case NUM_ARGS: {
-                    if (Boolean.parseBoolean(args[0])) {
+                    // Check if GUI was called
+                    if (args[0].equals("gui")) {
                         System.out.println("Starting GUI");
                         g = createGUIUsingArgs(args);
-                        startGUI(g);
+                        GUISimulator.startGUI(g);
                     }
+                    
                     s = createSimulatorUsingArgs(args);
                     break;
                 }
                 case 0: {
-                    //s = new Simulator();
                     System.out.println("Zero arguments");
-                    startGUI(new GUISimulator());
+                    g = new GUISimulator();
+                    GUISimulator.startGUI(g);
+                    
+                    s = new Simulator();
                     break;
                 }
                 default: {
@@ -123,12 +127,6 @@ public class SimulationRunner {
         
         return new GUISimulator(seed, maxQueueSize, meanBookings, sdBookings, firstProb, businessProb, premiumProb,
                 economyProb, cancelProb);
-    }
-
-    // From GUISimulator.main()
-    private static void startGUI(GUISimulator g) throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
-        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        SwingUtilities.invokeLater(g);
     }
 
     /**

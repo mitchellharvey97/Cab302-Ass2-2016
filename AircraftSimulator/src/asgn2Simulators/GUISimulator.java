@@ -97,8 +97,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private double economyProb;
     private double cancelProb;
 
-    
-
     // Line Chart Variables
     XYSeries tmsTotal = new XYSeries("Total Bookings");
     XYSeries tmsFirst = new XYSeries("First");
@@ -120,7 +118,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private Log log;
     private Simulator sim;
 
-    
     /**
      * @param arg0
      * @throws HeadlessException
@@ -143,8 +140,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         this.premiumProb = premiumProb;
         this.economyProb = economyProb;
         this.cancelProb = cancelProb;
-        
-        main(null);
         
     }
 
@@ -170,6 +165,19 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // JFrame.setDefaultLookAndFeelDecorated(false);
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(new GUISimulator());
+    }
+
+    /**
+     * @param args
+     * @throws UnsupportedLookAndFeelException
+     * @throws IllegalAccessException
+     * @throws InstantiationException
+     * @throws ClassNotFoundException
+     */
+    public static void startGUI(GUISimulator g) throws ClassNotFoundException, InstantiationException,
+            IllegalAccessException, UnsupportedLookAndFeelException {
+        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        SwingUtilities.invokeLater(g);
     }
 
     private void createGUI() {
