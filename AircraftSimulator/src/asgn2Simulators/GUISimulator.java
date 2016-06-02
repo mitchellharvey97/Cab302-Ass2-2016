@@ -67,6 +67,9 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private JLabel lblStartImg;
     private ChartPanel pnlChartController;
     private org.jfree.chart.ChartPanel pnlChart;
+    
+    private JScrollPane scrlLog;
+    private JTextArea txtLog;
 
     private JSpinner valSeed;
     private JSpinner valMean;
@@ -95,7 +98,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private int seed;
     private int maxQueueSize;
     private double meanBookings;
-    // TODO ?? Remove private double sdBookings; ??
+    private double sdBookings;
     private double firstProb;
     private double businessProb;
     private double premiumProb;
@@ -103,8 +106,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private double cancelProb;
 
     String customLog = "";
-
-    private JScrollPane scrlLog;
+    
     // Line Chart Variables
     JFreeChart lineChart;
     XYSeries tmsTotal = new XYSeries("Total Bookings");
@@ -139,19 +141,17 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             double businessProb, double premiumProb, double economyProb, double cancelProb)
             throws ClassNotFoundException, InstantiationException, IllegalAccessException,
             UnsupportedLookAndFeelException {
-
         // Assign all given values
         this.valuesLoaded = true;
         this.seed = seed;
         this.maxQueueSize = maxQueueSize;
         this.meanBookings = meanBookings;
-        // TODO ?? this.sdBookings = sdBookings; ??
+        this.sdBookings = sdBookings;
         this.firstProb = firstProb;
         this.businessProb = businessProb;
         this.premiumProb = premiumProb;
         this.economyProb = economyProb;
         this.cancelProb = cancelProb;
-
     }
 
     /*
@@ -185,7 +185,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
      */
     public static void startGUI(GUISimulator g) throws ClassNotFoundException, InstantiationException,
             IllegalAccessException, UnsupportedLookAndFeelException {
-        // TODO ?? Remove JFrame.setDefaultLookAndFeelDecorated(false); ??
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         SwingUtilities.invokeLater(g);
     }
@@ -204,11 +203,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlBottom = new JPanel();
         pnlStart = new JPanel();
 
-        // JFreeChart
-        pnlChartController = new ChartPanel();
-        pnlChart = pnlChartController.getChartPanel();
-        pnlDisplay.setLayout(new BorderLayout());
-
         // Start Panel
         lblStartTop = createLabel("Thank you for flying Air Hogie!", new Font("Arial", Font.BOLD, 15));
         lblStartBottom = createLabel("We hope you enjoy our wide selection of in-flight memes.",
@@ -216,6 +210,18 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         lblStartImg = new JLabel(new ImageIcon(getClass().getResource("img/jim.png")));
         layoutStartPanel();
         pnlDisplay.add(pnlStart);
+
+        // JFreeChart
+        pnlChartController = new ChartPanel();
+        pnlChart = pnlChartController.getChartPanel();
+        pnlDisplay.setLayout(new BorderLayout());
+        
+        // Scrollable Log
+        txtLog = new JTextArea();
+        txtLog.setEditable(false);
+        txtLog.setWrapStyleWord(true);
+        scrlLog = new JScrollPane(txtLog);
+        scrlLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
         // Labels
         lblSimTitle = createLabel("Simulation Settings", new Font("Arial", Font.BOLD, 15));
@@ -320,11 +326,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private boolean lineGraph = false;
 
     private void displayGraph() {
-        // pnlDisplay.remove(scrlLog);
-        
         // Remove the placeholder Screen
         if (pnlStart.getParent() == pnlDisplay) {
             pnlDisplay.remove(pnlStart);
+        }
+        
+        // Remove the log screen
+        if (scrlLog.getParent() == pnlDisplay) {
+            pnlDisplay.remove(scrlLog);
         }
 
         // Add the chart panel
@@ -342,6 +351,27 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         }
         
         lineGraph = !lineGraph;
+        this.setVisible(true);
+    }
+
+    private void displayLogs() {
+        // Remove the placeholder Screen
+        if (pnlStart.getParent() == pnlDisplay) {
+            pnlDisplay.remove(pnlStart);
+        }
+
+        // Remove the chart panel
+        if (pnlChart.getParent() == pnlDisplay) {
+            pnlDisplay.remove(pnlChart);
+        }
+        
+        txtLog.setText(customLog);
+
+        // Add the log screen
+        if (scrlLog.getParent() != pnlDisplay) {
+            pnlDisplay.add(scrlLog);
+        }
+        
         this.setVisible(true);
     }
 
@@ -451,26 +481,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             valPremium.setValue(Constants.DEFAULT_PREMIUM_PROB * 100);
             valEconomy.setValue(Constants.DEFAULT_ECONOMY_PROB * 100);
         } else if (src == btnLog) {
-            showLogs();
+            displayLogs();
         }
-    }
-
-    private void showLogs() {
-        pnlDisplay.setLayout(new BorderLayout());
-        pnlDisplay.remove(pnlStart);
-        pnlDisplay.remove(pnlChart);
-        JTextArea tbxLog = new JTextArea();
-        tbxLog.setText(customLog);
-        tbxLog.setEditable(false);
-        tbxLog.setWrapStyleWord(true);
-
-        scrlLog = new JScrollPane(tbxLog);
-        scrlLog.setBackground(Color.pink);
-        scrlLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        pnlDisplay.add(scrlLog);
-
-        this.setVisible(true);
-        repaint();
     }
 
     private void createErrorMessage(String errorBody) {
@@ -567,6 +579,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             return false;
         }
 
+        sdBooking = sdBookings;
         sdBooking = 0.33 * mean;
 
         log = new Log();

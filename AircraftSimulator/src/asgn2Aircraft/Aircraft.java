@@ -345,8 +345,8 @@ public abstract class Aircraft {
      *            <code>Passenger</code> whose presence we are checking
      * @return <code>boolean</code> true if isConfirmed(p); false otherwise
      */
-    public boolean hasPassenger(Passenger p) {
-        return seats.contains(p);
+    public boolean hasPassenger(Passenger p) {    
+        return seats.contains(p) && p.isConfirmed();
     }
 
     /**
