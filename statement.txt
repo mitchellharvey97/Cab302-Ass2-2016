@@ -13,7 +13,6 @@ Contribution Summary:
       - ChartPanel
       - GUISimulator
       - SimulationRunner
-  
   Mitchell Harvey
     • asgn2Aircraft
     • asgn2Tests [Passenger]
@@ -32,11 +31,9 @@ Summary Agreement Statement:
 Attempt:
   The charting version of the GUI has been attempted.
   The GUI showcases a start page, simulation log, line graph, and bar chart.
-  
-  
+
 Known Bugs:
-  - None
-  - !! TODO
+  - Associate Professor James M Hogan keeps appearing on the start screen.
   
 Final Statements:
-  !! TODO ("Anything else you feel that we need to know in order to grade your assignment appropriately.")
+  - In future revisions of the application, we would choose to refactor the asgn2Simulators package such that SimulationRunner be the controller for all data and the GUI. In our current implementation, code is duplicated from it's runSimulation() method for a custom implementation. In a future revision of the software, static classes should be implemented for GUISimulator to interface with.

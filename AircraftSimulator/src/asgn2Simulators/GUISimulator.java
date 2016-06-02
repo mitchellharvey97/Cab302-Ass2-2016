@@ -474,7 +474,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
 
         // Determine which button was pressed
         if (src == btnRun) {
-            complete_sim();
+            completeSim();
         } else if (src == btnSwitch) {
             displayChart();
         } else if (src == btnRestore) {
@@ -492,7 +492,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     private void createErrorMessage(String errorBody) {
-        JOptionPane.showMessageDialog(this, "Please input a valid number for the " + errorBody + ".", "Input Value Error",
+        JOptionPane.showMessageDialog(this, errorBody, "WE'VE CRASHED! Retrieving Black Box records...",
                 JOptionPane.WARNING_MESSAGE);
     }
 
@@ -511,7 +511,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         return returned;
     }
 
-    private void complete_sim() {
+    private void completeSim() {
         try {
             if (prepareSim()) {
                 runSim();
@@ -519,7 +519,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
             } else {
                 System.out.println("There where errors in setting up");
             }
-        } catch (IOException | SimulationException | AircraftException | PassengerException e) {
+        } catch (IOException | SimulationException e) {
             e.printStackTrace();
         }
         System.out.println("All Done for now");
@@ -540,48 +540,48 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // Extra Confusing for Integer Values
 
         if (((tmp = (valueInRange(valSeed, 0, null, false))) == null) || (seed = tmp.intValue()) == null) {
-            createErrorMessage("Seed Value");
+            createErrorMessage("Please input a valid number for the seed value.");
             return false;
         }
 
         if (((tmp = (valueInRange(valQueue, 0, null, false))) == null) || (queue = tmp.intValue()) == null) {
-            createErrorMessage("Queue Value");
+            createErrorMessage("Please input a valid number for the queue value.");
             return false;
         }
 
         // A much easier way without casting to Integers
         if ((mean = valueInRange(valMean, 0, null, false)) == null) {
-            createErrorMessage("Mean Value");
+            createErrorMessage("Please input a valid number for the mean value.");
             return false;
         }
 
         if ((cancel = valueInRange(valCancel, 0, 100, true)) == null) {
-            createErrorMessage("'Cancel' probability");
+            createErrorMessage("Please input a valid number for the 'Cancel' probability.");
             return false;
         }
 
         if ((first = valueInRange(valFirst, 0, 100, true)) == null) {
-            createErrorMessage("'First' probability");
+            createErrorMessage("Please input a valid number for the 'First' probability.");
             return false;
         }
 
         if ((business = valueInRange(valBusiness, 0, 100, true)) == null) {
-            createErrorMessage("'Business' probability");
+            createErrorMessage("Please input a valid number for the 'Business' probability.");
             return false;
         }
 
         if ((premium = valueInRange(valPremium, 0, 100, true)) == null) {
-            createErrorMessage("'Premium' probability");
+            createErrorMessage("Please input a valid number for the 'Premium' probability.");
             return false;
         }
 
         if ((economy = valueInRange(valEconomy, 0, 100, true)) == null) {
-            createErrorMessage("'Economy' probability");
+            createErrorMessage("Please input a valid number for the 'Economy' probability.");
             return false;
         }
 
         if ((first + business + premium + economy) != 1) {
-            createErrorMessage("'Passenger' probability");
+            createErrorMessage("Please input a valid number for the Fare Class probabilities.");
             return false;
         }
 
@@ -608,7 +608,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         
     }
 
-    private void runSim() throws AircraftException, PassengerException, SimulationException, IOException {
+    private void runSim() {
         cleanupCharts();
         
         System.out.println("Running the main sim");
@@ -616,41 +616,49 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         // SimulationRunner sr = new SimulationRunner();
         // sr.runSimulation();
 
-        this.sim.createSchedule();
-        this.log.initialEntry(this.sim);
         // Main simulation loop
         Bookings todaysBookings;
         barQueue = 0;
         barRefused = 0;
-
         
-        for (int time = 0; time <= Constants.DURATION; time++) {
-            this.sim.resetStatus(time);
-            this.sim.rebookCancelledPassengers(time);
-            this.sim.generateAndHandleBookings(time);
-            this.sim.processNewCancellations(time);
-            if (time >= Constants.FIRST_FLIGHT) {
-                this.sim.processUpgrades(time);
-                this.sim.processQueue(time);
-                this.sim.flyPassengers(time);
-                this.sim.updateTotalCounts(time);
-                this.log.logFlightEntries(time, sim);
-                // we don't start logging till the first flight leaves
-                barCapacity = (sim.getFlights(time).getCurrentCounts().getTotal()
-                        + sim.getFlights(time).getCurrentCounts().getAvailable());
-
-                barQueue = Math.max(sim.numInQueue(), barQueue);
-
-                barRefused = Math.max(sim.numInQueue(), barRefused);
-
-                todaysBookings = this.sim.getFlights(time).getCurrentCounts();
-                // pass values to be logged
-                addDailyValues(time, todaysBookings);
-            } else {
-                this.sim.processQueue(time);
+        try {
+            this.sim.createSchedule();
+            this.log.initialEntry(this.sim);
+        
+            for (int time = 0; time <= Constants.DURATION; time++) {
+                this.sim.resetStatus(time);
+                this.sim.rebookCancelledPassengers(time);
+                this.sim.generateAndHandleBookings(time);
+                this.sim.processNewCancellations(time);
+                if (time >= Constants.FIRST_FLIGHT) {
+                    this.sim.processUpgrades(time);
+                    this.sim.processQueue(time);
+                    this.sim.flyPassengers(time);
+                    this.sim.updateTotalCounts(time);
+                    this.log.logFlightEntries(time, sim);
+                    // we don't start logging till the first flight leaves
+                    barCapacity = (sim.getFlights(time).getCurrentCounts().getTotal()
+                            + sim.getFlights(time).getCurrentCounts().getAvailable());
+    
+                    barQueue = Math.max(sim.numInQueue(), barQueue);
+    
+                    barRefused = Math.max(sim.numInQueue(), barRefused);
+    
+                    todaysBookings = this.sim.getFlights(time).getCurrentCounts();
+                    // pass values to be logged
+                    addDailyValues(time, todaysBookings);
+                } else {
+                    this.sim.processQueue(time);
+                }
+                this.log.logQREntries(time, sim);
+                this.log.logEntry(time, this.sim);
             }
-            this.log.logQREntries(time, sim);
-            this.log.logEntry(time, this.sim);
+
+            this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
+            this.log.logQREntries(Constants.DURATION, sim);
+            this.log.finalise(this.sim);
+        } catch (AircraftException | PassengerException | SimulationException | IOException ex) {
+            createErrorMessage(ex.getMessage());
         }
 
         // Add all the data to the charts
@@ -660,10 +668,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         displayChart();
         btnLog.setEnabled(true);
         btnSwitch.setEnabled(true);
-
-        this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION);
-        this.log.logQREntries(Constants.DURATION, sim);
-        this.log.finalise(this.sim);
     }
 
     private void prepareData() {
@@ -702,7 +706,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         cal.set(2016, 0, time, 6, 0);
         java.util.Date timePoint = cal.getTime();
         
-       Day day_val = new Day(timePoint);
+        Day day_val = new Day(timePoint);
         
         String lineBreak = "\n----------\n";
         customLog += "Day " + time + "\n" + "Daily Stats" + lineBreak + "First Class: " + firstClass + "\n"
