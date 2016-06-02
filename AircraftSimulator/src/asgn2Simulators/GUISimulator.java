@@ -102,6 +102,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private double economyProb;
     private double cancelProb;
 
+    String customLog = "";
+
     private JScrollPane scrlLog;
     // Line Chart Variables
     XYSeries tmsTotal = new XYSeries("Total Bookings");
@@ -319,8 +321,8 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     private void displayGraph() {
         // Remove the placeholder Screen
         pnlDisplay.remove(pnlStart);
-       // pnlDisplay.remove(scrlLog);
-        
+        // pnlDisplay.remove(scrlLog);
+
         // Check a Boolean to decide which graph to load
         if (lineGraph) {
             System.out.println("Showing Line Chart");
@@ -458,7 +460,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         scrlLog.setBackground(Color.pink);
         scrlLog.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         pnlDisplay.add(scrlLog);
-        
+
         this.setVisible(true);
         repaint();
     }
@@ -492,7 +494,6 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
                 System.out.println("There where errors in setting up");
             }
         } catch (IOException | SimulationException | AircraftException | PassengerException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         System.out.println("All Done for now");
@@ -640,21 +641,17 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         pnlChartController.SetData(lineChartDataPoints);
 
         // Bar graph
-        final String types = "";
-        barChartDataSet.addValue(barQueue, "Queue Size", types);
-        barChartDataSet.addValue(barRefused, "Passengers Refused", types);
-        barChartDataSet.addValue(barCapacity, "Daily Capacity", types);
+        barChartDataSet.addValue(barQueue, "Queue Size", "");
+        barChartDataSet.addValue(barRefused, "Passengers Refused", "");
+        barChartDataSet.addValue(barCapacity, "Daily Capacity", "");
 
         barChart = pnlChartController.createBarChart(barChartDataSet);
 
-        customLog += "Final Statistics" + "----------\n" + "First Class: " + sim.getTotalFirst() + "\n"
+        customLog += "Final Statistics\n" + "----------\n" + "First Class: " + sim.getTotalFirst() + "\n"
                 + "Business Class: " + sim.getTotalBusiness() + "\n" + "Premium Class: " + sim.getTotalPremium() + "\n"
-                + "Economy Class: " + sim.getTotalEconomy() + "\n" + "Empty Seats: " + "\n" + "Refused: "
-                + sim.numRefused() + "\n" + "Queued: " + sim.numInQueue() + "\n" + "Flown: ";
-
+                + "Economy Class: " + sim.getTotalEconomy() + "\n" + "Empty Seats: " + sim.getTotalEmpty() + "\nRefused: "
+                + sim.numRefused() + "\n" + "Queued: " + sim.numInQueue() + "\n" + "Flown: " + sim.getTotalFlown();
     }
-
-    String customLog = "";
 
     private void addDailyValues(int time, Bookings todaysBookings) {
         int firstClass = todaysBookings.getNumFirst();
@@ -663,12 +660,14 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         int economyClass = todaysBookings.getNumEconomy();
         int totalClass = todaysBookings.getTotal();
         int emptySeats = todaysBookings.getAvailable();
+        int queuedSeats = sim.numInQueue();
+        int refusedSeats = sim.numRefused();
 
-        String line_break = "----------\n";
-        customLog += "Day " + time + "\n" + "Daily Stats \n" + line_break + "First Class: " + firstClass + "\n"
+        String lineBreak = "\n----------\n";
+        customLog += "Day " + time + "\n" + "Daily Stats" + lineBreak + "First Class: " + firstClass + "\n"
                 + "Business Class: " + businessClass + "\n" + "Premium Class: " + premiumClass + "\n"
-                + "Economy Class: " + economyClass + "\n" + "Empty Seats: " + emptySeats + "\n" + "Refused: " + "\n"
-                + "Queued: " + "\n" + "Flown: " + "\n" + line_break + "\n";
+                + "Economy Class: " + economyClass + "\n" + "Empty Seats: " + emptySeats + "\n" + "Refused: " + refusedSeats + "\n"
+                + "Queued: " + queuedSeats + "\n" + "Flown: " + totalClass + lineBreak + "\n";
 
         tmsTotal.add(time, totalClass);
         tmsFirst.add(time, firstClass);
