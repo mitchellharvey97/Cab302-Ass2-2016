@@ -5,8 +5,6 @@ package asgn2Simulators;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
@@ -19,13 +17,12 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 /**
- * @author Andrew
+ * @author Andrew & Mitch
  *
  */
 @SuppressWarnings("serial")
@@ -110,7 +107,7 @@ public class ChartPanel extends Component {
         // set the background color for the chart...
         chart.setBackgroundPaint(Color.white);
 
-        // get a reference to the plot for further customisation...
+        // get a reference to the plot for further customization...
         final CategoryPlot plot = chart.getCategoryPlot();
         plot.setBackgroundPaint(Color.lightGray);
         plot.setDomainGridlinePaint(Color.white);
