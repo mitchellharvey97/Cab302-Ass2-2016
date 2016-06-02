@@ -492,7 +492,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
     }
 
     private void createErrorMessage(String errorBody) {
-        JOptionPane.showMessageDialog(this, "Please Input a valid number for the " + errorBody, "Input Value Error",
+        JOptionPane.showMessageDialog(this, "Please input a valid number for the " + errorBody + ".", "Input Value Error",
                 JOptionPane.WARNING_MESSAGE);
     }
 
@@ -556,32 +556,32 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         }
 
         if ((cancel = valueInRange(valCancel, 0, 100, true)) == null) {
-            createErrorMessage("Cancel Value");
+            createErrorMessage("'Cancel' probability");
             return false;
         }
 
         if ((first = valueInRange(valFirst, 0, 100, true)) == null) {
-            createErrorMessage("First Value");
+            createErrorMessage("'First' probability");
             return false;
         }
 
         if ((business = valueInRange(valBusiness, 0, 100, true)) == null) {
-            createErrorMessage("Business Value");
+            createErrorMessage("'Business' probability");
             return false;
         }
 
         if ((premium = valueInRange(valPremium, 0, 100, true)) == null) {
-            createErrorMessage("Premium Value");
+            createErrorMessage("'Premium' probability");
             return false;
         }
 
         if ((economy = valueInRange(valEconomy, 0, 100, true)) == null) {
-            createErrorMessage("Economy Value");
+            createErrorMessage("'Economy' probability");
             return false;
         }
 
         if ((first + business + premium + economy) != 1) {
-            createErrorMessage("Passenger split");
+            createErrorMessage("'Passenger' probability");
             return false;
         }
 

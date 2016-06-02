@@ -28,7 +28,6 @@ import org.jfree.data.xy.XYDataset;
 public class ChartPanel extends Component {
 
     protected static JFreeChart chart;
-    private static final String TITLE = "Random Bookings";
 
     private TimeSeriesCollection line_data_points;
 
@@ -56,7 +55,7 @@ public class ChartPanel extends Component {
      */
     public JFreeChart createLineChart(final XYDataset dataset) {
         System.out.println("Creating the line chart");
-        final JFreeChart result = ChartFactory.createTimeSeriesChart(TITLE, "Days", "Passengers", dataset, true, true,
+        final JFreeChart result = ChartFactory.createTimeSeriesChart("Passenger Summary", "Days", "Passengers", dataset, true, true,
                 false);
         final XYPlot plot = result.getXYPlot();
 
@@ -87,8 +86,7 @@ public class ChartPanel extends Component {
     public JFreeChart createBarChart(final CategoryDataset dataset) {
         System.out.println("Creating the bar chart");
         // create the chart...
-        final JFreeChart chart = ChartFactory.createBarChart("Bar Chart Demo", // chart
-                                                                               // title
+        final JFreeChart chart = ChartFactory.createBarChart("Flight Summary",
                 "Category", // domain axis label
                 "Value", // range axis label
                 dataset, // data
