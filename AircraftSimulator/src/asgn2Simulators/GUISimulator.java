@@ -354,9 +354,12 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         
         lineGraph = !lineGraph;
         this.setVisible(true);
+        repaint();
     }
 
     private void displayLogs() {
+        System.out.println("Showing logs");
+        
         // Remove the placeholder Screen
         if (pnlStart.getParent() == pnlDisplay) {
             pnlDisplay.remove(pnlStart);
@@ -375,6 +378,7 @@ public class GUISimulator extends JFrame implements ActionListener, Runnable {
         }
         
         this.setVisible(true);
+        repaint();
     }
 
     private void layoutStartPanel() {
